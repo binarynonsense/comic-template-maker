@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Comic Book Page Template Maker</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/loading.css" />
+    <link href="./libs/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="./libs/fontawesome/css/solid.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="left">
+      <div id="result-div">
+        <img src="" id="result-img" alt="" />
+      </div>
+    </div>
+    <div id="right-bottom">
+      <div id="buttons">
+        <button id="refresh-button">REFRESH PREVIEW</button>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="autorefresh-checkbox"
+            class="refresh"
+            checked
+          />
+          auto-refresh
+        </label>
+      </div>
+    </div>
+    <div id="right">
+      <div class="tab tab-selected" id="tab-1">
+        <i class="fa-solid fa-file tab-icon"></i>
+      </div>
+      <div id="tab-1-content">
+        <label
+          >preset<select id="preset-select" class="refresh"></select
+        ></label>
+        <label
+          >units<select id="units-select" class="refresh preset-value">
+            <option value="inches">inches</option>
+            <option value="cm">centimeters</option>
+          </select></label
+        >
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="double-page-checkbox"
+            class="refresh preset-value"
+          />
+          is double-page
+        </label>
+        <div id="paper-div" class="section">
+          <h3>Paper:</h3>
+          <label
+            >width<input
+              type="number"
+              id="paper-width-input"
+              class="refresh preset-value"
+              value="7.875"
+          /></label>
+          <label
+            >height<input
+              type="number"
+              id="paper-height-input"
+              class="refresh preset-value"
+              value="11.4375"
+          /></label>
+        </div>
+
+        <div id="bleed-div" class="section">
+          <h3>Bleed Area:</h3>
+          <label
+            >width<input
+              type="number"
+              id="bleed-width-input"
+              class="refresh preset-value"
+              value="6.875"
+          /></label>
+          <label
+            >height<input
+              type="number"
+              id="bleed-height-input"
+              class="refresh preset-value"
+              value="10.4375"
+          /></label>
+        </div>
+
+        <div id="trim-div" class="section">
+          <h3>Trim Area:</h3>
+          <label
+            >width<input
+              type="number"
+              id="trim-width-input"
+              class="refresh preset-value"
+              value="6.625"
+          /></label>
+          <label
+            >height<input
+              type="number"
+              id="trim-height-input"
+              class="refresh preset-value"
+              value="10.1875"
+          /></label>
+        </div>
+
+        <div id="safe-div" class="section">
+          <h3>Safe Area:</h3>
+          <label
+            >width<input
+              type="number"
+              id="safe-width-input"
+              class="refresh preset-value"
+              value="6.125"
+          /></label>
+          <label
+            >height<input
+              type="number"
+              id="safe-height-input"
+              class="refresh preset-value"
+              value="9.687"
+          /></label>
+        </div>
+
+        <div id="safe-div" class="section">
+          <h3>Other:</h3>
+          <label
+            >border marks max. length<input
+              type="number"
+              id="border-marks-length-input"
+              class="refresh preset-value"
+              value="0.085"
+          /></label>
+          <label
+            >header text height<input
+              type="number"
+              id="header-text-height-input"
+              class="refresh preset-value"
+              value="0.17"
+          /></label>
+          <label
+            >header padding<input
+              type="number"
+              id="header-padding-input"
+              class="refresh preset-value"
+              value="0.19"
+          /></label>
+        </div>
+      </div>
+
+      <div class="tab" id="tab-2">
+        <i class="fa-solid fa-pen-to-square tab-icon"></i>
+      </div>
+      <div id="tab-2-content" class="hidden">
+        <div class="section">
+          <label
+            >ppi<input type="number" id="ppi-input" class="refresh" value="600"
+          /></label>
+          <label
+            >background color<input
+              type="color"
+              id="background-color-input"
+              class="refresh"
+              value="#FFFFFF"
+          /></label>
+          <label
+            >line color<input
+              type="color"
+              id="line-color-input"
+              class="refresh"
+              value="#A4DDED"
+          /></label>
+          <label
+            >line thickness<select id="line-thickness-select" class="refresh">
+              <option value="thin">thin</option>
+              <option value="thick">thick</option>
+            </select></label
+          >
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="paper-draw-bg-checkbox"
+              class="refresh"
+              checked
+            />
+            draw background
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="paper-draw-header-checkbox"
+              class="refresh"
+              checked
+            />
+            draw header
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="bleed-draw-checkbox"
+              class="refresh"
+              checked
+            />
+            draw bleed area
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="trim-draw-checkbox"
+              class="refresh"
+              checked
+            />
+            draw trim area
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="safe-draw-checkbox"
+              class="refresh"
+              checked
+            />
+            draw safe area
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="border-marks-draw-checkbox"
+              class="refresh"
+              checked
+            />
+            draw border marks
+          </label>
+        </div>
+      </div>
+
+      <div class="tab" id="tab-3">
+        <i class="fa-solid fa-border-all tab-icon"></i>
+      </div>
+      <div id="tab-3-content" class="hidden">
+        <label
+          >panels<select id="panels-distribution-select" class="refresh">
+            <option value="custom">none</option>
+            <option value="2x2">2 x 2</option>
+            <option value="3x3">3 x 3</option>
+            <option value="4x4">4 x 4</option>
+          </select></label
+        >
+        <label
+          >gutter size<input
+            type="number"
+            id="gutter-size-input"
+            class="refresh"
+            value="0.15"
+        /></label>
+      </div>
+
+      <div class="tab" id="tab-4">
+        <!-- fa-floppy-disk -->
+        <i class="fa-solid fa-right-left tab-icon"></i>
+      </div>
+      <div id="tab-4-content" class="hidden">
+        <h3 class="h3-extratop">Save Current Template To File:</h3>
+        <label
+          >image file format<select id="save-template-format-select">
+            <option value="png">png</option>
+            <option value="jpg">jpg</option>
+          </select></label
+        >
+        <button id="save-template-button">SAVE</button>
+        <h3 class="h3-extratop h3-extrabottom">Load Preset From File:</h3>
+        <input type="file" id="load-preset-file-input" accept=".json" />
+        <button id="load-preset-button">LOAD</button>
+        <label class="checkbox-label">
+          <input type="checkbox" id="load-preset-apply-checkbox" checked />
+          apply when loaded
+        </label>
+        <h3 class="h3-extratop">Save Current Preset To File:</h3>
+        <label
+          >preset name<input
+            type="text"
+            id="save-preset-name-input"
+            value="comic page"
+        /></label>
+        <button id="save-preset-button">SAVE</button>
+      </div>
+
+      <div class="tab" id="tab-5">
+        <i class="fa-solid fa-circle-info tab-icon"></i>
+      </div>
+      <div id="tab-5-content" class="hidden">
+        <h3>Comic Book Page Template Maker</h3>
+        <p id="info-version-p">version: 0.0.0</p>
+        <p> </p>
+        <h3 class="h3-extratop">Made by:</h3>
+        <p>Álvaro García</p>
+        <p><a href="http://www.binarynonsense.com" target=”_blank”>www.binarynonsense.com</a></p>
+      </div>
+
+      <!-- fa-grip-vertical thumbnails tab -->
+    </div>    
+  </div>
+
+  <div id="loading">
+    <div id="loading-bg"><div id="loading-spinner"></div></div>
+  </div>
+  </body>
+
+  <script src="./js/main.js" type="module"></script>
+</html>
