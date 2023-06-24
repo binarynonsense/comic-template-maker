@@ -29,6 +29,10 @@ export class SafeRect extends Rect {
     }
   }
 
+  addPanels(panels) {
+    this.panels = panels;
+  }
+
   draw(ctx, recursive = false) {
     /////////////////
     // MARKS ////////
@@ -49,7 +53,8 @@ export class SafeRect extends Rect {
         lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // down
       this.drawLine(
@@ -59,7 +64,8 @@ export class SafeRect extends Rect {
         -lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // left
       this.drawLine(
@@ -69,7 +75,8 @@ export class SafeRect extends Rect {
         0,
         lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // right
       this.drawLine(
@@ -79,7 +86,8 @@ export class SafeRect extends Rect {
         0,
         -lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       /////////////////
       // THIRDS ///////
@@ -93,7 +101,8 @@ export class SafeRect extends Rect {
         lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -102,7 +111,8 @@ export class SafeRect extends Rect {
         lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // down
       this.drawLine(
@@ -112,7 +122,8 @@ export class SafeRect extends Rect {
         -lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -121,7 +132,8 @@ export class SafeRect extends Rect {
         -lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // left
       this.drawLine(
@@ -131,7 +143,8 @@ export class SafeRect extends Rect {
         0,
         lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -140,7 +153,8 @@ export class SafeRect extends Rect {
         0,
         lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // right
       this.drawLine(
@@ -150,7 +164,8 @@ export class SafeRect extends Rect {
         0,
         -lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -159,7 +174,8 @@ export class SafeRect extends Rect {
         0,
         -lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       /////////////////
       // FOURTHS///////
@@ -172,7 +188,8 @@ export class SafeRect extends Rect {
         lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -181,7 +198,8 @@ export class SafeRect extends Rect {
         lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // down
       this.drawLine(
@@ -191,7 +209,8 @@ export class SafeRect extends Rect {
         -lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -200,7 +219,8 @@ export class SafeRect extends Rect {
         -lineLength,
         0,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // left
       this.drawLine(
@@ -210,7 +230,8 @@ export class SafeRect extends Rect {
         0,
         lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -219,7 +240,8 @@ export class SafeRect extends Rect {
         0,
         lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       // right
       this.drawLine(
@@ -229,7 +251,8 @@ export class SafeRect extends Rect {
         0,
         -lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       this.drawLine(
         ctx,
@@ -238,7 +261,8 @@ export class SafeRect extends Rect {
         0,
         -lineLength,
         lineWidth,
-        lineDash
+        lineDash,
+        this.lineColor
       );
       ///////////////////
       // DOUBLE MIDDLE //
@@ -255,7 +279,8 @@ export class SafeRect extends Rect {
           lineLength,
           0,
           lineWidth,
-          lineDash
+          lineDash,
+          this.lineColor
         );
         // down
         this.drawLine(
@@ -265,7 +290,8 @@ export class SafeRect extends Rect {
           -lineLength,
           0,
           lineWidth,
-          lineDash
+          lineDash,
+          this.lineColor
         );
       }
     }
@@ -273,5 +299,11 @@ export class SafeRect extends Rect {
     // BORDER ///////
     /////////////////
     super.draw(ctx, recursive);
+    /////////////////
+    // PANELS ///////
+    /////////////////
+    if (this.panels) {
+      this.panels.draw(ctx);
+    }
   }
 }

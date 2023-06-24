@@ -238,20 +238,35 @@
       </div>
       <div id="tab-3-content" class="hidden">
         <label
-          >panels<select id="panels-distribution-select" class="refresh">
-            <option value="custom">none</option>
-            <option value="2x2">2 x 2</option>
-            <option value="3x3">3 x 3</option>
-            <option value="4x4">4 x 4</option>
+          >panels<select id="panel-preset-select" class="refresh">
+            <option value="-1">none</option>
+            <option value="0">1 x 1</option>
+            <option value="1">2 x 2</option>
+            <option value="2">3 x 3</option>
+            <option value="3">4 x 4</option>
           </select></label
         >
         <label
           >gutter size<input
             type="number"
-            id="gutter-size-input"
+            id="panel-gutter-size-input"
             class="refresh"
             value="0.15"
         /></label>
+        <label
+          >line width<input
+            type="number"
+            id="panel-line-width-input"
+            class="refresh"
+            value="0.04"
+        /></label>
+        <label
+            >line color<input
+              type="color"
+              id="panel-line-color-input"
+              class="refresh"
+              value="#000000"
+          /></label>
       </div>
 
       <div class="tab" id="tab-4">

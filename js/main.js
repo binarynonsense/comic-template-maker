@@ -1,6 +1,7 @@
 import { Rect } from "./rect.js";
 import { SafeRect } from "./safe-rect.js";
 import { PaperRect as PaperRect } from "./paper-rect.js";
+import { PanelGrid } from "./panels.js";
 
 import preset_1 from "../presets/american-1-single.js";
 import preset_2 from "../presets/american-1-double.js";
@@ -111,6 +112,7 @@ function drawCanvas() {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
     document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
+  const isDoublePage = document.getElementById("double-page-checkbox").checked;
 
   const backGroundColor = document.getElementById(
     "background-color-input"
@@ -143,8 +145,6 @@ function drawCanvas() {
   const headerPadding =
     document.getElementById("header-padding-input").value * toInches;
 
-  const isDoublePage = document.getElementById("double-page-checkbox").checked;
-
   const drawBackground = document.getElementById(
     "paper-draw-bg-checkbox"
   ).checked;
@@ -157,6 +157,15 @@ function drawCanvas() {
   const drawBorderMarks = document.getElementById(
     "border-marks-draw-checkbox"
   ).checked;
+
+  const panelPreset = document.getElementById("panel-preset-select").value;
+  const panelGutterSize =
+    document.getElementById("panel-gutter-size-input").value * toInches;
+  const panelLineWidth =
+    document.getElementById("panel-line-width-input").value * toInches;
+  const panelLineColor = document.getElementById(
+    "panel-line-color-input"
+  ).value;
   //////////////////////
   // BUILD /////////////
   //////////////////////
@@ -204,6 +213,16 @@ function drawCanvas() {
     lineColor,
     [safeHeight / 120, safeHeight / 120]
   );
+  if (panelPreset > -1)
+    safeRect_1.addPanels(
+      new PanelGrid(
+        safeRect_1,
+        panelPreset,
+        panelLineWidth,
+        panelLineColor,
+        panelGutterSize
+      )
+    );
   trimRect.addChild(safeRect_1);
 
   if (isDoublePage) {
@@ -222,6 +241,16 @@ function drawCanvas() {
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
+    if (panelPreset > -1)
+      safeRect_2.addPanels(
+        new PanelGrid(
+          safeRect_2,
+          panelPreset,
+          panelLineWidth,
+          panelLineColor,
+          panelGutterSize
+        )
+      );
     trimRect.addChild(safeRect_2);
   }
 

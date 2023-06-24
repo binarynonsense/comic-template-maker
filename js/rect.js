@@ -20,6 +20,9 @@ export class Rect {
   setPpi(ppi) {
     this.ppi = ppi;
   }
+  getPpi() {
+    return this.ppi;
+  }
 
   getSize() {
     return { x: this.x, y: this.y, width: this.width, height: this.height };
@@ -39,7 +42,8 @@ export class Rect {
     this.lineDash = lineDash;
   }
 
-  drawLine(ctx, x, y, up, left, width, dash) {
+  drawLine(ctx, x, y, up, left, width, dash, color) {
+    ctx.strokeStyle = color;
     ctx.setLineDash([dash[0] * this.ppi, dash[1] * this.ppi]);
     ctx.lineWidth = width * this.ppi;
     ctx.moveTo(x * this.ppi, y * this.ppi);

@@ -45,7 +45,8 @@ export class PaperRect extends Rect {
         0,
         -bookLinelength,
         this.lineWidth,
-        [0, 0]
+        [0, 0],
+        this.lineColor
       );
       // ISSUE /////////
       let issueTextX = bookLineX + bookLinelength;
@@ -60,7 +61,8 @@ export class PaperRect extends Rect {
         0,
         -issueLineLeght,
         this.lineWidth,
-        [0, 0]
+        [0, 0],
+        this.lineColor
       );
       // PAGE /////////
       let pageTextX = issueLineX + issueLineLeght;
@@ -75,7 +77,8 @@ export class PaperRect extends Rect {
         0,
         -pageLinelength,
         this.lineWidth,
-        [0, 0]
+        [0, 0],
+        this.lineColor
       );
     }
     /////////////////
