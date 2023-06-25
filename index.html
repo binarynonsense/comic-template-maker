@@ -29,7 +29,7 @@
       </div>
     </div>
     <div id="right">
-      <div class="tab tab-selected" id="tab-1">
+      <div class="tab tab-selected" id="tab-1" title="dimensions">
         <i class="fa-solid fa-file tab-icon"></i>
       </div>
       <div id="tab-1-content">
@@ -42,14 +42,6 @@
             <option value="cm">centimeters</option>
           </select></label
         >
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            id="double-page-checkbox"
-            class="refresh preset-value"
-          />
-          is double-page
-        </label>
 
         <div id="trim-div" class="section">
           <h3>Trim Area Size:</h3>
@@ -133,25 +125,25 @@
         </div>
 
         <div id="paper-div" class="section">
-          <h3>Header Area / Paper:</h3>
+          <h3>Header Area Margin:</h3>
           <div class="columns-parent">
             <label class="two-columns"
-              >width<input
+              >top / bottom<input
                 type="number"
-                id="paper-width-input"
+                id="header-margin-top-bottom-input"
                 class="refresh preset-value"
                 step="0.25"
                 min="0"
-                value="7.875"
+                value="0.5"
             /></label>
             <label class="two-columns"
-              >height<input
+              >left / right<input
                 type="number"
-                id="paper-height-input"
+                id="header-margin-left-right-input"
                 class="refresh preset-value"
                 step="0.25"
                 min="0"
-                value="11.4375"
+                value="0.5"
             /></label>
           </div>
         </div>
@@ -206,7 +198,7 @@
         </div>
       </div>
 
-      <div class="tab" id="tab-2">
+      <div class="tab" id="tab-2" title="rendering options">
         <i class="fa-solid fa-pen-to-square tab-icon"></i>
       </div>
       <div id="tab-2-content" class="hidden">
@@ -310,7 +302,7 @@
         </div>
       </div>
 
-      <div class="tab" id="tab-3">
+      <div class="tab" id="tab-3" title="panels">
         <i class="fa-solid fa-border-all tab-icon"></i>
       </div>
       <div id="tab-3-content" class="hidden">
@@ -356,11 +348,22 @@
         /></label>
       </div>
 
-      <div class="tab" id="tab-4">
-        <!-- fa-floppy-disk -->
-        <i class="fa-solid fa-right-left tab-icon"></i>
+      <div class="tab" id="tab-4" title="layout">
+        <i class="fa-solid fa-grip tab-icon"></i>
       </div>
       <div id="tab-4-content" class="hidden">
+        <label
+          >layout<select id="layout-select" class="refresh">
+            <option value="single">single page</option>
+            <option value="double">double page</option>
+          </select></label
+        >
+      </div>
+
+      <div class="tab" id="tab-5" title="save/load">
+        <i class="fa-solid fa-right-left tab-icon"></i>
+      </div>
+      <div id="tab-5-content" class="hidden">
         <h3 class="h3-extratop">Save Current Template To File:</h3>
         <label
           >image file format<select id="save-template-format-select">
@@ -386,10 +389,10 @@
         <button id="save-preset-button">SAVE</button>
       </div>
 
-      <div class="tab" id="tab-5">
+      <div class="tab" id="tab-6" title="tool info">
         <i class="fa-solid fa-circle-info tab-icon"></i>
       </div>
-      <div id="tab-5-content" class="hidden">
+      <div id="tab-6-content" class="hidden">
         <h3>Comic Book Page Template Maker</h3>
         <p id="info-version-p">version: 0.0.0</p>
         <p></p>

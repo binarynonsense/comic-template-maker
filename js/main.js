@@ -1,10 +1,9 @@
 import { Rect } from "./rect.js";
 import { SafeRect } from "./safe-rect.js";
-import { PaperRect as PaperRect } from "./paper-rect.js";
+import { HeaderRect as HeaderRect } from "./header-rect.js";
 import { PanelGrid } from "./panels.js";
 
-import preset_1 from "../presets/american-1-single.js";
-import preset_2 from "../presets/american-1-double.js";
+import preset_1 from "../presets/american-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1-single.json" assert { type: "json" };
 // import preset_2 from "../presets/american-1-double.json" assert { type: "json" };
@@ -27,7 +26,6 @@ function init() {
   opt.innerHTML = "custom";
   select.appendChild(opt);
   loadPresetFromJson(preset_1);
-  loadPresetFromJson(preset_2);
   setPreset(0);
 }
 
@@ -38,7 +36,6 @@ function loadPresetFromJson(preset) {
   // TODO: check version is valid
   preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
   preset.units = sanitizeString(preset.units);
-  preset.isDoublePage = sanitizeBool(preset.isDoublePage);
 
   preset.trimWidth = sanitizeNumber(preset.trimWidth);
   preset.trimHeight = sanitizeNumber(preset.trimHeight);
@@ -47,8 +44,8 @@ function loadPresetFromJson(preset) {
   preset.safeMarginLeft = sanitizeNumber(preset.safeMarginLeft);
   preset.safeMarginRight = sanitizeNumber(preset.safeMarginRight);
   preset.bleedMargin = sanitizeNumber(preset.bleedMargin);
-  preset.paperWidth = sanitizeNumber(preset.paperWidth);
-  preset.paperHeight = sanitizeNumber(preset.paperHeight);
+  preset.headerMarginTopBottom = sanitizeNumber(preset.headerMarginTopBottom);
+  preset.headerMarginLeftRight = sanitizeNumber(preset.headerMarginLeftRight);
 
   preset.lineWidthThin = sanitizeNumber(preset.lineWidthThin);
   preset.lineWidthThick = sanitizeNumber(preset.lineWidthThick);
@@ -120,7 +117,6 @@ function setPreset(index) {
   const preset = presets[index];
 
   document.getElementById("units-select").value = preset.units;
-  document.getElementById("double-page-checkbox").checked = preset.isDoublePage;
 
   document.getElementById("trim-width-input").value = preset.trimWidth;
   document.getElementById("trim-height-input").value = preset.trimHeight;
@@ -132,8 +128,10 @@ function setPreset(index) {
     preset.safeMarginLeft;
   document.getElementById("safe-margin-right-input").value =
     preset.safeMarginRight;
-  document.getElementById("paper-width-input").value = preset.paperWidth;
-  document.getElementById("paper-height-input").value = preset.paperHeight;
+  document.getElementById("header-margin-top-bottom-input").value =
+    preset.headerMarginTopBottom;
+  document.getElementById("header-margin-left-right-input").value =
+    preset.headerMarginLeftRight;
 
   document.getElementById("line-width-thin-input").value = preset.lineWidthThin;
   document.getElementById("line-width-thick-input").value =
@@ -152,11 +150,9 @@ function getPresetFromCurrentValues(name, author) {
   const preset = { ...presets[1] };
 
   preset.units = document.getElementById("units-select").value;
-  preset.isDoublePage = document.getElementById("double-page-checkbox").checked;
 
   preset.trimWidth = document.getElementById("trim-width-input").value;
   preset.trimHeight = document.getElementById("trim-height-input").value;
-  preset.bleedWidth = document.getElementById("bleed-margin-input").value;
   preset.safeMarginTop = document.getElementById("safe-margin-top-input").value;
   preset.safeMarginBottom = document.getElementById(
     "safe-margin-bottom-input"
@@ -167,8 +163,13 @@ function getPresetFromCurrentValues(name, author) {
   preset.safeMarginRight = document.getElementById(
     "safe-margin-right-input"
   ).value;
-  preset.paperWidth = document.getElementById("paper-width-input").value;
-  preset.paperHeight = document.getElementById("paper-height-input").value;
+  preset.bleedWidth = document.getElementById("bleed-margin-input").value;
+  preset.headerMarginTopBottom = document.getElementById(
+    "header-margin-top-bottom-input"
+  ).value;
+  preset.headerMarginLeftRight = document.getElementById(
+    "header-margin-left-right-input"
+  ).value;
 
   preset.lineWidthThin = document.getElementById("line-width-thin-input").value;
   preset.lineWidthThick = document.getElementById(
@@ -199,23 +200,25 @@ function drawTemplate() {
   showLoading(true);
   // set timeout so loading spinner can show
   setTimeout(() => {
-    drawCanvas();
+    const makeDoublePage =
+      document.getElementById("layout-select").value === "double"
+        ? true
+        : false;
+    drawCanvas(makeDoublePage);
   }, "100");
 }
 
-function drawCanvas() {
+function drawCanvas(makeDoublePage) {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
     document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
-  const isDoublePage = document.getElementById("double-page-checkbox").checked;
 
   const lineWidthThin =
     document.getElementById("line-width-thin-input").value * toInches;
   const lineWidthThick =
     document.getElementById("line-width-thick-input").value * toInches;
 
-  const trimWidth =
-    document.getElementById("trim-width-input").value * toInches;
+  let trimWidth = document.getElementById("trim-width-input").value * toInches;
   const trimHeight =
     document.getElementById("trim-height-input").value * toInches;
   const safeMarginTop =
@@ -228,14 +231,10 @@ function drawCanvas() {
     document.getElementById("safe-margin-right-input").value * toInches;
   const bleedMargin =
     document.getElementById("bleed-margin-input").value * toInches;
-  let paperWidth =
-    document.getElementById("paper-width-input").value * toInches;
-  if (paperWidth < trimWidth + bleedMargin * 2)
-    paperWidth = trimWidth + bleedMargin * 2;
-  let paperHeight =
-    document.getElementById("paper-height-input").value * toInches;
-  if (paperHeight < trimHeight + bleedMargin * 2)
-    paperHeight = trimHeight + bleedMargin * 2;
+  const headerMarginTopBottom =
+    document.getElementById("header-margin-top-bottom-input").value * toInches;
+  const headerMarginLeftRight =
+    document.getElementById("header-margin-left-right-input").value * toInches;
 
   const borderMarkMaxLength =
     document.getElementById("border-marks-length-input").value * toInches;
@@ -280,15 +279,19 @@ function drawCanvas() {
   const panelLineColor = document.getElementById(
     "panel-line-color-input"
   ).value;
+
+  if (makeDoublePage) trimWidth *= 2;
   //////////////////////
   // BUILD /////////////
   //////////////////////
-  const paperRect = new PaperRect(
+  const headerWidth = trimWidth + bleedMargin * 2 + headerMarginLeftRight * 2;
+  const headerHeight = trimHeight + bleedMargin * 2 + headerMarginTopBottom * 2;
+  const headerRect = new HeaderRect(
     undefined,
     0,
     0,
-    paperWidth,
-    paperHeight,
+    headerWidth,
+    headerHeight,
     ppi,
     lineWidthThin,
     lineWidthMultiplier,
@@ -297,14 +300,14 @@ function drawCanvas() {
     headerTextHeight,
     headerTextWeight
   );
-  paperRect.setBorderStyle(0, lineColor, [0, 0]);
+  headerRect.setBorderStyle(0, lineColor, [0, 0]);
 
   const bleedWidth = trimWidth + bleedMargin * 2;
   const bleedHeight = trimHeight + bleedMargin * 2;
-  const bleedX = (paperWidth - bleedWidth) / 2;
-  const bleedY = (paperHeight - bleedHeight) / 2;
+  const bleedX = (headerWidth - bleedWidth) / 2;
+  const bleedY = (headerHeight - bleedHeight) / 2;
   const bleedRect = new Rect(
-    paperRect,
+    headerRect,
     bleedX,
     bleedY,
     bleedWidth,
@@ -316,7 +319,7 @@ function drawCanvas() {
     lineColor,
     [0, 0]
   );
-  paperRect.addChild(bleedRect);
+  headerRect.addChild(bleedRect);
 
   const trimX = bleedX + bleedMargin;
   const trimY = bleedY + bleedMargin;
@@ -335,7 +338,7 @@ function drawCanvas() {
   );
   bleedRect.addChild(trimRect);
 
-  if (isDoublePage) {
+  if (makeDoublePage) {
     let safeX = trimX + safeMarginLeft;
     let safeY = trimY + safeMarginTop;
     let safeWidth =
@@ -435,12 +438,12 @@ function drawCanvas() {
     trimRect.addChild(safeRect_1);
   }
 
-  canvas.width = paperRect.getSize().width * ppi;
-  canvas.height = paperRect.getSize().height * ppi;
+  canvas.width = headerRect.getSize().width * ppi;
+  canvas.height = headerRect.getSize().height * ppi;
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = drawBackground ? backGroundColor : "rgba(0, 0, 0, 0)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  paperRect.draw(ctx, true);
+  headerRect.draw(ctx, true);
 
   document.getElementById("result-img").src = canvas.toDataURL();
 
@@ -548,6 +551,8 @@ const tab4 = document.getElementById("tab-4");
 const tab4Content = document.getElementById("tab-4-content");
 const tab5 = document.getElementById("tab-5");
 const tab5Content = document.getElementById("tab-5-content");
+const tab6 = document.getElementById("tab-6");
+const tab6Content = document.getElementById("tab-6-content");
 tab1.addEventListener("click", function () {
   if (!tab1.classList.contains("tab-selected")) {
     tab1.classList.add("tab-selected");
@@ -560,6 +565,8 @@ tab1.addEventListener("click", function () {
     tab4Content.classList.add("hidden");
     tab5.classList.remove("tab-selected");
     tab5Content.classList.add("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
   }
 });
 tab2.addEventListener("click", function () {
@@ -574,6 +581,8 @@ tab2.addEventListener("click", function () {
     tab4Content.classList.add("hidden");
     tab5.classList.remove("tab-selected");
     tab5Content.classList.add("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
   }
 });
 tab3.addEventListener("click", function () {
@@ -588,6 +597,8 @@ tab3.addEventListener("click", function () {
     tab4Content.classList.add("hidden");
     tab5.classList.remove("tab-selected");
     tab5Content.classList.add("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
   }
 });
 tab4.addEventListener("click", function () {
@@ -602,6 +613,8 @@ tab4.addEventListener("click", function () {
     tab4Content.classList.remove("hidden");
     tab5.classList.remove("tab-selected");
     tab5Content.classList.add("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
   }
 });
 tab5.addEventListener("click", function () {
@@ -616,6 +629,24 @@ tab5.addEventListener("click", function () {
     tab4Content.classList.add("hidden");
     tab5.classList.add("tab-selected");
     tab5Content.classList.remove("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
+  }
+});
+tab6.addEventListener("click", function () {
+  if (!tab6.classList.contains("tab-selected")) {
+    tab1.classList.remove("tab-selected");
+    tab1Content.classList.add("hidden");
+    tab2.classList.remove("tab-selected");
+    tab2Content.classList.add("hidden");
+    tab3.classList.remove("tab-selected");
+    tab3Content.classList.add("hidden");
+    tab4.classList.remove("tab-selected");
+    tab4Content.classList.add("hidden");
+    tab5.classList.remove("tab-selected");
+    tab5Content.classList.add("hidden");
+    tab6.classList.add("tab-selected");
+    tab6Content.classList.remove("hidden");
   }
 });
 

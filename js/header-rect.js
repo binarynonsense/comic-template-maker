@@ -1,6 +1,6 @@
 import { Rect } from "./rect.js";
 
-export class PaperRect extends Rect {
+export class HeaderRect extends Rect {
   constructor(
     parent,
     x,
