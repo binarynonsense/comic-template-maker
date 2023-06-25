@@ -4,9 +4,9 @@ import { HeaderRect as HeaderRect } from "./header-rect.js";
 import { PanelGrid } from "./panels.js";
 
 import preset_1 from "../presets/american-1.js";
+import preset_2 from "../presets/american-2.js";
 // not supported by firefox:
-// import preset_1 from "../presets/american-1-single.json" assert { type: "json" };
-// import preset_2 from "../presets/american-1-double.json" assert { type: "json" };
+// import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
 const version = "1.0.0";
 let canvas;
@@ -26,6 +26,7 @@ function init() {
   opt.innerHTML = "custom";
   select.appendChild(opt);
   loadPresetFromJson(preset_1);
+  loadPresetFromJson(preset_2);
   setPreset(0);
 }
 
