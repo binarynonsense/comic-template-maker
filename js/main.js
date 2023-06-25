@@ -33,10 +33,13 @@ function init() {
 function loadPresetFromJson(preset) {
   const select = document.getElementById("preset-select");
   // sanitize /////
-  preset.name = sanitizeString(preset.name);
+  preset.name = sanitizeString(preset.name, "comic book");
   // TODO: check version is valid
   preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
-  preset.units = sanitizeString(preset.units);
+  preset.units = sanitizeString(preset.units, "inches", [
+    "inches",
+    "centimeters",
+  ]);
 
   preset.trimWidth = sanitizeNumber(preset.trimWidth);
   preset.trimHeight = sanitizeNumber(preset.trimHeight);
@@ -62,11 +65,24 @@ function loadPresetFromJson(preset) {
   return opt.value;
 }
 
-function sanitizeString(input) {
+function sanitizeString(input, defaultString, validStrings) {
+  let isValid = true;
   if (typeof input !== "string") {
-    return "???";
+    isValid = false;
+  } else if (validStrings) {
+    isValid = false;
+    for (let index = 0; index < validStrings.length; index++) {
+      if (input === validStrings[index]) {
+        isValid = true;
+        break;
+      }
+    }
   }
-  return input;
+  if (isValid) {
+    return input;
+  } else {
+    return defaultString;
+  }
 }
 function sanitizeNumber(input) {
   let value = Number(input);
