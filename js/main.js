@@ -33,12 +33,87 @@ function init() {
 
 function loadPresetFromJson(preset) {
   const select = document.getElementById("preset-select");
+  // sanitize /////
+  preset.name = sanitizeString(preset.name);
+  // TODO: check version is valid
+  preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
+  preset.units = sanitizeString(preset.units);
+  preset.isDoublePage = sanitizeBool(preset.isDoublePage);
+
+  preset.trimWidth = sanitizeNumber(preset.trimWidth);
+  preset.trimHeight = sanitizeNumber(preset.trimHeight);
+  preset.safeMarginTop = sanitizeNumber(preset.safeMarginTop);
+  preset.safeMarginBottom = sanitizeNumber(preset.safeMarginBottom);
+  preset.safeMarginLeft = sanitizeNumber(preset.safeMarginLeft);
+  preset.safeMarginRight = sanitizeNumber(preset.safeMarginRight);
+  preset.bleedMargin = sanitizeNumber(preset.bleedMargin);
+  preset.paperWidth = sanitizeNumber(preset.paperWidth);
+  preset.paperHeight = sanitizeNumber(preset.paperHeight);
+
+  preset.lineWidthThin = sanitizeNumber(preset.lineWidthThin);
+  preset.lineWidthThick = sanitizeNumber(preset.lineWidthThick);
+  preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
+  preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
+  preset.headerPadding = sanitizeNumber(preset.headerPadding);
+  /////////////////
   let opt = document.createElement("option");
   opt.value = select.childElementCount;
-  opt.innerHTML = preset.name;
+  opt.textContent = preset.name;
   select.appendChild(opt);
   presets.push(preset);
   return opt.value;
+}
+
+function sanitizeString(input) {
+  if (typeof input !== "string") {
+    return "???";
+  }
+  return input;
+}
+function sanitizeNumber(input) {
+  let value = Number(input);
+  if (typeof value !== "number") {
+    console.log("not a number " + value);
+    return 0;
+  }
+  return value;
+}
+function sanitizeBool(input) {
+  if (typeof input !== "boolean") {
+    return false;
+  }
+  return input;
+}
+function sanitizeVersion(input) {
+  if (typeof input !== "string") {
+    return "0.0.0";
+  }
+  if (!separateVersionText(input)) {
+    return "0.0.0";
+  }
+  return input;
+}
+
+function separateVersionText(version) {
+  const regex =
+    /^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)(-beta(?<beta>[0-9]+))*$/;
+  let match = version.match(regex);
+  if (match === null) return undefined;
+  return match.groups;
+}
+
+function isVersionOlder(testVersion, referenceVersion) {
+  const test = separateVersionText(testVersion);
+  const reference = separateVersionText(referenceVersion);
+  if (test === undefined || reference === undefined) return true;
+  if (test.major < reference.major) return true;
+  if (test.minor < reference.minor) return true;
+  if (test.patch < reference.patch) return true;
+  if (test.beta !== undefined) {
+    if (reference.beta === undefined) return true;
+    if (test.beta < reference.beta) return true;
+  }
+  return false;
 }
 
 function setPreset(index) {
@@ -47,14 +122,18 @@ function setPreset(index) {
   document.getElementById("units-select").value = preset.units;
   document.getElementById("double-page-checkbox").checked = preset.isDoublePage;
 
-  document.getElementById("paper-width-input").value = preset.paperWidth;
-  document.getElementById("paper-height-input").value = preset.paperHeight;
-  document.getElementById("bleed-width-input").value = preset.bleedWidth;
-  document.getElementById("bleed-height-input").value = preset.bleedHeight;
   document.getElementById("trim-width-input").value = preset.trimWidth;
   document.getElementById("trim-height-input").value = preset.trimHeight;
-  document.getElementById("safe-width-input").value = preset.safeWidth;
-  document.getElementById("safe-height-input").value = preset.safeHeight;
+  document.getElementById("bleed-margin-input").value = preset.bleedMargin;
+  document.getElementById("safe-margin-top-input").value = preset.safeMarginTop;
+  document.getElementById("safe-margin-bottom-input").value =
+    preset.safeMarginBottom;
+  document.getElementById("safe-margin-left-input").value =
+    preset.safeMarginLeft;
+  document.getElementById("safe-margin-right-input").value =
+    preset.safeMarginRight;
+  document.getElementById("paper-width-input").value = preset.paperWidth;
+  document.getElementById("paper-height-input").value = preset.paperHeight;
 
   document.getElementById("line-width-thin-input").value = preset.lineWidthThin;
   document.getElementById("line-width-thick-input").value =
@@ -75,14 +154,21 @@ function getPresetFromCurrentValues(name, author) {
   preset.units = document.getElementById("units-select").value;
   preset.isDoublePage = document.getElementById("double-page-checkbox").checked;
 
-  preset.paperWidth = document.getElementById("paper-width-input").value;
-  preset.paperHeight = document.getElementById("paper-height-input").value;
-  preset.bleedWidth = document.getElementById("bleed-width-input").value;
-  preset.bleedHeight = document.getElementById("bleed-height-input").value;
   preset.trimWidth = document.getElementById("trim-width-input").value;
   preset.trimHeight = document.getElementById("trim-height-input").value;
-  preset.safeWidth = document.getElementById("safe-width-input").value;
-  preset.safeHeight = document.getElementById("safe-height-input").value;
+  preset.bleedWidth = document.getElementById("bleed-margin-input").value;
+  preset.safeMarginTop = document.getElementById("safe-margin-top-input").value;
+  preset.safeMarginBottom = document.getElementById(
+    "safe-margin-bottom-input"
+  ).value;
+  preset.safeMarginLeft = document.getElementById(
+    "safe-margin-left-input"
+  ).value;
+  preset.safeMarginRight = document.getElementById(
+    "safe-margin-right-input"
+  ).value;
+  preset.paperWidth = document.getElementById("paper-width-input").value;
+  preset.paperHeight = document.getElementById("paper-height-input").value;
 
   preset.lineWidthThin = document.getElementById("line-width-thin-input").value;
   preset.lineWidthThick = document.getElementById(
@@ -128,22 +214,28 @@ function drawCanvas() {
   const lineWidthThick =
     document.getElementById("line-width-thick-input").value * toInches;
 
-  const paperWidth =
-    document.getElementById("paper-width-input").value * toInches;
-  const paperHeight =
-    document.getElementById("paper-height-input").value * toInches;
-  const bleedWidth =
-    document.getElementById("bleed-width-input").value * toInches;
-  const bleedHeight =
-    document.getElementById("bleed-height-input").value * toInches;
   const trimWidth =
     document.getElementById("trim-width-input").value * toInches;
   const trimHeight =
     document.getElementById("trim-height-input").value * toInches;
-  const safeWidth =
-    document.getElementById("safe-width-input").value * toInches;
-  const safeHeight =
-    document.getElementById("safe-height-input").value * toInches;
+  const safeMarginTop =
+    document.getElementById("safe-margin-top-input").value * toInches;
+  const safeMarginBottom =
+    document.getElementById("safe-margin-bottom-input").value * toInches;
+  const safeMarginLeft =
+    document.getElementById("safe-margin-left-input").value * toInches;
+  const safeMarginRight =
+    document.getElementById("safe-margin-right-input").value * toInches;
+  const bleedMargin =
+    document.getElementById("bleed-margin-input").value * toInches;
+  let paperWidth =
+    document.getElementById("paper-width-input").value * toInches;
+  if (paperWidth < trimWidth + bleedMargin * 2)
+    paperWidth = trimWidth + bleedMargin * 2;
+  let paperHeight =
+    document.getElementById("paper-height-input").value * toInches;
+  if (paperHeight < trimHeight + bleedMargin * 2)
+    paperHeight = trimHeight + bleedMargin * 2;
 
   const borderMarkMaxLength =
     document.getElementById("border-marks-length-input").value * toInches;
@@ -182,9 +274,9 @@ function drawCanvas() {
       ? 1
       : 0.393701;
   const panelGutterSize =
-    document.getElementById("panel-gutter-size-input").value * toInches;
+    document.getElementById("panel-gutter-size-input").value * panelToInches;
   const panelLineWidth =
-    document.getElementById("panel-line-width-input").value * toInches;
+    document.getElementById("panel-line-width-input").value * panelToInches;
   const panelLineColor = document.getElementById(
     "panel-line-color-input"
   ).value;
@@ -193,6 +285,8 @@ function drawCanvas() {
   //////////////////////
   const paperRect = new PaperRect(
     undefined,
+    0,
+    0,
     paperWidth,
     paperHeight,
     ppi,
@@ -205,7 +299,18 @@ function drawCanvas() {
   );
   paperRect.setBorderStyle(0, lineColor, [0, 0]);
 
-  const bleedRect = new Rect(paperRect, bleedWidth, bleedHeight, ppi);
+  const bleedWidth = trimWidth + bleedMargin * 2;
+  const bleedHeight = trimHeight + bleedMargin * 2;
+  const bleedX = (paperWidth - bleedWidth) / 2;
+  const bleedY = (paperHeight - bleedHeight) / 2;
+  const bleedRect = new Rect(
+    paperRect,
+    bleedX,
+    bleedY,
+    bleedWidth,
+    bleedHeight,
+    ppi
+  );
   bleedRect.setBorderStyle(
     drawBleed ? lineWidthThick * lineWidthMultiplier : 0,
     lineColor,
@@ -213,7 +318,16 @@ function drawCanvas() {
   );
   paperRect.addChild(bleedRect);
 
-  const trimRect = new Rect(bleedRect, trimWidth, trimHeight, ppi);
+  const trimX = bleedX + bleedMargin;
+  const trimY = bleedY + bleedMargin;
+  const trimRect = new Rect(
+    bleedRect,
+    trimX,
+    trimY,
+    trimWidth,
+    trimHeight,
+    ppi
+  );
   trimRect.setBorderStyle(
     drawTrim ? lineWidthThin * lineWidthMultiplier : 0,
     lineColor,
@@ -221,43 +335,54 @@ function drawCanvas() {
   );
   bleedRect.addChild(trimRect);
 
-  const safeRect_1 = new SafeRect(
-    trimRect,
-    safeWidth,
-    safeHeight,
-    ppi,
-    drawBorderMarks,
-    lineWidthThick * lineWidthMultiplier,
-    borderMarkMaxLength,
-    isDoublePage ? 1 : 0
-  );
-  safeRect_1.setBorderStyle(
-    drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
-    lineColor,
-    [safeHeight / 120, safeHeight / 120]
-  );
-  if (panelPreset > -1)
-    safeRect_1.addPanels(
-      new PanelGrid(
-        safeRect_1,
-        panelPreset,
-        panelLineWidth * panelToInches,
-        panelLineColor,
-        panelGutterSize * panelToInches
-      )
-    );
-  trimRect.addChild(safeRect_1);
-
   if (isDoublePage) {
-    const safeRect_2 = new SafeRect(
+    let safeX = trimX + safeMarginLeft;
+    let safeY = trimY + safeMarginTop;
+    let safeWidth =
+      (trimWidth - safeMarginLeft - safeMarginRight - safeMarginRight * 2) / 2;
+    let safeHeight = trimHeight - safeMarginTop - safeMarginBottom;
+    let middleMarkPos = trimX + trimWidth / 2;
+    const safeRect_1 = new SafeRect(
       trimRect,
+      safeX,
+      safeY,
       safeWidth,
       safeHeight,
       ppi,
       drawBorderMarks,
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
-      2
+      undefined
+    );
+    safeRect_1.setBorderStyle(
+      drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
+      lineColor,
+      [safeHeight / 120, safeHeight / 120]
+    );
+    if (panelPreset > -1)
+      safeRect_1.addPanels(
+        new PanelGrid(
+          safeRect_1,
+          panelPreset,
+          panelLineWidth,
+          panelLineColor,
+          panelGutterSize
+        )
+      );
+    trimRect.addChild(safeRect_1);
+
+    safeX = safeX + safeWidth + 2 * safeMarginRight;
+    const safeRect_2 = new SafeRect(
+      trimRect,
+      safeX,
+      safeY,
+      safeWidth,
+      safeHeight,
+      ppi,
+      drawBorderMarks,
+      lineWidthThick * lineWidthMultiplier,
+      borderMarkMaxLength,
+      middleMarkPos
     );
     safeRect_2.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
@@ -269,12 +394,45 @@ function drawCanvas() {
         new PanelGrid(
           safeRect_2,
           panelPreset,
-          panelLineWidth * panelToInches,
+          panelLineWidth,
           panelLineColor,
-          panelGutterSize * panelToInches
+          panelGutterSize
         )
       );
     trimRect.addChild(safeRect_2);
+  } else {
+    const safeX = trimX + safeMarginLeft;
+    const safeY = trimY + safeMarginTop;
+    const safeWidth = trimWidth - safeMarginLeft - safeMarginRight;
+    const safeHeight = trimHeight - safeMarginTop - safeMarginBottom;
+    const safeRect_1 = new SafeRect(
+      trimRect,
+      safeX,
+      safeY,
+      safeWidth,
+      safeHeight,
+      ppi,
+      drawBorderMarks,
+      lineWidthThick * lineWidthMultiplier,
+      borderMarkMaxLength,
+      undefined
+    );
+    safeRect_1.setBorderStyle(
+      drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
+      lineColor,
+      [safeHeight / 120, safeHeight / 120]
+    );
+    if (panelPreset > -1)
+      safeRect_1.addPanels(
+        new PanelGrid(
+          safeRect_1,
+          panelPreset,
+          panelLineWidth,
+          panelLineColor,
+          panelGutterSize
+        )
+      );
+    trimRect.addChild(safeRect_1);
   }
 
   canvas.width = paperRect.getSize().width * ppi;

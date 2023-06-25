@@ -190,7 +190,18 @@ select {
 
 label {
   margin: 10px 0px 0px 0px;
-  display: block;
+  display: inline-block;
+  width: 100%;
+}
+
+.columns-parent {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.two-columns {
+  flex: 0 1 50%;
 }
 
 .h3-extratop {

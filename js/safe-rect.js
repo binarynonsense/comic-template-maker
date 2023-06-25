@@ -3,30 +3,21 @@ import { Rect } from "./rect.js";
 export class SafeRect extends Rect {
   constructor(
     parent,
+    x,
+    y,
     width,
     height,
     ppi,
     drawBorderMarks,
     borderMarkWidth,
     borderMarkMaxLength,
-    layoutType
+    middleMarkPos
   ) {
-    super(parent, width, height, ppi);
+    super(parent, x, y, width, height, ppi);
     this.drawBorderMarks = drawBorderMarks;
     this.borderMarkWidth = borderMarkWidth;
     this.borderMarkMaxLength = borderMarkMaxLength;
-    this.layoutType = layoutType;
-    if (this.layoutType !== 0) {
-      const parentSize = this.parent.getSize();
-      const middleGap = (this.x - parentSize.x) * 2;
-      this.width = (this.width - middleGap) / 2;
-      if (this.layoutType === 2) {
-        // right side
-        this.x = this.x + this.width + middleGap;
-      } else if (this.layoutType === 1) {
-        this.middleMarkPos = this.x + this.width + middleGap / 2;
-      }
-    }
+    this.middleMarkPos = middleMarkPos;
   }
 
   addPanels(panels) {
@@ -267,7 +258,7 @@ export class SafeRect extends Rect {
       ///////////////////
       // DOUBLE MIDDLE //
       ///////////////////
-      if (this.layoutType === 1) {
+      if (this.middleMarkPos && this.middleMarkPos > 0) {
         markLineLength = this.borderMarkMaxLength;
         markLineWidth = this.borderMarkWidth;
         lineDash = [0, 0];

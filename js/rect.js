@@ -1,16 +1,11 @@
 export class Rect {
-  constructor(parent, width, height, ppi) {
+  constructor(parent, x, y, width, height, ppi) {
     this.parent = parent;
     this.children = [];
     this.width = width;
     this.height = height;
-    this.x = 0;
-    this.y = 0;
-    if (this.parent) {
-      const parentSize = this.parent.getSize();
-      this.x = parentSize.x + (parentSize.width - this.width) / 2;
-      this.y = parentSize.y + (parentSize.height - this.height) / 2;
-    }
+    this.x = x;
+    this.y = y;
     this.ppi = ppi;
     this.lineWidth = 0;
     this.lineColor = "#000";

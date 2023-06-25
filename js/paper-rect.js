@@ -3,6 +3,8 @@ import { Rect } from "./rect.js";
 export class PaperRect extends Rect {
   constructor(
     parent,
+    x,
+    y,
     width,
     height,
     ppi,
@@ -13,7 +15,7 @@ export class PaperRect extends Rect {
     headerTextHeight,
     headerTextWeight
   ) {
-    super(parent, width, height, ppi);
+    super(parent, x, y, width, height, ppi);
     this.lineWidth = lineWidth;
     this.lineWidthMultiplier = lineWidthMultiplier;
     this.drawHeader = drawHeader;
@@ -40,23 +42,23 @@ export class PaperRect extends Rect {
       ctx.fillText("BOOK: ", bookTextX * this.ppi, bookTextY * this.ppi);
       let bookTextWidthPx = ctx.measureText("BOOK: ");
       let bookLineX = bookTextX + bookTextWidthPx.width / this.ppi;
-      let bookLinelength = this.headerTextHeight * 8;
+      let bookLineLength = this.headerTextHeight * 8;
       this.drawLine(
         ctx,
         bookLineX,
         bookTextY,
         0,
-        -bookLinelength,
+        -bookLineLength,
         this.lineWidth,
         [0, 0],
         this.lineColor
       );
       // ISSUE /////////
-      let issueTextX = bookLineX + bookLinelength;
+      let issueTextX = bookLineX + bookLineLength;
       ctx.fillText("  ISSUE #: ", issueTextX * this.ppi, bookTextY * this.ppi);
       let issueTextWidthPx = ctx.measureText("  ISSUE #: ");
       let issueLineX = issueTextX + issueTextWidthPx.width / this.ppi;
-      let issueLineLeght = bookLinelength / 4;
+      let issueLineLeght = bookLineLength / 4;
       this.drawLine(
         ctx,
         issueLineX,
@@ -72,7 +74,7 @@ export class PaperRect extends Rect {
       ctx.fillText("  PAGE #: ", pageTextX * this.ppi, bookTextY * this.ppi);
       let pageTextWidthPx = ctx.measureText("  PAGE #: ");
       let pageLineX = pageTextX + pageTextWidthPx.width / this.ppi;
-      let pageLinelength = bookLinelength / 4;
+      let pageLinelength = bookLineLength / 4;
       this.drawLine(
         ctx,
         pageLineX,
