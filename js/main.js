@@ -218,10 +218,107 @@ function drawTemplate() {
   // set timeout so loading spinner can show
   setTimeout(() => {
     const makeDoublePage =
-      document.getElementById("layout-select").value === "double"
+      document.getElementById("layout-spread-select").value === "double"
         ? true
         : false;
-    drawCanvas(makeDoublePage);
+    let renderedPageData = drawCanvas(makeDoublePage);
+    if (document.getElementById("layout-template-select").value === "page") {
+      if (
+        document.getElementById("layout-page-paper-select").value === "header"
+      ) {
+        // paper size = header area size
+        document.getElementById("result-img").src = canvas.toDataURL();
+        showLoading(false);
+      } else {
+        let paperWidth = 8.3;
+        let paperHeight = 11.7;
+        if (
+          document.getElementById("layout-page-paper-select").value === "us"
+        ) {
+          paperWidth = 8.5;
+          paperHeight = 11;
+        }
+        let image = new Image();
+        image.onload = function () {
+          canvas.width = paperWidth * renderedPageData.ppi;
+          canvas.height = paperHeight * renderedPageData.ppi;
+          const doScale =
+            document.getElementById("layout-page-scaling-select").value ===
+            "scale"
+              ? true
+              : false;
+          let pageWidth = renderedPageData.width;
+          let pageHeight = renderedPageData.height;
+          if (doScale) {
+            const widthRatio = canvas.width / pageWidth;
+            const heightRatio = canvas.height / pageHeight;
+            const ratio = widthRatio < heightRatio ? widthRatio : heightRatio;
+            pageWidth = ratio * pageWidth;
+            pageHeight = ratio * pageHeight;
+          }
+          const gapX = canvas.width - pageWidth;
+          const gapY = canvas.height - pageHeight;
+          // draw the image
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(this, gapX / 2, gapY / 2, pageWidth, pageHeight);
+
+          document.getElementById("result-img").src = canvas.toDataURL();
+          showLoading(false);
+        };
+        image.src = canvas.toDataURL();
+      }
+    } else {
+      let paperWidth = 8.3;
+      let paperHeight = 11.7;
+      if (
+        document.getElementById("layout-thumbnails-paper-select").value === "us"
+      ) {
+        paperWidth = 8.5;
+        paperHeight = 11;
+      }
+      const numThumbsX = document.getElementById(
+        "layout-thumbnails-columns-input"
+      ).value;
+      const numThumbsY = document.getElementById(
+        "layout-thumbnails-rows-input"
+      ).value;
+      let image = new Image();
+      image.onload = function () {
+        canvas.width = paperWidth * renderedPageData.ppi;
+        canvas.height = paperHeight * renderedPageData.ppi;
+        const pageWidth = renderedPageData.width;
+        const pageHeight = renderedPageData.height;
+        const thumbWidthRatio = canvas.width / numThumbsX / pageWidth;
+        const thumbHeightRatio = canvas.height / numThumbsY / pageHeight;
+        const thumbRatio =
+          thumbWidthRatio < thumbHeightRatio
+            ? thumbWidthRatio
+            : thumbHeightRatio;
+        const thumbWidth = thumbRatio * pageWidth;
+        const thumbHeight = thumbRatio * pageHeight;
+        const gapX = canvas.width - thumbWidth * numThumbsX;
+        const gapY = canvas.height - thumbHeight * numThumbsY;
+        // draw the pattern
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let subCanvas = document.createElement("canvas");
+        subCanvas.width = thumbWidth;
+        subCanvas.height = thumbHeight;
+        subCanvas
+          .getContext("2d")
+          .drawImage(this, 0, 0, subCanvas.width, subCanvas.height);
+        ctx.fillStyle = ctx.createPattern(subCanvas, "repeat");
+        ctx.translate(gapX / 2, gapY / 2);
+        ctx.fillRect(0, 0, thumbWidth * numThumbsX, thumbHeight * numThumbsY);
+
+        document.getElementById("result-img").src = canvas.toDataURL();
+        showLoading(false);
+      };
+      image.src = canvas.toDataURL();
+    }
   }, "100");
 }
 
@@ -462,9 +559,7 @@ function drawCanvas(makeDoublePage) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   headerRect.draw(ctx, true);
 
-  document.getElementById("result-img").src = canvas.toDataURL();
-
-  showLoading(false);
+  return { ppi: ppi, width: canvas.width, height: canvas.height };
 }
 
 function saveBase64AsFile(base64, fileName) {
@@ -551,6 +646,20 @@ for (let i = 0; i < refreshable.length; i++) {
     } else {
       if (event.target.classList.contains("preset-value")) {
         document.getElementById("preset-select").value = 0;
+      } else if (event.target.id === "layout-template-select") {
+        if (
+          document.getElementById("layout-template-select").value === "page"
+        ) {
+          document.getElementById("layout-page-div").classList.remove("hidden");
+          document
+            .getElementById("layout-thumbnails-div")
+            .classList.add("hidden");
+        } else {
+          document.getElementById("layout-page-div").classList.add("hidden");
+          document
+            .getElementById("layout-thumbnails-div")
+            .classList.remove("hidden");
+        }
       }
       if (document.getElementById("autorefresh-checkbox").checked)
         drawTemplate();

@@ -352,12 +352,67 @@
         <i class="fa-solid fa-grip tab-icon"></i>
       </div>
       <div id="tab-4-content" class="hidden">
+        <h3 class="h3-extratop">Layout options:</h3>
         <label
-          >spread<select id="layout-select" class="refresh">
+          >page spread<select id="layout-spread-select" class="refresh">
             <option value="single">single page</option>
             <option value="double">double page</option>
           </select></label
         >
+        <label
+          >template type<select id="layout-template-select" class="refresh">
+            <option value="page">page template</option>
+            <option value="thumbnails">thumbnails template</option>
+          </select></label
+        >
+        <div id="layout-page-div">
+          <h3 class="h3-extratop">Page template options:</h3>
+          <label
+            >paper size
+            <select id="layout-page-paper-select" class="refresh">
+              <option value="header">use header area size</option>
+              <option value="a4">DIN A4</option>
+              <option value="us">US Letter</option>
+            </select></label
+          >
+          <label
+            >scaling
+            <select id="layout-page-scaling-select" class="refresh">
+              <option value="keep">keep dimensions</option>
+              <option value="scale">scale to fit paper dimensions</option>
+            </select></label
+          >
+        </div>
+        <div id="layout-thumbnails-div" class="hidden">
+          <h3 class="h3-extratop">Thumbnails template options:</h3>
+          <div class="columns-parent">
+            <label class="two-columns"
+              >columns<input
+                type="number"
+                id="layout-thumbnails-columns-input"
+                class="refresh"
+                step="1"
+                min="1"
+                value="2"
+            /></label>
+            <label class="two-columns"
+              >rows<input
+                type="number"
+                id="layout-thumbnails-rows-input"
+                class="refresh"
+                step="1"
+                min="1"
+                value="3"
+            /></label>
+          </div>
+          <label
+            >paper size
+            <select id="layout-thumbnails-paper-select" class="refresh">
+              <option value="a4">DIN A4</option>
+              <option value="us">US Letter</option>
+            </select></label
+          >
+        </div>
       </div>
 
       <div class="tab" id="tab-5" title="save/load">
