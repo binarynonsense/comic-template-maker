@@ -1,5 +1,5 @@
 export default {
-  name: "american comic v2",
+  name: "american comic page v2",
   presetFormatVersion: "1.0.0",
   units: "inches",
 
