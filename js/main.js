@@ -177,6 +177,10 @@ function drawCanvas() {
   ).checked;
 
   const panelPreset = document.getElementById("panel-preset-select").value;
+  const panelToInches =
+    document.getElementById("panel-units-select").value === "inches"
+      ? 1
+      : 0.393701;
   const panelGutterSize =
     document.getElementById("panel-gutter-size-input").value * toInches;
   const panelLineWidth =
@@ -237,9 +241,9 @@ function drawCanvas() {
       new PanelGrid(
         safeRect_1,
         panelPreset,
-        panelLineWidth,
+        panelLineWidth * panelToInches,
         panelLineColor,
-        panelGutterSize
+        panelGutterSize * panelToInches
       )
     );
   trimRect.addChild(safeRect_1);
@@ -265,9 +269,9 @@ function drawCanvas() {
         new PanelGrid(
           safeRect_2,
           panelPreset,
-          panelLineWidth,
+          panelLineWidth * panelToInches,
           panelLineColor,
-          panelGutterSize
+          panelGutterSize * panelToInches
         )
       );
     trimRect.addChild(safeRect_2);
