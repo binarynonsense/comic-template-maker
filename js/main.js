@@ -56,6 +56,10 @@ function setPreset(index) {
   document.getElementById("safe-width-input").value = preset.safeWidth;
   document.getElementById("safe-height-input").value = preset.safeHeight;
 
+  document.getElementById("line-width-thin-input").value = preset.lineWidthThin;
+  document.getElementById("line-width-thick-input").value =
+    preset.lineWidthThick;
+
   document.getElementById("border-marks-length-input").value =
     preset.borderMarkMaxLength;
   document.getElementById("header-text-height-input").value =
@@ -79,6 +83,11 @@ function getPresetFromCurrentValues(name, author) {
   preset.trimHeight = document.getElementById("trim-height-input").value;
   preset.safeWidth = document.getElementById("safe-width-input").value;
   preset.safeHeight = document.getElementById("safe-height-input").value;
+
+  preset.lineWidthThin = document.getElementById("line-width-thin-input").value;
+  preset.lineWidthThick = document.getElementById(
+    "line-width-thick-input"
+  ).value;
 
   preset.borderMarkMaxLength = document.getElementById(
     "border-marks-length-input"
@@ -114,12 +123,10 @@ function drawCanvas() {
     document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
   const isDoublePage = document.getElementById("double-page-checkbox").checked;
 
-  const backGroundColor = document.getElementById(
-    "background-color-input"
-  ).value;
-  const lineColor = document.getElementById("line-color-input").value;
-  const lineThicknessMultiplier =
-    document.getElementById("line-thickness-select").value === "thin" ? 1 : 3;
+  const lineWidthThin =
+    document.getElementById("line-width-thin-input").value * toInches;
+  const lineWidthThick =
+    document.getElementById("line-width-thick-input").value * toInches;
 
   const paperWidth =
     document.getElementById("paper-width-input").value * toInches;
@@ -144,6 +151,17 @@ function drawCanvas() {
     document.getElementById("header-text-height-input").value * toInches;
   const headerPadding =
     document.getElementById("header-padding-input").value * toInches;
+
+  const backGroundColor = document.getElementById(
+    "background-color-input"
+  ).value;
+  const lineColor = document.getElementById("line-color-input").value;
+  const lineWidthMultiplier = document.getElementById(
+    "line-thickness-select"
+  ).value;
+  const headerTextWeight = document.getElementById(
+    "header-text-weight-select"
+  ).value;
 
   const drawBackground = document.getElementById(
     "paper-draw-bg-checkbox"
@@ -174,17 +192,18 @@ function drawCanvas() {
     paperWidth,
     paperHeight,
     ppi,
-    0.004,
-    lineThicknessMultiplier,
+    lineWidthThin,
+    lineWidthMultiplier,
     drawHeader,
     headerPadding,
-    headerTextHeight
+    headerTextHeight,
+    headerTextWeight
   );
   paperRect.setBorderStyle(0, lineColor, [0, 0]);
 
   const bleedRect = new Rect(paperRect, bleedWidth, bleedHeight, ppi);
   bleedRect.setBorderStyle(
-    drawBleed ? 0.008 * lineThicknessMultiplier : 0,
+    drawBleed ? lineWidthThick * lineWidthMultiplier : 0,
     lineColor,
     [0, 0]
   );
@@ -192,7 +211,7 @@ function drawCanvas() {
 
   const trimRect = new Rect(bleedRect, trimWidth, trimHeight, ppi);
   trimRect.setBorderStyle(
-    drawTrim ? 0.004 * lineThicknessMultiplier : 0,
+    drawTrim ? lineWidthThin * lineWidthMultiplier : 0,
     lineColor,
     [0, 0]
   );
@@ -203,13 +222,13 @@ function drawCanvas() {
     safeWidth,
     safeHeight,
     ppi,
-    lineThicknessMultiplier,
     drawBorderMarks,
+    lineWidthThick * lineWidthMultiplier,
     borderMarkMaxLength,
     isDoublePage ? 1 : 0
   );
   safeRect_1.setBorderStyle(
-    drawSafe ? 0.004 * lineThicknessMultiplier : 0,
+    drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
     lineColor,
     [safeHeight / 120, safeHeight / 120]
   );
@@ -231,13 +250,13 @@ function drawCanvas() {
       safeWidth,
       safeHeight,
       ppi,
-      lineThicknessMultiplier,
       drawBorderMarks,
+      lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
       2
     );
     safeRect_2.setBorderStyle(
-      drawSafe ? 0.004 * lineThicknessMultiplier : 0,
+      drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );

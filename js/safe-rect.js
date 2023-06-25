@@ -6,14 +6,14 @@ export class SafeRect extends Rect {
     width,
     height,
     ppi,
-    lineThicknessMultiplier,
     drawBorderMarks,
+    borderMarkWidth,
     borderMarkMaxLength,
     layoutType
   ) {
     super(parent, width, height, ppi);
-    this.lineThicknessMultiplier = lineThicknessMultiplier;
     this.drawBorderMarks = drawBorderMarks;
+    this.borderMarkWidth = borderMarkWidth;
     this.borderMarkMaxLength = borderMarkMaxLength;
     this.layoutType = layoutType;
     if (this.layoutType !== 0) {
@@ -42,17 +42,17 @@ export class SafeRect extends Rect {
       // MIDDLE ///////
       /////////////////
       const bleedSize = this.parent.getParent().getSize();
-      let lineLength = this.borderMarkMaxLength;
-      let lineWidth = 0.01 * this.lineThicknessMultiplier;
+      let markLineLength = this.borderMarkMaxLength;
+      let markLineWidth = this.borderMarkWidth;
       let lineDash = [0, 0];
       // up
       this.drawLine(
         ctx,
         this.x + this.width / 2,
         bleedSize.y,
-        lineLength,
+        markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -61,9 +61,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + this.width / 2,
         bleedSize.y + bleedSize.height,
-        -lineLength,
+        -markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -73,8 +73,8 @@ export class SafeRect extends Rect {
         bleedSize.x,
         this.y + this.height / 2,
         0,
-        lineLength,
-        lineWidth,
+        markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -84,23 +84,23 @@ export class SafeRect extends Rect {
         bleedSize.x + bleedSize.width,
         this.y + this.height / 2,
         0,
-        -lineLength,
-        lineWidth,
+        -markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
       /////////////////
       // THIRDS ///////
       /////////////////
-      lineLength = this.borderMarkMaxLength / 2;
+      markLineLength = this.borderMarkMaxLength / 2;
       // up
       this.drawLine(
         ctx,
         this.x + this.width / 3,
         bleedSize.y,
-        lineLength,
+        markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -108,9 +108,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + (2 * this.width) / 3,
         bleedSize.y,
-        lineLength,
+        markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -119,9 +119,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + this.width / 3,
         bleedSize.y + bleedSize.height,
-        -lineLength,
+        -markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -129,9 +129,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + (2 * this.width) / 3,
         bleedSize.y + bleedSize.height,
-        -lineLength,
+        -markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -141,8 +141,8 @@ export class SafeRect extends Rect {
         bleedSize.x,
         this.y + this.height / 3,
         0,
-        lineLength,
-        lineWidth,
+        markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -151,8 +151,8 @@ export class SafeRect extends Rect {
         bleedSize.x,
         this.y + (2 * this.height) / 3,
         0,
-        lineLength,
-        lineWidth,
+        markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -162,8 +162,8 @@ export class SafeRect extends Rect {
         bleedSize.x + bleedSize.width,
         this.y + this.height / 3,
         0,
-        -lineLength,
-        lineWidth,
+        -markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -172,8 +172,8 @@ export class SafeRect extends Rect {
         bleedSize.x + bleedSize.width,
         this.y + (2 * this.height) / 3,
         0,
-        -lineLength,
-        lineWidth,
+        -markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -185,9 +185,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + this.width / 4,
         bleedSize.y,
-        lineLength,
+        markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -195,9 +195,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + (3 * this.width) / 4,
         bleedSize.y,
-        lineLength,
+        markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -206,9 +206,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + this.width / 4,
         bleedSize.y + bleedSize.height,
-        -lineLength,
+        -markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -216,9 +216,9 @@ export class SafeRect extends Rect {
         ctx,
         this.x + (3 * this.width) / 4,
         bleedSize.y + bleedSize.height,
-        -lineLength,
+        -markLineLength,
         0,
-        lineWidth,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -228,8 +228,8 @@ export class SafeRect extends Rect {
         bleedSize.x,
         this.y + this.height / 4,
         0,
-        lineLength,
-        lineWidth,
+        markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -238,8 +238,8 @@ export class SafeRect extends Rect {
         bleedSize.x,
         this.y + (3 * this.height) / 4,
         0,
-        lineLength,
-        lineWidth,
+        markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -249,8 +249,8 @@ export class SafeRect extends Rect {
         bleedSize.x + bleedSize.width,
         this.y + this.height / 4,
         0,
-        -lineLength,
-        lineWidth,
+        -markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -259,8 +259,8 @@ export class SafeRect extends Rect {
         bleedSize.x + bleedSize.width,
         this.y + (3 * this.height) / 4,
         0,
-        -lineLength,
-        lineWidth,
+        -markLineLength,
+        markLineWidth,
         lineDash,
         this.lineColor
       );
@@ -268,17 +268,17 @@ export class SafeRect extends Rect {
       // DOUBLE MIDDLE //
       ///////////////////
       if (this.layoutType === 1) {
-        lineLength = this.borderMarkMaxLength;
-        lineWidth = 0.01 * this.lineThicknessMultiplier;
+        markLineLength = this.borderMarkMaxLength;
+        markLineWidth = this.borderMarkWidth;
         lineDash = [0, 0];
         // up
         this.drawLine(
           ctx,
           this.middleMarkPos,
           bleedSize.y,
-          lineLength,
+          markLineLength,
           0,
-          lineWidth,
+          markLineWidth,
           lineDash,
           this.lineColor
         );
@@ -287,9 +287,9 @@ export class SafeRect extends Rect {
           ctx,
           this.middleMarkPos,
           bleedSize.y + bleedSize.height,
-          -lineLength,
+          -markLineLength,
           0,
-          lineWidth,
+          markLineWidth,
           lineDash,
           this.lineColor
         );

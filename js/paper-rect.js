@@ -7,18 +7,21 @@ export class PaperRect extends Rect {
     height,
     ppi,
     lineWidth,
-    lineThicknessMultiplier,
+    lineWidthMultiplier,
     drawHeader,
     headerPadding,
-    headerTextHeight
+    headerTextHeight,
+    headerTextWeight
   ) {
     super(parent, width, height, ppi);
-    this.lineThicknessMultiplier = lineThicknessMultiplier;
-    this.lineWidth = lineWidth * lineThicknessMultiplier;
+    this.lineWidth = lineWidth;
+    this.lineWidthMultiplier = lineWidthMultiplier;
     this.drawHeader = drawHeader;
     this.headerPadding = headerPadding;
     this.headerTextHeight = headerTextHeight;
+    this.headerTextWeight = headerTextWeight;
   }
+
   draw(ctx, recursive = false) {
     const bleedSize = this.children[0];
     const fontSize = this.headerTextHeight;
@@ -28,7 +31,7 @@ export class PaperRect extends Rect {
     if (this.drawHeader) {
       ctx.strokeStyle = this.lineColor;
       ctx.fillStyle = this.lineColor;
-      ctx.font = `${this.lineThicknessMultiplier > 1 ? "bold " : ""}${
+      ctx.font = `${this.headerTextWeight === "bold" ? "bold " : ""}${
         fontSize * this.ppi
       }px Arial`;
       // BOOK /////////

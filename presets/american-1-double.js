@@ -11,6 +11,8 @@ export default {
   trimHeight: "10.1875",
   safeWidth: "12.75",
   safeHeight: "9.687",
+  lineWidthThin: "0.004",
+  lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
   headerTextHeight: "0.17",
   headerPadding: "0.19",
