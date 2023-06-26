@@ -207,18 +207,21 @@
             >background color<input
               type="color"
               id="background-color-input"
-              class="refresh"
+              class="refresh preset-value"
               value="#FFFFFF"
           /></label>
           <label
             >line color<input
               type="color"
               id="line-color-input"
-              class="refresh"
+              class="refresh preset-value"
               value="#A4DDED"
           /></label>
           <label
-            >line width<select id="line-thickness-select" class="refresh">
+            >line width<select
+              id="line-thickness-select"
+              class="refresh preset-value"
+            >
               <option value="1">x1</option>
               <option value="2">x2</option>
               <option value="3">x3</option>
@@ -230,7 +233,7 @@
           <label
             >header text weight<select
               id="header-text-weight-select"
-              class="refresh"
+              class="refresh preset-value"
             >
               <option value="normal">normal</option>
               <option value="bold">bold</option>
@@ -240,7 +243,7 @@
             <input
               type="checkbox"
               id="paper-draw-bg-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw background
@@ -249,7 +252,7 @@
             <input
               type="checkbox"
               id="paper-draw-header-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw header
@@ -258,7 +261,7 @@
             <input
               type="checkbox"
               id="bleed-draw-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw bleed area
@@ -267,7 +270,7 @@
             <input
               type="checkbox"
               id="trim-draw-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw trim area
@@ -276,7 +279,7 @@
             <input
               type="checkbox"
               id="safe-draw-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw safe area
@@ -285,7 +288,7 @@
             <input
               type="checkbox"
               id="border-marks-draw-checkbox"
-              class="refresh"
+              class="refresh preset-value"
               checked
             />
             draw fraction marks
@@ -298,7 +301,7 @@
       </div>
       <div id="tab-3-content" class="hidden">
         <label
-          >panels<select id="panel-preset-select" class="refresh">
+          >panels<select id="panel-preset-select" class="refresh preset-value">
             <option value="-1">none</option>
             <option value="0">1 x 1</option>
             <option value="1">2 x 2</option>
@@ -307,7 +310,7 @@
           </select></label
         >
         <label
-          >units<select id="panel-units-select" class="refresh">
+          >units<select id="panel-units-select" class="refresh preset-value">
             <option value="inches">inches</option>
             <option value="cm">centimeters</option>
           </select></label
@@ -316,7 +319,7 @@
           >gutter size<input
             type="number"
             id="panel-gutter-size-input"
-            class="refresh"
+            class="refresh preset-value"
             step="0.05"
             min="0"
             value="0.15"
@@ -325,7 +328,7 @@
           >line width<input
             type="number"
             id="panel-line-width-input"
-            class="refresh"
+            class="refresh preset-value"
             step="0.01"
             min="0"
             value="0.04"
@@ -334,7 +337,7 @@
           >line color<input
             type="color"
             id="panel-line-color-input"
-            class="refresh"
+            class="refresh preset-value"
             value="#000000"
         /></label>
       </div>
@@ -345,7 +348,10 @@
       <div id="tab-4-content" class="hidden">
         <h3 class="h3-extratop">Layout options:</h3>
         <label
-          >page spread<select id="layout-spread-select" class="refresh">
+          >page spread<select
+            id="layout-spread-select"
+            class="refresh preset-value"
+          >
             <option value="single">single page</option>
             <option value="double">double page</option>
           </select></label
@@ -354,12 +360,15 @@
           >ppi<input
             type="number"
             id="ppi-input"
-            class="refresh"
+            class="refresh preset-value"
             step="150"
             value="300"
         /></label>
         <label
-          >template type<select id="layout-template-select" class="refresh">
+          >template type<select
+            id="layout-template-select"
+            class="refresh preset-value"
+          >
             <option value="page">page template</option>
             <option value="thumbnails">thumbnails template</option>
           </select></label
@@ -368,7 +377,7 @@
           <h3 class="h3-extratop">Page template options:</h3>
           <label
             >paper size
-            <select id="layout-page-paper-select" class="refresh">
+            <select id="layout-page-paper-select" class="refresh preset-value">
               <option value="header">use header area size</option>
               <option value="a4">A4</option>
               <option value="b4">B4</option>
@@ -378,7 +387,10 @@
           >
           <label
             >scaling
-            <select id="layout-page-scaling-select" class="refresh">
+            <select
+              id="layout-page-scaling-select"
+              class="refresh preset-value"
+            >
               <option value="keep">keep dimensions</option>
               <option value="scale">scale to fit paper dimensions</option>
             </select></label
@@ -391,7 +403,7 @@
               >columns<input
                 type="number"
                 id="layout-thumbnails-columns-input"
-                class="refresh"
+                class="refresh preset-value"
                 step="1"
                 min="1"
                 value="3"
@@ -400,7 +412,7 @@
               >rows<input
                 type="number"
                 id="layout-thumbnails-rows-input"
-                class="refresh"
+                class="refresh preset-value"
                 step="1"
                 min="1"
                 value="3"
@@ -408,7 +420,10 @@
           </div>
           <label
             >paper size
-            <select id="layout-thumbnails-paper-select" class="refresh">
+            <select
+              id="layout-thumbnails-paper-select"
+              class="refresh preset-value"
+            >
               <option value="a4">DIN A4</option>
               <option value="us">US Letter</option>
             </select></label
