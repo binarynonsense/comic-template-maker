@@ -50,6 +50,7 @@ function loadPresetFromJson(preset) {
   preset.name = sanitizeString(preset.name, "comic book");
   // TODO: check version is valid
   preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
+  //////////////// dimensions ///////////////////////////
   preset.units = sanitizeString(preset.units, "inches", ["inches", "cm"]);
 
   preset.trimWidth = sanitizeNumber(preset.trimWidth);
@@ -67,6 +68,23 @@ function loadPresetFromJson(preset) {
   preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
   preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
   preset.headerPadding = sanitizeNumber(preset.headerPadding);
+  //////////////// rendering ///////////////////////////
+  // preset.renderBackgroundColor // TODO sanitize color
+  // preset.renderLineColor
+  if (preset.renderLineWidth !== undefined)
+    preset.renderLineWidth = sanitizeNumber(preset.renderLineWidth);
+  if (preset.renderHeaderTextWidth !== undefined)
+    preset.renderHeaderTextWidth = sanitizeNumber(preset.renderLineWidth);
+  if (preset.renderDrawBackground !== undefined)
+    preset.renderDrawBackground = sanitizeBool(preset.renderDrawBackground);
+  if (preset.renderDrawHeader !== undefined)
+    preset.renderDrawHeader = sanitizeBool(preset.renderDrawHeader);
+  if (preset.renderDrawBleed !== undefined)
+    preset.renderDrawBleed = sanitizeBool(preset.renderDrawBleed);
+  if (preset.renderDrawSafe !== undefined)
+    preset.renderDrawSafe = sanitizeBool(preset.renderDrawSafe);
+  if (preset.renderDrawMarks !== undefined)
+    preset.renderDrawMarks = sanitizeBool(preset.renderDrawMarks);
   /////////////////
   let opt = document.createElement("option");
   opt.value = select.childElementCount;
@@ -98,7 +116,6 @@ function sanitizeString(input, defaultString, validStrings) {
 function sanitizeNumber(input) {
   let value = Number(input);
   if (typeof value !== "number") {
-    console.log("not a number " + value);
     return 0;
   }
   return value;
@@ -170,70 +187,74 @@ function setPreset(index, updateSelect = true) {
     preset.headerTextHeight;
   document.getElementById("header-padding-input").value = preset.headerPadding;
   //////////////// rendering ///////////////////////////
-  if (preset.renderBackgroundColor) {
+  if (preset.renderBackgroundColor !== undefined) {
     document.getElementById("background-color-input").value =
       preset.renderBackgroundColor;
   }
-  if (preset.renderLineColor) {
+  if (preset.renderLineColor !== undefined) {
     document.getElementById("line-color-input").value = preset.renderLineColor;
   }
-  if (preset.renderLineWidth) {
+  if (preset.renderLineWidth !== undefined) {
     document.getElementById("line-thickness-select").value =
       preset.renderLineWidth;
   }
-  if (preset.renderHeaderTextWidth) {
+  if (preset.renderHeaderTextWidth !== undefined) {
     document.getElementById("header-text-weight-select").value =
       preset.renderHeaderTextWidth;
   }
 
-  if (preset.renderDrawBackground) {
+  if (preset.renderDrawBackground !== undefined) {
     document.getElementById("paper-draw-bg-checkbox").checked =
       preset.renderDrawBackground;
   }
-  if (preset.renderDrawHeader) {
+  if (preset.renderDrawHeader !== undefined) {
     document.getElementById("paper-draw-header-checkbox").checked =
-      preset.renderDrawBackground;
+      preset.renderDrawHeader;
   }
-  if (preset.renderDrawBleed) {
+  if (preset.renderDrawBleed !== undefined) {
     document.getElementById("bleed-draw-checkbox").checked =
       preset.renderDrawBleed;
   }
-  if (preset.renderDrawTrim) {
+  if (preset.renderDrawTrim !== undefined) {
     document.getElementById("trim-draw-checkbox").checked =
       preset.renderDrawTrim;
   }
-  if (preset.renderDrawMarks) {
+  if (preset.renderDrawSafe !== undefined) {
+    document.getElementById("safe-draw-checkbox").checked =
+      preset.renderDrawSafe;
+  }
+  if (preset.renderDrawMarks !== undefined) {
     document.getElementById("border-marks-draw-checkbox").checked =
       preset.renderDrawMarks;
   }
   //////////////// panels ///////////////////////////
-  if (preset.panelsPreset) {
+  if (preset.panelsPreset !== undefined) {
     document.getElementById("panel-preset-select").value = preset.panelsPreset;
   }
-  if (preset.panelsUnits) {
+  if (preset.panelsUnits !== undefined) {
     document.getElementById("panel-units-select").value = preset.panelsUnits;
   }
-  if (preset.panelsGutterSize) {
+  if (preset.panelsGutterSize !== undefined) {
     document.getElementById("panel-gutter-size-input").value =
       preset.panelsGutterSize;
   }
-  if (preset.panelsLineWidth) {
+  if (preset.panelsLineWidth !== undefined) {
     document.getElementById("panel-line-width-input").value =
       preset.panelsLineWidth;
   }
-  if (preset.panelsLineColor) {
+  if (preset.panelsLineColor !== undefined) {
     document.getElementById("panel-line-color-input").value =
       preset.panelsLineColor;
   }
   //////////////// layout ///////////////////////////
-  if (preset.layoutPageSpread) {
+  if (preset.layoutPageSpread !== undefined) {
     document.getElementById("layout-spread-select").value =
       preset.layoutPageSpread;
   }
-  if (preset.layoutPpi) {
+  if (preset.layoutPpi !== undefined) {
     document.getElementById("ppi-input").value = preset.layoutPpi;
   }
-  if (preset.layoutTemplateType) {
+  if (preset.layoutTemplateType !== undefined) {
     document.getElementById("layout-template-select").value =
       preset.layoutTemplateType;
     if (document.getElementById("layout-template-select").value === "page") {
@@ -246,23 +267,23 @@ function setPreset(index, updateSelect = true) {
         .classList.remove("hidden");
     }
   }
-  if (preset.layoutPagePaperSize) {
+  if (preset.layoutPagePaperSize !== undefined) {
     document.getElementById("layout-page-paper-select").value =
       preset.layoutPagePaperSize;
   }
-  if (preset.layoutPageScaling) {
+  if (preset.layoutPageScaling !== undefined) {
     document.getElementById("layout-page-scaling-select").value =
       preset.layoutPageScaling;
   }
-  if (preset.layoutThumbnailsRows) {
+  if (preset.layoutThumbnailsRows !== undefined) {
     document.getElementById("layout-thumbnails-rows-input").value =
       preset.layoutThumbnailsRows;
   }
-  if (preset.layoutThumbnailsColumns) {
+  if (preset.layoutThumbnailsColumns !== undefined) {
     document.getElementById("layout-thumbnails-columns-input").value =
       preset.layoutThumbnailsColumns;
   }
-  if (preset.layoutThumbnailsPaperSize) {
+  if (preset.layoutThumbnailsPaperSize !== undefined) {
     document.getElementById("layout-thumbnails-paper-select").value =
       preset.layoutThumbnailsPaperSize;
   }
@@ -330,6 +351,8 @@ function getPresetFromCurrentValues(name, author) {
     ).checked;
     preset.renderDrawTrim =
       document.getElementById("trim-draw-checkbox").checked;
+    preset.renderDrawSafe =
+      document.getElementById("safe-draw-checkbox").checked;
     preset.renderDrawMarks = document.getElementById(
       "border-marks-draw-checkbox"
     ).checked;
