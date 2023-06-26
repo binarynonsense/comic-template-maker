@@ -1,6 +1,7 @@
 import { initCanvas, drawTemplate } from "./draw.js";
 import { initPresets, setPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
+import { initView } from "./view.js";
 
 const version = "1.0.0";
 
@@ -10,6 +11,7 @@ function init() {
   initCanvas();
   initPresets(version);
   initSaveLoad();
+  initView();
   drawTemplate();
 }
 

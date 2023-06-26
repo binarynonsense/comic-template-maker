@@ -10,6 +10,15 @@
   </head>
   <body>
     <div id="left">
+      <div class="zoom-button" id="zoom-button-1" title="zoom in">
+        <i class="fa-solid fa-magnifying-glass-plus zoom-button-icon"></i>
+      </div>
+      <div class="zoom-button" id="zoom-button-2" title="zoom out">
+        <i class="fa-solid fa-magnifying-glass-minus zoom-button-icon"></i>
+      </div>
+      <div class="zoom-button" id="zoom-button-3" title="reset view">
+        <i class="fa-solid fa-expand zoom-button-icon"></i>
+      </div>
       <div id="result-div">
         <img src="" id="result-img" alt="" />
       </div>
@@ -508,6 +517,7 @@
     </div>
   </body>
 
+  <script src="./libs/panzoom/panzoom.min.js"></script>
   <script src="./libs/blob-stream/blob-stream.js"></script>
   <script src="./libs/pdfkit/pdfkit.standalone.js"></script>
   <script src="./js/main.js" type="module"></script>
