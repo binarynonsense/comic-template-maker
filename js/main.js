@@ -1,7 +1,7 @@
 import { initCanvas, drawTemplate } from "./draw.js";
 import { initPresets, setPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
-import { initView } from "./view.js";
+import { initView, resetView } from "./view.js";
 
 const version = "1.0.0";
 
@@ -29,8 +29,10 @@ for (let i = 0; i < refreshable.length; i++) {
       if (event.target.value != 0) {
         if (event.target.value - 1 !== 0) setPreset(0, false); // load all defaults
         setPreset(event.target.value - 1);
-        if (document.getElementById("autorefresh-checkbox").checked)
+        if (document.getElementById("autorefresh-checkbox").checked) {
           drawTemplate();
+          resetView();
+        }
       }
     } else {
       if (event.target.classList.contains("preset-value")) {
