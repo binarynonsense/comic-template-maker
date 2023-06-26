@@ -29,6 +29,7 @@ function init() {
   document.getElementById("info-version-p").innerHTML = `${version}`;
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
+  opt.disabled = true;
   opt.value = 0;
   opt.innerHTML = "custom";
   select.appendChild(opt);
