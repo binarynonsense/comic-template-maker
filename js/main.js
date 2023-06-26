@@ -5,6 +5,9 @@ import { PanelGrid } from "./panels.js";
 
 import preset_1 from "../presets/american-comic-1.js";
 import preset_2 from "../presets/american-comic-2.js";
+import preset_3 from "../presets/american-manga-1.js";
+import preset_4 from "../presets/japanese-manga-1.js";
+import preset_5 from "../presets/six-by-nine-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
@@ -27,6 +30,9 @@ function init() {
   select.appendChild(opt);
   loadPresetFromJson(preset_1);
   loadPresetFromJson(preset_2);
+  loadPresetFromJson(preset_3);
+  loadPresetFromJson(preset_4);
+  loadPresetFromJson(preset_5);
   setPreset(0);
 }
 
@@ -36,10 +42,7 @@ function loadPresetFromJson(preset) {
   preset.name = sanitizeString(preset.name, "comic book");
   // TODO: check version is valid
   preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
-  preset.units = sanitizeString(preset.units, "inches", [
-    "inches",
-    "centimeters",
-  ]);
+  preset.units = sanitizeString(preset.units, "inches", ["inches", "cm"]);
 
   preset.trimWidth = sanitizeNumber(preset.trimWidth);
   preset.trimHeight = sanitizeNumber(preset.trimHeight);
@@ -222,6 +225,7 @@ function drawTemplate() {
         ? true
         : false;
     let renderedPageData = drawCanvas(makeDoublePage);
+    console.log(`img ${renderedPageData.width}x${renderedPageData.height}`);
     if (document.getElementById("layout-template-select").value === "page") {
       if (
         document.getElementById("layout-page-paper-select").value === "header"
@@ -230,14 +234,31 @@ function drawTemplate() {
         document.getElementById("result-img").src = canvas.toDataURL();
         showLoading(false);
       } else {
-        let paperWidth = 8.3;
-        let paperHeight = 11.7;
+        // a4 210 mm x 297 mm
+        let paperWidth = 8.27;
+        let paperHeight = 11.69;
         if (
           document.getElementById("layout-page-paper-select").value === "us"
         ) {
           paperWidth = 8.5;
           paperHeight = 11;
+        } else if (
+          document.getElementById("layout-page-paper-select").value === "b4"
+        ) {
+          paperWidth = 10.12;
+          paperHeight = 14.33;
+        } //257 x 364 mm
+        else if (
+          document.getElementById("layout-page-paper-select").value === "11x17"
+        ) {
+          paperWidth = 11;
+          paperHeight = 17;
         }
+        console.log(
+          `paper ${paperWidth * renderedPageData.ppi}x${
+            paperHeight * renderedPageData.ppi
+          }`
+        );
         let image = new Image();
         image.onload = function () {
           canvas.width = paperWidth * renderedPageData.ppi;
