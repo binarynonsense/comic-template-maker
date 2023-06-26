@@ -2,6 +2,7 @@ import { Rect } from "./rect.js";
 import { SafeRect } from "./safe-rect.js";
 import { HeaderRect as HeaderRect } from "./header-rect.js";
 import { PanelGrid } from "./panels.js";
+
 import { showLoading } from "./loading.js";
 
 let canvas;
@@ -9,6 +10,10 @@ let canvas;
 export function initCanvas() {
   canvas = document.createElement("canvas");
   canvas.id = "hidden-canvas";
+}
+
+export function getCanvas() {
+  return canvas;
 }
 
 export function drawTemplate() {
