@@ -3,8 +3,8 @@ import { SafeRect } from "./safe-rect.js";
 import { HeaderRect as HeaderRect } from "./header-rect.js";
 import { PanelGrid } from "./panels.js";
 
-import preset_1 from "../presets/american-1.js";
-import preset_2 from "../presets/american-2.js";
+import preset_1 from "../presets/american-comic-1.js";
+import preset_2 from "../presets/american-comic-2.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
