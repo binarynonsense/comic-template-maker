@@ -8,6 +8,8 @@ import preset_2 from "../presets/american-comic-2.js";
 import preset_3 from "../presets/american-manga-1.js";
 import preset_4 from "../presets/japanese-manga-1.js";
 import preset_5 from "../presets/six-by-nine-1.js";
+import preset_6 from "../presets/thumbs-american-single-1.js";
+import preset_7 from "../presets/thumbs-american-double-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
@@ -33,6 +35,8 @@ function init() {
   loadPresetFromJson(preset_3);
   loadPresetFromJson(preset_4);
   loadPresetFromJson(preset_5);
+  loadPresetFromJson(preset_6);
+  loadPresetFromJson(preset_7);
   setPreset(0);
 }
 
@@ -135,7 +139,7 @@ function isVersionOlder(testVersion, referenceVersion) {
 
 function setPreset(index) {
   const preset = presets[index];
-
+  //////////////// dimensions ///////////////////////////
   document.getElementById("units-select").value = preset.units;
 
   document.getElementById("trim-width-input").value = preset.trimWidth;
@@ -162,13 +166,110 @@ function setPreset(index) {
   document.getElementById("header-text-height-input").value =
     preset.headerTextHeight;
   document.getElementById("header-padding-input").value = preset.headerPadding;
+  //////////////// rendering ///////////////////////////
+  if (preset.renderBackgroundColor) {
+    document.getElementById("background-color-input").value =
+      preset.renderBackgroundColor;
+  }
+  if (preset.renderLineColor) {
+    document.getElementById("line-color-input").value = preset.renderLineColor;
+  }
+  if (preset.renderLineWidth) {
+    document.getElementById("line-thickness-select").value =
+      preset.renderLineWidth;
+  }
+  if (preset.renderHeaderTextWidth) {
+    document.getElementById("header-text-weight-select").value =
+      preset.renderHeaderTextWidth;
+  }
 
+  if (preset.renderDrawBackground) {
+    document.getElementById("paper-draw-bg-checkbox").checked =
+      preset.renderDrawBackground;
+  }
+  if (preset.renderDrawHeader) {
+    document.getElementById("paper-draw-header-checkbox").checked =
+      preset.renderDrawBackground;
+  }
+  if (preset.renderDrawBleed) {
+    document.getElementById("bleed-draw-checkbox").checked =
+      preset.renderDrawBleed;
+  }
+  if (preset.renderDrawTrim) {
+    document.getElementById("trim-draw-checkbox").checked =
+      preset.renderDrawTrim;
+  }
+  if (preset.renderDrawMarks) {
+    document.getElementById("border-marks-draw-checkbox").checked =
+      preset.renderDrawMarks;
+  }
+  //////////////// panels ///////////////////////////
+  if (preset.panelsPreset) {
+    document.getElementById("panel-preset-select").value = preset.panelsPreset;
+  }
+  if (preset.panelsUnits) {
+    document.getElementById("panel-units-select").value = preset.panelsUnits;
+  }
+  if (preset.panelsGutterSize) {
+    document.getElementById("panel-gutter-size-select").value =
+      preset.panelsGutterSize;
+  }
+  if (preset.panelsLineWidth) {
+    document.getElementById("panel-line-width-input").value =
+      preset.panelsLineWidth;
+  }
+  if (preset.panelsLineColor) {
+    document.getElementById("panel-line-color-input").value =
+      preset.panelsLineColor;
+  }
+  //////////////// layout ///////////////////////////
+  if (preset.layoutPageSpread) {
+    document.getElementById("layout-spread-select").value =
+      preset.layoutPageSpread;
+  }
+  if (preset.layoutPpi) {
+    document.getElementById("ppi-input").value = preset.layoutPpi;
+  }
+  if (preset.layoutTemplateType) {
+    document.getElementById("layout-template-select").value =
+      preset.layoutTemplateType;
+    if (document.getElementById("layout-template-select").value === "page") {
+      document.getElementById("layout-page-div").classList.remove("hidden");
+      document.getElementById("layout-thumbnails-div").classList.add("hidden");
+    } else {
+      document.getElementById("layout-page-div").classList.add("hidden");
+      document
+        .getElementById("layout-thumbnails-div")
+        .classList.remove("hidden");
+    }
+  }
+  if (preset.layoutPagePaperSize) {
+    document.getElementById("layout-page-paper-select").value =
+      preset.layoutPagePaperSize;
+  }
+  if (preset.layoutPageScaling) {
+    document.getElementById("layout-page-scaling-select").value =
+      preset.layoutPageScaling;
+  }
+  if (preset.layoutThumbnailsRows) {
+    document.getElementById("layout-thumbnails-rows-input").value =
+      preset.layoutThumbnailsRows;
+  }
+  if (preset.layoutThumbnailsColumns) {
+    document.getElementById("layout-thumbnails-columns-input").value =
+      preset.layoutThumbnailsColumns;
+  }
+  if (preset.layoutThumbnailsPaperSize) {
+    document.getElementById("layout-thumbnails-paper-select").value =
+      preset.layoutThumbnailsPaperSize;
+  }
+  //////////////////////////////////////////////////
   document.getElementById("preset-select").value = index + 1;
 }
 
 function getPresetFromCurrentValues(name, author) {
   const preset = { ...presets[1] };
-
+  //////////////// dimensions ///////////////////////////
   preset.units = document.getElementById("units-select").value;
 
   preset.trimWidth = document.getElementById("trim-width-input").value;
@@ -203,7 +304,73 @@ function getPresetFromCurrentValues(name, author) {
     "header-text-height-input"
   ).value;
   preset.headerPadding = document.getElementById("header-padding-input").value;
-
+  //////////////// rendering ///////////////////////////
+  if (document.getElementById("save-preset-rendering-checkbox").checked) {
+    preset.renderBackgroundColor = document.getElementById(
+      "background-color-input"
+    ).value;
+    preset.renderLineColor = document.getElementById("line-color-input").value;
+    preset.renderLineWidth = document.getElementById(
+      "line-thickness-select"
+    ).value;
+    preset.renderHeaderTextWidth = document.getElementById(
+      "header-text-weight-select"
+    ).value;
+    preset.renderDrawBackground = document.getElementById(
+      "paper-draw-bg-checkbox"
+    ).checked;
+    preset.renderDrawHeader = document.getElementById(
+      "paper-draw-header-checkbox"
+    ).checked;
+    preset.renderDrawBleed = document.getElementById(
+      "bleed-draw-checkbox"
+    ).checked;
+    preset.renderDrawTrim =
+      document.getElementById("trim-draw-checkbox").checked;
+    preset.renderDrawMarks = document.getElementById(
+      "border-marks-draw-checkbox"
+    ).checked;
+  }
+  //////////////// panels ///////////////////////////
+  if (document.getElementById("save-preset-panels-checkbox").checked) {
+    preset.panelsPreset = document.getElementById("panel-preset-select").value;
+    preset.panelsUnits = document.getElementById("panel-units-select").value;
+    preset.panelsGutterSize = document.getElementById(
+      "panel-gutter-size-input"
+    ).value;
+    preset.panelsLineWidth = document.getElementById(
+      "panel-line-width-input"
+    ).value;
+    preset.panelsLineColor = document.getElementById(
+      "panel-line-color-input"
+    ).value;
+  }
+  //////////////// layout ///////////////////////////
+  if (document.getElementById("save-preset-layout-checkbox").checked) {
+    preset.layoutPageSpread = document.getElementById(
+      "layout-spread-select"
+    ).value;
+    preset.layoutPpi = document.getElementById("ppi-input").value;
+    preset.layoutTemplateType = document.getElementById(
+      "layout-template-select"
+    ).value;
+    preset.layoutPagePaperSize = document.getElementById(
+      "layout-page-paper-select"
+    ).value;
+    preset.layoutPageScaling = document.getElementById(
+      "layout-page-scaling-select"
+    ).value;
+    preset.layoutThumbnailsRows = document.getElementById(
+      "layout-thumbnails-rows-input"
+    ).value;
+    preset.layoutThumbnailsColumns = document.getElementById(
+      "layout-thumbnails-columns-input"
+    ).value;
+    preset.layoutThumbnailsPaperSize = document.getElementById(
+      "layout-thumbnails-paper-select"
+    ).value;
+  }
+  //////////////////////////////////////////////////////
   preset.name = name;
   return preset;
 }
@@ -225,7 +392,6 @@ function drawTemplate() {
         ? true
         : false;
     let renderedPageData = drawCanvas(makeDoublePage);
-    console.log(`img ${renderedPageData.width}x${renderedPageData.height}`);
     if (document.getElementById("layout-template-select").value === "page") {
       if (
         document.getElementById("layout-page-paper-select").value === "header"
@@ -254,11 +420,6 @@ function drawTemplate() {
           paperWidth = 11;
           paperHeight = 17;
         }
-        console.log(
-          `paper ${paperWidth * renderedPageData.ppi}x${
-            paperHeight * renderedPageData.ppi
-          }`
-        );
         let image = new Image();
         image.onload = function () {
           canvas.width = paperWidth * renderedPageData.ppi;
