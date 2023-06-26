@@ -70,8 +70,10 @@ function loadPresetFromJson(preset) {
   preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
   preset.headerPadding = sanitizeNumber(preset.headerPadding);
   //////////////// rendering ///////////////////////////
-  // preset.renderBackgroundColor // TODO sanitize color
-  // preset.renderLineColor
+  if (preset.renderBackgroundColor !== undefined)
+    preset.renderBackgroundColor = sanitizeColor(preset.renderBackgroundColor);
+  if (preset.renderLineColor !== undefined)
+    preset.renderLineColor = sanitizeColor(preset.renderLineColor);
   if (preset.renderLineWidth !== undefined)
     preset.renderLineWidth = sanitizeNumber(preset.renderLineWidth);
   if (preset.renderHeaderTextWidth !== undefined)
@@ -117,22 +119,29 @@ function sanitizeString(input, defaultString, validStrings) {
 function sanitizeNumber(input) {
   let value = Number(input);
   if (typeof value !== "number") {
-    return 0;
+    return undefined;
   }
   return value;
 }
 function sanitizeBool(input) {
   if (typeof input !== "boolean") {
-    return false;
+    return undefined;
+  }
+  return input;
+}
+function sanitizeColor(input) {
+  let regex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
+  if (typeof input !== "string" || !regex.test(input)) {
+    return undefined;
   }
   return input;
 }
 function sanitizeVersion(input) {
   if (typeof input !== "string") {
-    return "0.0.0";
+    return undefined;
   }
   if (!separateVersionText(input)) {
-    return "0.0.0";
+    return undefined;
   }
   return input;
 }
@@ -162,31 +171,63 @@ function isVersionOlder(testVersion, referenceVersion) {
 function setPreset(index, updateSelect = true) {
   const preset = presets[index];
   //////////////// dimensions ///////////////////////////
-  document.getElementById("units-select").value = preset.units;
+  if (preset.units !== undefined) {
+    document.getElementById("units-select").value = preset.units;
+  }
+  if (preset.trimWidth !== undefined) {
+    document.getElementById("trim-width-input").value = preset.trimWidth;
+  }
+  if (preset.trimHeight !== undefined) {
+    document.getElementById("trim-height-input").value = preset.trimHeight;
+  }
+  if (preset.safeMarginTop !== undefined) {
+    document.getElementById("safe-margin-top-input").value =
+      preset.safeMarginTop;
+  }
+  if (preset.safeMarginBottom !== undefined) {
+    document.getElementById("safe-margin-bottom-input").value =
+      preset.safeMarginBottom;
+  }
+  if (preset.safeMarginLeft !== undefined) {
+    document.getElementById("safe-margin-left-input").value =
+      preset.safeMarginLeft;
+  }
+  if (preset.safeMarginRight !== undefined) {
+    document.getElementById("safe-margin-right-input").value =
+      preset.safeMarginRight;
+  }
+  if (preset.bleedMargin !== undefined) {
+    document.getElementById("bleed-margin-input").value = preset.bleedMargin;
+  }
+  if (preset.headerMarginTopBottom !== undefined) {
+    document.getElementById("header-margin-top-bottom-input").value =
+      preset.headerMarginTopBottom;
+  }
+  if (preset.headerMarginLeftRight !== undefined) {
+    document.getElementById("header-margin-left-right-input").value =
+      preset.headerMarginLeftRight;
+  }
 
-  document.getElementById("trim-width-input").value = preset.trimWidth;
-  document.getElementById("trim-height-input").value = preset.trimHeight;
-  document.getElementById("safe-margin-top-input").value = preset.safeMarginTop;
-  document.getElementById("safe-margin-bottom-input").value =
-    preset.safeMarginBottom;
-  document.getElementById("safe-margin-left-input").value =
-    preset.safeMarginLeft;
-  document.getElementById("safe-margin-right-input").value =
-    preset.safeMarginRight;
-  document.getElementById("bleed-margin-input").value = preset.bleedMargin;
-  document.getElementById("header-margin-top-bottom-input").value =
-    preset.headerMarginTopBottom;
-  document.getElementById("header-margin-left-right-input").value =
-    preset.headerMarginLeftRight;
-
-  document.getElementById("line-width-thin-input").value = preset.lineWidthThin;
-  document.getElementById("line-width-thick-input").value =
-    preset.lineWidthThick;
-  document.getElementById("border-marks-length-input").value =
-    preset.borderMarkMaxLength;
-  document.getElementById("header-text-height-input").value =
-    preset.headerTextHeight;
-  document.getElementById("header-padding-input").value = preset.headerPadding;
+  if (preset.lineWidthThin !== undefined) {
+    document.getElementById("line-width-thin-input").value =
+      preset.lineWidthThin;
+  }
+  if (preset.lineWidthThick !== undefined) {
+    document.getElementById("line-width-thick-input").value =
+      preset.lineWidthThick;
+  }
+  if (preset.borderMarkMaxLength !== undefined) {
+    document.getElementById("border-marks-length-input").value =
+      preset.borderMarkMaxLength;
+  }
+  if (preset.headerTextHeight !== undefined) {
+    document.getElementById("header-text-height-input").value =
+      preset.headerTextHeight;
+  }
+  if (preset.headerPadding !== undefined) {
+    document.getElementById("header-padding-input").value =
+      preset.headerPadding;
+  }
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined) {
     document.getElementById("background-color-input").value =
