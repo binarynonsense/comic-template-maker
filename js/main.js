@@ -571,29 +571,63 @@ function saveBase64AsFile(base64, fileName) {
   link.click();
   document.body.removeChild(link);
 }
+
 document
   .getElementById("save-template-button")
   .addEventListener("click", function () {
-    if (
-      document.getElementById("save-template-format-select").value === "png"
-    ) {
-      saveBase64AsFile(canvas.toDataURL(), "template.png");
-    } else {
-      saveBase64AsFile(canvas.toDataURL("image/jpeg"), "template.jpg");
-    }
+    showLoading(true);
+    // set timeout so loading spinner can show
+    setTimeout(() => {
+      if (
+        document.getElementById("save-template-format-select").value === "png"
+      ) {
+        saveBase64AsFile(canvas.toDataURL(), "template.png");
+        showLoading(false);
+      } else if (
+        document.getElementById("save-template-format-select").value === "jpg"
+      ) {
+        saveBase64AsFile(canvas.toDataURL("image/jpeg"), "template.jpg");
+        showLoading(false);
+      } else if (
+        document.getElementById("save-template-format-select").value === "pdf"
+      ) {
+        const pdf = new PDFDocument({
+          autoFirstPage: false,
+        });
+        const stream = pdf.pipe(blobStream());
+        const imgBase64 = canvas.toDataURL("image/jpeg");
+        const img = pdf.openImage(imgBase64);
+        pdf.addPage({
+          margin: 0,
+          size: [canvas.width, canvas.height],
+        });
+        pdf.image(img, 0, 0, { scale: 1 });
+        pdf.end();
+
+        const link = document.createElement("a");
+        document.body.appendChild(link);
+        link.setAttribute("type", "hidden");
+
+        stream.on("finish", function () {
+          let blob = stream.toBlob("application/pdf");
+          if (blob) {
+            let url = window.URL.createObjectURL(blob);
+            link.href = url;
+            link.download = "template.pdf";
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+            showLoading(false);
+          }
+        });
+      }
+    }, "100");
   });
 
 function savePresetFileFromCurrentValues(name) {
   let preset = getPresetFromCurrentValues(name);
   saveToFile(JSON.stringify(preset), "preset.json", "text/plain");
 }
-document
-  .getElementById("save-preset-button")
-  .addEventListener("click", function () {
-    let name = document.getElementById("save-preset-name-input").value;
-    savePresetFileFromCurrentValues(name);
-  });
-
 // TODO: merge with base64 version?
 function saveToFile(content, fileName, contentType) {
   let link = document.createElement("a");
@@ -604,8 +638,15 @@ function saveToFile(content, fileName, contentType) {
   link.download = fileName;
   link.click();
   document.body.removeChild(link);
+  window.URL.revokeObjectURL(link.href);
 }
 
+document
+  .getElementById("save-preset-button")
+  .addEventListener("click", function () {
+    let name = document.getElementById("save-preset-name-input").value;
+    savePresetFileFromCurrentValues(name);
+  });
 document
   .getElementById("load-preset-button")
   .addEventListener("click", function () {

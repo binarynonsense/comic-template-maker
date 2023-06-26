@@ -424,6 +424,7 @@
           >image file format<select id="save-template-format-select">
             <option value="png">png</option>
             <option value="jpg">jpg</option>
+            <option value="pdf">pdf</option>
           </select></label
         >
         <button id="save-template-button">SAVE</button>
@@ -470,5 +471,7 @@
     </div>
   </body>
 
+  <script src="./libs/blob-stream/blob-stream.js"></script>
+  <script src="./libs/pdfkit/pdfkit.standalone.js"></script>
   <script src="./js/main.js" type="module"></script>
 </html>
