@@ -1,5 +1,5 @@
 export default {
-  name: "american manga page v1",
+  name: "american manga page",
   presetFormatVersion: "1.0.0",
   units: "inches",
 

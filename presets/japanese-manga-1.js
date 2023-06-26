@@ -1,5 +1,5 @@
 export default {
-  name: "japanese manga page v1",
+  name: "japanese manga page",
   presetFormatVersion: "1.0.0",
   units: "cm",
 

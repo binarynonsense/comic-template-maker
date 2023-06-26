@@ -4,12 +4,14 @@ import { HeaderRect as HeaderRect } from "./header-rect.js";
 import { PanelGrid } from "./panels.js";
 
 import preset_1 from "../presets/american-comic-1.js";
-import preset_2 from "../presets/american-comic-2.js";
-import preset_3 from "../presets/american-manga-1.js";
-import preset_4 from "../presets/japanese-manga-1.js";
-import preset_5 from "../presets/six-by-nine-1.js";
-import preset_6 from "../presets/thumbs-american-single-1.js";
-import preset_7 from "../presets/thumbs-american-double-1.js";
+import preset_2 from "../presets/american-comic-1-double.js";
+import preset_3 from "../presets/thumbs-american-single-1.js";
+import preset_4 from "../presets/thumbs-american-double-1.js";
+import preset_5 from "../presets/american-comic-2.js";
+import preset_6 from "../presets/american-comic-2-double.js";
+import preset_7 from "../presets/american-manga-1.js";
+import preset_8 from "../presets/japanese-manga-1.js";
+import preset_9 from "../presets/six-by-nine-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
@@ -37,6 +39,8 @@ function init() {
   loadPresetFromJson(preset_5);
   loadPresetFromJson(preset_6);
   loadPresetFromJson(preset_7);
+  loadPresetFromJson(preset_8);
+  loadPresetFromJson(preset_9);
   setPreset(0);
 }
 
@@ -137,14 +141,13 @@ function isVersionOlder(testVersion, referenceVersion) {
   return false;
 }
 
-function setPreset(index) {
+function setPreset(index, updateSelect = true) {
   const preset = presets[index];
   //////////////// dimensions ///////////////////////////
   document.getElementById("units-select").value = preset.units;
 
   document.getElementById("trim-width-input").value = preset.trimWidth;
   document.getElementById("trim-height-input").value = preset.trimHeight;
-  document.getElementById("bleed-margin-input").value = preset.bleedMargin;
   document.getElementById("safe-margin-top-input").value = preset.safeMarginTop;
   document.getElementById("safe-margin-bottom-input").value =
     preset.safeMarginBottom;
@@ -152,6 +155,7 @@ function setPreset(index) {
     preset.safeMarginLeft;
   document.getElementById("safe-margin-right-input").value =
     preset.safeMarginRight;
+  document.getElementById("bleed-margin-input").value = preset.bleedMargin;
   document.getElementById("header-margin-top-bottom-input").value =
     preset.headerMarginTopBottom;
   document.getElementById("header-margin-left-right-input").value =
@@ -160,7 +164,6 @@ function setPreset(index) {
   document.getElementById("line-width-thin-input").value = preset.lineWidthThin;
   document.getElementById("line-width-thick-input").value =
     preset.lineWidthThick;
-
   document.getElementById("border-marks-length-input").value =
     preset.borderMarkMaxLength;
   document.getElementById("header-text-height-input").value =
@@ -211,7 +214,7 @@ function setPreset(index) {
     document.getElementById("panel-units-select").value = preset.panelsUnits;
   }
   if (preset.panelsGutterSize) {
-    document.getElementById("panel-gutter-size-select").value =
+    document.getElementById("panel-gutter-size-input").value =
       preset.panelsGutterSize;
   }
   if (preset.panelsLineWidth) {
@@ -264,7 +267,7 @@ function setPreset(index) {
       preset.layoutThumbnailsPaperSize;
   }
   //////////////////////////////////////////////////
-  document.getElementById("preset-select").value = index + 1;
+  if (updateSelect) document.getElementById("preset-select").value = index + 1;
 }
 
 function getPresetFromCurrentValues(name, author) {
@@ -284,7 +287,7 @@ function getPresetFromCurrentValues(name, author) {
   preset.safeMarginRight = document.getElementById(
     "safe-margin-right-input"
   ).value;
-  preset.bleedWidth = document.getElementById("bleed-margin-input").value;
+  preset.bleedMargin = document.getElementById("bleed-margin-input").value;
   preset.headerMarginTopBottom = document.getElementById(
     "header-margin-top-bottom-input"
   ).value;
@@ -842,6 +845,7 @@ document
     reader.onload = function (e) {
       let index = loadPresetFromJson(JSON.parse(e.target.result));
       if (document.getElementById("load-preset-apply-checkbox").checked) {
+        if (index - 1 !== 0) setPreset(0, false); // load all defaults
         setPreset(index - 1);
         if (true || document.getElementById("autorefresh-checkbox").checked)
           drawTemplate();
@@ -862,6 +866,7 @@ for (let i = 0; i < refreshable.length; i++) {
     // console.log(event.target.id);
     if (event.target.id === "preset-select") {
       if (event.target.value != 0) {
+        if (event.target.value - 1 !== 0) setPreset(0, false); // load all defaults
         setPreset(event.target.value - 1);
         if (document.getElementById("autorefresh-checkbox").checked)
           drawTemplate();
