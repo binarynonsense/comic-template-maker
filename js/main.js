@@ -19,7 +19,7 @@ function init() {
   canvas = document.createElement("canvas");
   canvas.id = "hidden-canvas";
   presets = [];
-  document.getElementById("info-version-p").innerHTML = `version: ${version}`;
+  document.getElementById("info-version-p").innerHTML = `${version}`;
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
   opt.value = 0;
