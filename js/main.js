@@ -37,7 +37,9 @@ for (let i = 0; i < refreshable.length; i++) {
     } else {
       if (event.target.classList.contains("preset-value")) {
         document.getElementById("preset-select").value = 0;
-      } else if (event.target.id === "layout-template-select") {
+      }
+
+      if (event.target.id === "layout-template-select") {
         if (
           document.getElementById("layout-template-select").value === "page"
         ) {
