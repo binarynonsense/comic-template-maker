@@ -64,8 +64,8 @@ export function loadPresetFromJson(preset) {
     preset.renderLineColor = sanitizeColor(preset.renderLineColor);
   if (preset.renderLineWidth !== undefined)
     preset.renderLineWidth = sanitizeNumber(preset.renderLineWidth);
-  if (preset.renderHeaderTextWidth !== undefined)
-    preset.renderHeaderTextWidth = sanitizeNumber(preset.renderLineWidth);
+  if (preset.renderHeaderTextWeight !== undefined)
+    preset.renderHeaderTextWeight = sanitizeString(preset.renderLineWidth);
   if (preset.renderDrawBackground !== undefined)
     preset.renderDrawBackground = sanitizeBool(preset.renderDrawBackground);
   if (preset.renderDrawHeader !== undefined)
@@ -230,9 +230,9 @@ export function setPreset(index, updateSelect = true) {
     document.getElementById("line-thickness-select").value =
       preset.renderLineWidth;
   }
-  if (preset.renderHeaderTextWidth !== undefined) {
+  if (preset.renderHeaderTextWeight !== undefined) {
     document.getElementById("header-text-weight-select").value =
-      preset.renderHeaderTextWidth;
+      preset.renderHeaderTextWeight;
   }
 
   if (preset.renderDrawBackground !== undefined) {
@@ -369,7 +369,7 @@ export function getPresetFromCurrentValues(name, author) {
     preset.renderLineWidth = document.getElementById(
       "line-thickness-select"
     ).value;
-    preset.renderHeaderTextWidth = document.getElementById(
+    preset.renderHeaderTextWeight = document.getElementById(
       "header-text-weight-select"
     ).value;
     preset.renderDrawBackground = document.getElementById(

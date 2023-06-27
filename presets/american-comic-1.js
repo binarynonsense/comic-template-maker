@@ -22,7 +22,7 @@ export default {
   renderBackgroundColor: "#ffffff",
   renderLineColor: "#a4dded",
   renderLineWidth: "1",
-  renderHeaderTextWidth: "normal",
+  renderHeaderTextWeight: "normal",
   renderDrawBackground: true,
   renderDrawHeader: true,
   renderDrawBleed: true,
