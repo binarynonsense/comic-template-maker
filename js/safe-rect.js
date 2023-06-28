@@ -23,10 +23,6 @@ export class SafeRect extends Rect {
     this.drawPanels = drawPanels;
   }
 
-  // addPanels(panels) {
-  //   this.panels = panels;
-  // }
-
   draw(ctx, recursive = false) {
     /////////////////
     // MARKS ////////

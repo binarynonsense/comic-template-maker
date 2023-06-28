@@ -128,7 +128,25 @@
   cursor: pointer;
 }
 
-.panel-tree-panel-button:hover {
-  font-weight: bold;
+.panel-tree-button-selected {
+  font-weight: bolder;
   color: #3f51b5;
+}
+
+.panel-tree-button-disabled {
+  cursor: default;
+  pointer-events: none;
+  background-color: #cacaca;
+  user-select: none;
+}
+
+/* ************************* */
+
+#panel-tree-selected-element-view {
+  margin: 5px 0px;
+  width: 100%;
+  border: 2px solid #727272;
+  border-radius: 0px;
+  background-color: #fff;
+  padding: 0 10px 5px 10px;
 }

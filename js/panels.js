@@ -1,3 +1,5 @@
+import { drawTemplate } from "./draw.js";
+
 let GridNodeType = {
   VGROUP: "vgroup",
   HGROUP: "hgroup",
@@ -8,6 +10,137 @@ let g_rootNode;
 
 export function initPanels() {
   loadPreset(1);
+
+  // type select
+  document
+    .getElementById("panel-tree-selected-element-type-select")
+    .addEventListener("change", function (event) {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          const type = document.getElementById(
+            "panel-tree-selected-element-type-select"
+          ).value;
+          if (node.type === type) return;
+          const id = node.id;
+          const children = node.children;
+          const parent = node.parent;
+          const size = node.sizePercentage;
+          let index;
+          if (parent) {
+            index = parent.getChildIndexFromId(id);
+            parent.removeChildWithId(id);
+          }
+          if (type === GridNodeType.PANEL) {
+            const newNode = new GridNode(parent, id, GridNodeType.PANEL, size);
+            newNode.children = children;
+            newNode.children.forEach((child) => {
+              child.parent = newNode;
+            });
+            if (parent) {
+              parent.addChildAtIndex(index, newNode);
+            } else {
+              g_rootNode = newNode;
+            }
+          } else {
+            const newNode = new GridNode(
+              parent,
+              id,
+              event.target.value === "vgroup"
+                ? GridNodeType.VGROUP
+                : GridNodeType.HGROUP,
+              size
+            );
+            newNode.children = children;
+            newNode.children.forEach((child) => {
+              child.parent = newNode;
+            });
+            if (parent) {
+              parent.addChildAtIndex(index, newNode);
+            } else {
+              g_rootNode = newNode;
+            }
+          }
+          drawHtmlTree(id);
+          document.getElementById(id).scrollIntoView();
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
+
+  // size input
+  document
+    .getElementById("panel-tree-selected-element-size-input")
+    .addEventListener("change", function (event) {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          let percentage = document.getElementById(
+            "panel-tree-selected-element-size-input"
+          ).value;
+          if (percentage < 0) percentage = 0;
+          else if (percentage > 100) percentage = 100;
+          if (!node.parent || node.parent.children.length <= 1)
+            percentage = 100;
+          node.sizePercentage = percentage;
+          node.parent.recalculateChildrenSizes(node);
+          drawHtmlTree(node.id);
+          document.getElementById(node.id).scrollIntoView();
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
+  // add group button
+  document
+    .getElementById("panel-tree-selected-element-addgroup-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          node.addChild(
+            new GridNode(node, getUUID(), GridNodeType.VGROUP, 100)
+          );
+          node.recalculateChildrenSizes();
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
+  // add panel button
+  document
+    .getElementById("panel-tree-selected-element-addpanel-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          node.addChild(new GridNode(node, getUUID(), GridNodeType.PANEL, 100));
+          node.recalculateChildrenSizes();
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
+  // remove button
+  document
+    .getElementById("panel-tree-selected-element-remove-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          const nodeParent = node.parent;
+          nodeParent.removeChildWithId(node.id);
+          nodeParent.recalculateChildrenSizes();
+          drawHtmlTree(nodeParent.id);
+          document.getElementById(nodeParent.id).scrollIntoView();
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
 }
 
 export function loadPreset(value) {
@@ -32,15 +165,48 @@ class GridNode {
     this.children = [];
   }
 
-  addChildren(child) {
+  addChild(child) {
     this.children.push(child);
   }
 
-  removeChildren(id) {}
+  addChildAtIndex(index, child) {
+    // this.children = [
+    //   ...this.children.slice(0, index),
+    //   child,
+    //   ...this.children.slice(index),
+    // ];
+    this.children.splice(index, 0, child);
+  }
 
-  rebuild(keepPercentage) {
-    // when its percentage changed by user -> grow/shrink siblings to fit new percentage, and
-    // propagate to children of all siblings including this one
+  removeChildWithId(id) {
+    this.children = this.children.filter((e) => e.id !== id);
+  }
+
+  getChildIndexFromId(id) {
+    for (let index = 0; index < this.children.length; index++) {
+      const child = this.children[index];
+      if (child.id === id) {
+        return index;
+      }
+    }
+    return undefined;
+  }
+
+  recalculateChildrenSizes(exceptNode) {
+    let totalNum = this.children.length;
+    let totalPercentage = 100;
+    if (exceptNode) {
+      totalNum -= 1;
+      totalPercentage -= exceptNode.sizePercentage;
+    }
+    let childPercentage = totalPercentage / totalNum;
+    for (let index = 0; index < this.children.length; index++) {
+      const child = this.children[index];
+      if (child === exceptNode) {
+        continue;
+      }
+      child.sizePercentage = childPercentage;
+    }
   }
 
   drawRect(ctx, x, y, width, height, lineWidth, lineColor, ppi) {
@@ -125,26 +291,18 @@ export function drawGrid(ctx, x, y, width, height) {
 function buildSymetricGrid(cols, rows) {
   g_rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
   for (let y = 0; y < rows; y++) {
-    let hgroup1 = new GridNode(
+    let hgroup = new GridNode(
       g_rootNode,
       getUUID(),
       GridNodeType.HGROUP,
       100 / rows
     );
-    g_rootNode.addChildren(hgroup1);
+    g_rootNode.addChild(hgroup);
     for (let x = 0; x < cols; x++) {
-      hgroup1.addChildren(
-        new GridNode(g_rootNode, getUUID(), GridNodeType.PANEL, 100 / cols)
+      hgroup.addChild(
+        new GridNode(hgroup, getUUID(), GridNodeType.PANEL, 100 / cols)
       );
     }
-  }
-
-  function getNodeFromId(node, id) {
-    if (node.id === id) return node;
-    for (let index = 0; index < node.children.length; index++) {
-      if (getNodeFromId(node.children[index], id)) return node;
-    }
-    return undefined;
   }
 
   // rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
@@ -160,6 +318,15 @@ function buildSymetricGrid(cols, rows) {
   // hgroup1.addChildren(
   //   new GridNode(rootNode, getUUID(), GridNodeType.PANEL, 50)
   // );
+}
+
+function getGridNodeFromId(node, id) {
+  if (node.id === id) return node;
+  for (let index = 0; index < node.children.length; index++) {
+    let result = getGridNodeFromId(node.children[index], id);
+    if (result) return result;
+  }
+  return undefined;
 }
 
 //////////////////////////////////////////
@@ -185,10 +352,16 @@ function getUUID() {
 
 let g_selectedNodeId;
 
-function drawHtmlTree() {
+function drawHtmlTree(selectedId) {
+  g_selectedNodeId = g_rootNode.id;
   let rootElement = document.getElementById("panel-tree-root");
   rootElement.innerHTML = "";
   buildHtmlTree(g_rootNode, rootElement);
+  if (selectedId) {
+    setSelectedTreeElementFromId(selectedId);
+  } else {
+    setSelectedTreeElementFromId(g_rootNode.id);
+  }
   return;
 }
 
@@ -201,7 +374,10 @@ function buildHtmlTree(gridNode, htmlParent) {
     panelButton.classList = "panel-tree-panel-button";
     panelButton.textContent = "panel";
     panelButton.id = gridNode.id;
+    if (gridNode.id === g_selectedNodeId)
+      panelButton.classList.add("panel-tree-button-selected");
     panelButton.addEventListener("click", function (event) {
+      handleTreeButtonClicked(panelButton);
       event.preventDefault();
       event.stopImmediatePropagation();
     });
@@ -226,7 +402,10 @@ function buildHtmlTree(gridNode, htmlParent) {
       summaryButton.textContent = "horizontal group";
     }
     summaryButton.id = gridNode.id;
+    if (gridNode.id === g_selectedNodeId)
+      summaryButton.classList.add("panel-tree-button-selected");
     summaryButton.addEventListener("click", function (event) {
+      handleTreeButtonClicked(summaryButton);
       event.preventDefault();
       event.stopImmediatePropagation();
     });
@@ -238,6 +417,98 @@ function buildHtmlTree(gridNode, htmlParent) {
         buildHtmlTree(childNode, ul);
       });
     }
+  }
+}
+
+function handleTreeButtonClicked(buttonElement) {
+  if (buttonElement.id !== g_selectedNodeId) {
+    setSelectedTreeElementFromId(buttonElement.id);
+  }
+}
+
+function setSelectedTreeElementFromId(id) {
+  document
+    .getElementById(g_selectedNodeId)
+    .classList.remove("panel-tree-button-selected");
+  let selectedElement = document.getElementById(id);
+  selectedElement.classList.add("panel-tree-button-selected");
+  g_selectedNodeId = id;
+  const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+  if (node) {
+    // debug
+    if (false) {
+      document.getElementById("panel-tree-selected-element-debug").textContent =
+        node.id;
+      document
+        .getElementById("panel-tree-selected-element-debug")
+        .classList.remove("hidden");
+    } else {
+      document
+        .getElementById("panel-tree-selected-element-debug")
+        .classList.add("hidden");
+    }
+    // type
+    document
+      .querySelectorAll("#panel-tree-selected-element-type-select option")
+      .forEach((opt) => {
+        if (node.children.length > 0 && opt.value == "panel") {
+          // nodes with children can't be converted to panels
+          opt.disabled = true;
+        } else {
+          opt.disabled = false;
+        }
+      });
+    document.getElementById("panel-tree-selected-element-type-select").value =
+      node.type;
+    // size
+    if (node.parent === undefined) {
+      document.getElementById(
+        "panel-tree-selected-element-size-input"
+      ).disabled = true;
+    } else {
+      document.getElementById(
+        "panel-tree-selected-element-size-input"
+      ).disabled = false;
+    }
+    document.getElementById("panel-tree-selected-element-size-input").value =
+      node.sizePercentage;
+    // add buttons
+    if (node.type === GridNodeType.PANEL) {
+      document
+        .getElementById("panel-tree-selected-element-addgroup-button")
+        .classList.add("panel-tree-button-disabled");
+      document
+        .getElementById("panel-tree-selected-element-addpanel-button")
+        .classList.add("panel-tree-button-disabled");
+    } else {
+      document
+        .getElementById("panel-tree-selected-element-addgroup-button")
+        .classList.remove("panel-tree-button-disabled");
+      document
+        .getElementById("panel-tree-selected-element-addpanel-button")
+        .classList.remove("panel-tree-button-disabled");
+    }
+    // remove button
+    if (node.parent === undefined) {
+      document
+        .getElementById("panel-tree-selected-element-remove-button")
+        .classList.add("panel-tree-button-disabled");
+    } else {
+      document
+        .getElementById("panel-tree-selected-element-remove-button")
+        .classList.remove("panel-tree-button-disabled");
+    }
+  } else {
+    // TODO: disable type and size inputs
+    document
+      .getElementById("panel-tree-selected-element-addgroup-button")
+      .classList.add("panel-tree-button-disabled");
+    document
+      .getElementById("panel-tree-selected-element-addpanel-button")
+      .classList.add("panel-tree-button-disabled");
+    document
+      .getElementById("panel-tree-selected-element-remove-button")
+      .classList.add("panel-tree-button-disabled");
   }
 }
 
