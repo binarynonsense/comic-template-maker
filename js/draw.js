@@ -194,6 +194,7 @@ function drawCanvas(makeDoublePage) {
   const drawBorderMarks = document.getElementById(
     "border-marks-draw-checkbox"
   ).checked;
+  const drawPanels = document.getElementById("panels-draw-checkbox").checked;
 
   if (makeDoublePage) trimWidth *= 2;
   //////////////////////
@@ -270,23 +271,14 @@ function drawCanvas(makeDoublePage) {
       drawBorderMarks,
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
-      undefined
+      undefined,
+      drawPanels
     );
     safeRect_1.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    // if (panelPreset > -1)
-    //   safeRect_1.addPanels(
-    //     new PanelGrid(
-    //       safeRect_1,
-    //       panelPreset,
-    //       panelLineWidth,
-    //       panelLineColor,
-    //       panelGutterSize
-    //     )
-    //   );
     trimRect.addChild(safeRect_1);
 
     safeX = safeX + safeWidth + 2 * safeMarginRight;
@@ -300,23 +292,14 @@ function drawCanvas(makeDoublePage) {
       drawBorderMarks,
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
-      middleMarkPos
+      middleMarkPos,
+      drawPanels
     );
     safeRect_2.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    // if (panelPreset > -1)
-    //   safeRect_2.addPanels(
-    //     new PanelGrid(
-    //       safeRect_2,
-    //       panelPreset,
-    //       panelLineWidth,
-    //       panelLineColor,
-    //       panelGutterSize
-    //     )
-    //   );
     trimRect.addChild(safeRect_2);
   } else {
     const safeX = trimX + safeMarginLeft;
@@ -333,23 +316,14 @@ function drawCanvas(makeDoublePage) {
       drawBorderMarks,
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
-      undefined
+      undefined,
+      drawPanels
     );
     safeRect_1.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    // if (panelPreset > -1)
-    //   safeRect_1.addPanels(
-    //     new PanelGrid(
-    //       safeRect_1,
-    //       panelPreset,
-    //       panelLineWidth,
-    //       panelLineColor,
-    //       panelGutterSize
-    //     )
-    //   );
     trimRect.addChild(safeRect_1);
   }
 

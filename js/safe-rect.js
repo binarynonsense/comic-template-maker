@@ -12,13 +12,15 @@ export class SafeRect extends Rect {
     drawBorderMarks,
     borderMarkWidth,
     borderMarkMaxLength,
-    middleMarkPos
+    middleMarkPos,
+    drawPanels
   ) {
     super(parent, x, y, width, height, ppi);
     this.drawBorderMarks = drawBorderMarks;
     this.borderMarkWidth = borderMarkWidth;
     this.borderMarkMaxLength = borderMarkMaxLength;
     this.middleMarkPos = middleMarkPos;
+    this.drawPanels = drawPanels;
   }
 
   // addPanels(panels) {
@@ -294,9 +296,8 @@ export class SafeRect extends Rect {
     /////////////////
     // PANELS ///////
     /////////////////
-    // if (this.panels) {
-    //   this.panels.draw(ctx);
-    // }
-    drawPanelGrid(ctx, this.x, this.y, this.width, this.height);
+    if (this.drawPanels) {
+      drawPanelGrid(ctx, this.x, this.y, this.width, this.height);
+    }
   }
 }
