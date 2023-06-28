@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Comic Book Template Maker</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/panel-tree.css" />
     <link rel="stylesheet" href="./css/loading.css" />
     <link href="./libs/fontawesome/css/fontawesome.css" rel="stylesheet" />
     <link href="./libs/fontawesome/css/solid.css" rel="stylesheet" />
@@ -43,8 +44,14 @@
       </div>
       <div id="tab-1-content">
         <label
-          >preset<select id="preset-select" class="refresh"></select
+          >load a preset<select id="preset-select" class="refresh"></select
         ></label>
+      </div>
+
+      <div class="tab" id="tab-2" title="dimensions">
+        <i class="fa-solid fa-ruler-combined tab-icon"></i>
+      </div>
+      <div id="tab-2-content" class="hidden">
         <label
           >units<select id="units-select" class="refresh preset-value">
             <option value="inches">inches</option>
@@ -157,8 +164,32 @@
           </div>
         </div>
 
+        <div id="panels-div" class="section">
+          <h3>Panels:</h3>
+          <div class="columns-parent">
+            <label class="two-columns"
+              >gutter size<input
+                type="number"
+                id="panel-gutter-size-input"
+                class="refresh preset-value"
+                step="0.05"
+                min="0"
+                value="0.15"
+            /></label>
+            <label class="two-columns"
+              >panel line width<input
+                type="number"
+                id="panel-line-width-input"
+                class="refresh preset-value"
+                step="0.01"
+                min="0"
+                value="0.04"
+            /></label>
+          </div>
+        </div>
+
         <div id="safe-div" class="section">
-          <h3>Other:</h3>
+          <h3>Template:</h3>
           <label
             >thin line width<input
               type="number"
@@ -207,10 +238,10 @@
         </div>
       </div>
 
-      <div class="tab" id="tab-2" title="rendering options">
+      <div class="tab" id="tab-3" title="rendering options">
         <i class="fa-solid fa-paintbrush tab-icon"></i>
       </div>
-      <div id="tab-2-content" class="hidden">
+      <div id="tab-3-content" class="hidden">
         <div class="section">
           <label
             >background color<input
@@ -227,7 +258,7 @@
               value="#A4DDED"
           /></label>
           <label
-            >line width<select
+            >line weight<select
               id="line-thickness-select"
               class="refresh preset-value"
             >
@@ -239,6 +270,13 @@
               <option value="6">x6</option>
             </select></label
           >
+          <label
+            >panel line color<input
+              type="color"
+              id="panel-line-color-input"
+              class="refresh preset-value"
+              value="#000000"
+          /></label>
           <label
             >header text weight<select
               id="header-text-weight-select"
@@ -302,59 +340,45 @@
             />
             draw fraction marks
           </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="panels-draw-checkbox"
+              class="refresh preset-value"
+              checked
+            />
+            draw panels
+          </label>
         </div>
       </div>
 
-      <div class="tab" id="tab-3" title="panels">
+      <div class="tab" id="tab-4" title="panel grid">
         <i class="fa-solid fa-border-all tab-icon"></i>
       </div>
-      <div id="tab-3-content" class="hidden">
+      <div id="tab-4-content" class="hidden">
         <label
-          >panels<select id="panel-preset-select" class="refresh preset-value">
-            <option value="-1">none</option>
-            <option value="0">1 x 1</option>
-            <option value="1">2 x 2</option>
-            <option value="2">3 x 3</option>
-            <option value="3">4 x 4</option>
+          >load a grid preset
+          <select id="panel-preset-select" class="refresh preset-value">
+            <option value="0" selected="selected" disabled="disabled">
+              select a preset
+            </option>
+            <option value="1">no panels</option>
+            <option value="2">1x1</option>
+            <option value="3">2x2</option>
+            <option value="4">3x3</option>
+            <option value="5">4x4</option>
           </select></label
         >
-        <label
-          >units<select id="panel-units-select" class="refresh preset-value">
-            <option value="inches">inches</option>
-            <option value="cm">centimeters</option>
-          </select></label
-        >
-        <label
-          >gutter size<input
-            type="number"
-            id="panel-gutter-size-input"
-            class="refresh preset-value"
-            step="0.05"
-            min="0"
-            value="0.15"
-        /></label>
-        <label
-          >line width<input
-            type="number"
-            id="panel-line-width-input"
-            class="refresh preset-value"
-            step="0.01"
-            min="0"
-            value="0.04"
-        /></label>
-        <label
-          >line color<input
-            type="color"
-            id="panel-line-color-input"
-            class="refresh preset-value"
-            value="#000000"
-        /></label>
+        <label>grid elements</label>
+        <div id="panel-tree">
+          <ul id="panel-tree-root"></ul>
+        </div>
       </div>
 
-      <div class="tab" id="tab-4" title="layout (page/thumbnails)">
+      <div class="tab" id="tab-5" title="layout (page/thumbnails)">
         <i class="fa-solid fa-grip tab-icon"></i>
       </div>
-      <div id="tab-4-content" class="hidden">
+      <div id="tab-5-content" class="hidden">
         <h3 class="h3-extratop">Layout options:</h3>
         <label
           >page spread<select
@@ -440,10 +464,10 @@
         </div>
       </div>
 
-      <div class="tab" id="tab-5" title="save/load">
+      <div class="tab" id="tab-6" title="save/load">
         <i class="fa-solid fa-right-left tab-icon"></i>
       </div>
-      <div id="tab-5-content" class="hidden">
+      <div id="tab-6-content" class="hidden">
         <h3 class="h3-extratop">Save Current Template To File:</h3>
         <label
           >file format<select id="save-template-format-select">
@@ -468,12 +492,7 @@
             value="comic page"
         /></label>
         <label class="checkbox-label">
-          <input
-            type="checkbox"
-            id="save-preset-dimensions-checkbox"
-            disabled
-            checked
-          />
+          <input type="checkbox" id="save-preset-dimensions-checkbox" checked />
           save dimensions
         </label>
         <label class="checkbox-label">
@@ -481,8 +500,8 @@
           save rendering options
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-panels-checkbox" />
-          save panels
+          <input type="checkbox" id="save-preset-panels-checkbox" disabled />
+          save panel grid
         </label>
         <label class="checkbox-label">
           <input type="checkbox" id="save-preset-layout-checkbox" />
@@ -491,10 +510,10 @@
         <button id="save-preset-button">SAVE</button>
       </div>
 
-      <div class="tab" id="tab-6" title="tool info">
+      <div class="tab" id="tab-7" title="tool info">
         <i class="fa-solid fa-circle-info tab-icon"></i>
       </div>
-      <div id="tab-6-content" class="hidden">
+      <div id="tab-7-content" class="hidden">
         <h3>Comic Book Template Maker</h3>
         <p>Online tool to create comic book page and thumbnails templates.</p>
         <h3>Version:</h3>

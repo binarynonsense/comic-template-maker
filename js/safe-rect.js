@@ -1,4 +1,5 @@
 import { Rect } from "./rect.js";
+import { drawGrid as drawPanelGrid } from "./panels.js";
 
 export class SafeRect extends Rect {
   constructor(
@@ -20,9 +21,9 @@ export class SafeRect extends Rect {
     this.middleMarkPos = middleMarkPos;
   }
 
-  addPanels(panels) {
-    this.panels = panels;
-  }
+  // addPanels(panels) {
+  //   this.panels = panels;
+  // }
 
   draw(ctx, recursive = false) {
     /////////////////
@@ -293,8 +294,9 @@ export class SafeRect extends Rect {
     /////////////////
     // PANELS ///////
     /////////////////
-    if (this.panels) {
-      this.panels.draw(ctx);
-    }
+    // if (this.panels) {
+    //   this.panels.draw(ctx);
+    // }
+    drawPanelGrid(ctx, this.x, this.y, this.width, this.height);
   }
 }

@@ -2,6 +2,7 @@ import { initCanvas, drawTemplate } from "./draw.js";
 import { initPresets, setPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
+import { initPanels, loadPreset as loadPanelsPreset } from "./panels.js";
 
 const version = "1.0.0";
 
@@ -12,6 +13,7 @@ function init() {
   initPresets(version);
   initSaveLoad();
   initView();
+  initPanels();
   drawTemplate();
 }
 
@@ -24,7 +26,6 @@ document
 let refreshable = document.querySelectorAll(".refresh");
 for (let i = 0; i < refreshable.length; i++) {
   refreshable[i].addEventListener("change", function (event) {
-    // console.log(event.target.id);
     if (event.target.id === "preset-select") {
       if (event.target.value != 0) {
         if (event.target.value - 1 !== 0) setPreset(0, false); // load all defaults
@@ -33,12 +34,18 @@ for (let i = 0; i < refreshable.length; i++) {
           drawTemplate();
           resetView();
         }
+        event.target.value = 0;
+      }
+    } else if (event.target.id === "panel-preset-select") {
+      if (event.target.value != 0) {
+        loadPanelsPreset(event.target.value);
+        if (document.getElementById("autorefresh-checkbox").checked) {
+          drawTemplate();
+          resetView();
+        }
+        event.target.value = 0;
       }
     } else {
-      if (event.target.classList.contains("preset-value")) {
-        document.getElementById("preset-select").value = 0;
-      }
-
       if (event.target.id === "layout-template-select") {
         if (
           document.getElementById("layout-template-select").value === "page"
@@ -72,6 +79,8 @@ const tab5 = document.getElementById("tab-5");
 const tab5Content = document.getElementById("tab-5-content");
 const tab6 = document.getElementById("tab-6");
 const tab6Content = document.getElementById("tab-6-content");
+const tab7 = document.getElementById("tab-7");
+const tab7Content = document.getElementById("tab-7-content");
 tab1.addEventListener("click", function () {
   if (!tab1.classList.contains("tab-selected")) {
     tab1.classList.add("tab-selected");
@@ -86,6 +95,8 @@ tab1.addEventListener("click", function () {
     tab5Content.classList.add("hidden");
     tab6.classList.remove("tab-selected");
     tab6Content.classList.add("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
   }
 });
 tab2.addEventListener("click", function () {
@@ -102,6 +113,8 @@ tab2.addEventListener("click", function () {
     tab5Content.classList.add("hidden");
     tab6.classList.remove("tab-selected");
     tab6Content.classList.add("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
   }
 });
 tab3.addEventListener("click", function () {
@@ -118,6 +131,8 @@ tab3.addEventListener("click", function () {
     tab5Content.classList.add("hidden");
     tab6.classList.remove("tab-selected");
     tab6Content.classList.add("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
   }
 });
 tab4.addEventListener("click", function () {
@@ -134,6 +149,8 @@ tab4.addEventListener("click", function () {
     tab5Content.classList.add("hidden");
     tab6.classList.remove("tab-selected");
     tab6Content.classList.add("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
   }
 });
 tab5.addEventListener("click", function () {
@@ -150,6 +167,8 @@ tab5.addEventListener("click", function () {
     tab5Content.classList.remove("hidden");
     tab6.classList.remove("tab-selected");
     tab6Content.classList.add("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
   }
 });
 tab6.addEventListener("click", function () {
@@ -166,6 +185,27 @@ tab6.addEventListener("click", function () {
     tab5Content.classList.add("hidden");
     tab6.classList.add("tab-selected");
     tab6Content.classList.remove("hidden");
+    tab7.classList.remove("tab-selected");
+    tab7Content.classList.add("hidden");
+  }
+});
+
+tab7.addEventListener("click", function () {
+  if (!tab7.classList.contains("tab-selected")) {
+    tab1.classList.remove("tab-selected");
+    tab1Content.classList.add("hidden");
+    tab2.classList.remove("tab-selected");
+    tab2Content.classList.add("hidden");
+    tab3.classList.remove("tab-selected");
+    tab3Content.classList.add("hidden");
+    tab4.classList.remove("tab-selected");
+    tab4Content.classList.add("hidden");
+    tab5.classList.remove("tab-selected");
+    tab5Content.classList.add("hidden");
+    tab6.classList.remove("tab-selected");
+    tab6Content.classList.add("hidden");
+    tab7.classList.add("tab-selected");
+    tab7Content.classList.remove("hidden");
   }
 });
 

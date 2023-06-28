@@ -18,8 +18,9 @@ export function initPresets(version) {
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
   opt.disabled = true;
+  opt.selected = true;
   opt.value = 0;
-  opt.innerHTML = "custom";
+  opt.innerHTML = "select a preset";
   select.appendChild(opt);
   loadPresetFromJson(preset_1);
   loadPresetFromJson(preset_2);
@@ -218,6 +219,14 @@ export function setPreset(index, updateSelect = true) {
     document.getElementById("header-padding-input").value =
       preset.headerPadding;
   }
+  if (preset.panelsGutterSize !== undefined) {
+    document.getElementById("panel-gutter-size-input").value =
+      preset.panelsGutterSize;
+  }
+  if (preset.panelsLineWidth !== undefined) {
+    document.getElementById("panel-line-width-input").value =
+      preset.panelsLineWidth;
+  }
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined) {
     document.getElementById("background-color-input").value =
@@ -229,6 +238,10 @@ export function setPreset(index, updateSelect = true) {
   if (preset.renderLineWidth !== undefined) {
     document.getElementById("line-thickness-select").value =
       preset.renderLineWidth;
+  }
+  if (preset.panelsLineColor !== undefined) {
+    document.getElementById("panel-line-color-input").value =
+      preset.panelsLineColor;
   }
   if (preset.renderHeaderTextWeight !== undefined) {
     document.getElementById("header-text-weight-select").value =
@@ -260,24 +273,7 @@ export function setPreset(index, updateSelect = true) {
       preset.renderDrawMarks;
   }
   //////////////// panels ///////////////////////////
-  if (preset.panelsPreset !== undefined) {
-    document.getElementById("panel-preset-select").value = preset.panelsPreset;
-  }
-  if (preset.panelsUnits !== undefined) {
-    document.getElementById("panel-units-select").value = preset.panelsUnits;
-  }
-  if (preset.panelsGutterSize !== undefined) {
-    document.getElementById("panel-gutter-size-input").value =
-      preset.panelsGutterSize;
-  }
-  if (preset.panelsLineWidth !== undefined) {
-    document.getElementById("panel-line-width-input").value =
-      preset.panelsLineWidth;
-  }
-  if (preset.panelsLineColor !== undefined) {
-    document.getElementById("panel-line-color-input").value =
-      preset.panelsLineColor;
-  }
+
   //////////////// layout ///////////////////////////
   if (preset.layoutPageSpread !== undefined) {
     document.getElementById("layout-spread-select").value =
@@ -320,46 +316,60 @@ export function setPreset(index, updateSelect = true) {
       preset.layoutThumbnailsPaperSize;
   }
   //////////////////////////////////////////////////
-  if (updateSelect) document.getElementById("preset-select").value = index + 1;
 }
 
 export function getPresetFromCurrentValues(name, author) {
   const preset = { ...presets[1] };
   //////////////// dimensions ///////////////////////////
-  preset.units = document.getElementById("units-select").value;
+  if (document.getElementById("save-preset-dimensions-checkbox").checked) {
+    preset.units = document.getElementById("units-select").value;
 
-  preset.trimWidth = document.getElementById("trim-width-input").value;
-  preset.trimHeight = document.getElementById("trim-height-input").value;
-  preset.safeMarginTop = document.getElementById("safe-margin-top-input").value;
-  preset.safeMarginBottom = document.getElementById(
-    "safe-margin-bottom-input"
-  ).value;
-  preset.safeMarginLeft = document.getElementById(
-    "safe-margin-left-input"
-  ).value;
-  preset.safeMarginRight = document.getElementById(
-    "safe-margin-right-input"
-  ).value;
-  preset.bleedMargin = document.getElementById("bleed-margin-input").value;
-  preset.headerMarginTopBottom = document.getElementById(
-    "header-margin-top-bottom-input"
-  ).value;
-  preset.headerMarginLeftRight = document.getElementById(
-    "header-margin-left-right-input"
-  ).value;
+    preset.trimWidth = document.getElementById("trim-width-input").value;
+    preset.trimHeight = document.getElementById("trim-height-input").value;
+    preset.safeMarginTop = document.getElementById(
+      "safe-margin-top-input"
+    ).value;
+    preset.safeMarginBottom = document.getElementById(
+      "safe-margin-bottom-input"
+    ).value;
+    preset.safeMarginLeft = document.getElementById(
+      "safe-margin-left-input"
+    ).value;
+    preset.safeMarginRight = document.getElementById(
+      "safe-margin-right-input"
+    ).value;
+    preset.bleedMargin = document.getElementById("bleed-margin-input").value;
+    preset.headerMarginTopBottom = document.getElementById(
+      "header-margin-top-bottom-input"
+    ).value;
+    preset.headerMarginLeftRight = document.getElementById(
+      "header-margin-left-right-input"
+    ).value;
 
-  preset.lineWidthThin = document.getElementById("line-width-thin-input").value;
-  preset.lineWidthThick = document.getElementById(
-    "line-width-thick-input"
-  ).value;
+    preset.lineWidthThin = document.getElementById(
+      "line-width-thin-input"
+    ).value;
+    preset.lineWidthThick = document.getElementById(
+      "line-width-thick-input"
+    ).value;
 
-  preset.borderMarkMaxLength = document.getElementById(
-    "border-marks-length-input"
-  ).value;
-  preset.headerTextHeight = document.getElementById(
-    "header-text-height-input"
-  ).value;
-  preset.headerPadding = document.getElementById("header-padding-input").value;
+    preset.borderMarkMaxLength = document.getElementById(
+      "border-marks-length-input"
+    ).value;
+    preset.headerTextHeight = document.getElementById(
+      "header-text-height-input"
+    ).value;
+    preset.headerPadding = document.getElementById(
+      "header-padding-input"
+    ).value;
+
+    preset.panelsGutterSize = document.getElementById(
+      "panel-gutter-size-input"
+    ).value;
+    preset.panelsLineWidth = document.getElementById(
+      "panel-line-width-input"
+    ).value;
+  }
   //////////////// rendering ///////////////////////////
   if (document.getElementById("save-preset-rendering-checkbox").checked) {
     preset.renderBackgroundColor = document.getElementById(
@@ -368,6 +378,9 @@ export function getPresetFromCurrentValues(name, author) {
     preset.renderLineColor = document.getElementById("line-color-input").value;
     preset.renderLineWidth = document.getElementById(
       "line-thickness-select"
+    ).value;
+    preset.panelsLineColor = document.getElementById(
+      "panel-line-color-input"
     ).value;
     preset.renderHeaderTextWeight = document.getElementById(
       "header-text-weight-select"
@@ -391,17 +404,6 @@ export function getPresetFromCurrentValues(name, author) {
   }
   //////////////// panels ///////////////////////////
   if (document.getElementById("save-preset-panels-checkbox").checked) {
-    preset.panelsPreset = document.getElementById("panel-preset-select").value;
-    preset.panelsUnits = document.getElementById("panel-units-select").value;
-    preset.panelsGutterSize = document.getElementById(
-      "panel-gutter-size-input"
-    ).value;
-    preset.panelsLineWidth = document.getElementById(
-      "panel-line-width-input"
-    ).value;
-    preset.panelsLineColor = document.getElementById(
-      "panel-line-color-input"
-    ).value;
   }
   //////////////// layout ///////////////////////////
   if (document.getElementById("save-preset-layout-checkbox").checked) {

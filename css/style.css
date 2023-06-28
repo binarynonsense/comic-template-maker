@@ -142,10 +142,15 @@ html {
 #tab-6 {
   top: 250px;
 }
+#tab-7 {
+  top: 300px;
+}
 
 h3 {
   margin: 0;
   padding: 0;
+  display: block;
+  width: 100%;
 }
 
 .section {
@@ -165,12 +170,14 @@ input[type="number"] {
   font-family: inherit;
   font-size: inherit;
   width: 100%;
+  height: 30px;
 }
 
 input[type="color"] {
   margin: 5px 0px;
   width: 100%;
   border: 2px solid #727272;
+  height: 30px;
 }
 
 input[type="file"] {
@@ -186,11 +193,16 @@ input[type="file"] {
 
 select {
   margin: 5px 0px;
-  padding: 5px;
   width: 100%;
+  height: 30px;
   border: 2px solid #727272;
   border-radius: 0px;
   background-color: #fff;
+}
+@-moz-document url-prefix() {
+  select {
+    padding-bottom: 2px;
+  }
 }
 
 label {

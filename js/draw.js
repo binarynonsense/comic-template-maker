@@ -1,7 +1,6 @@
 import { Rect } from "./rect.js";
 import { SafeRect } from "./safe-rect.js";
 import { HeaderRect as HeaderRect } from "./header-rect.js";
-import { PanelGrid } from "./panels.js";
 
 import { showLoading } from "./loading.js";
 
@@ -196,19 +195,6 @@ function drawCanvas(makeDoublePage) {
     "border-marks-draw-checkbox"
   ).checked;
 
-  const panelPreset = document.getElementById("panel-preset-select").value;
-  const panelToInches =
-    document.getElementById("panel-units-select").value === "inches"
-      ? 1
-      : 0.393701;
-  const panelGutterSize =
-    document.getElementById("panel-gutter-size-input").value * panelToInches;
-  const panelLineWidth =
-    document.getElementById("panel-line-width-input").value * panelToInches;
-  const panelLineColor = document.getElementById(
-    "panel-line-color-input"
-  ).value;
-
   if (makeDoublePage) trimWidth *= 2;
   //////////////////////
   // BUILD /////////////
@@ -291,16 +277,16 @@ function drawCanvas(makeDoublePage) {
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    if (panelPreset > -1)
-      safeRect_1.addPanels(
-        new PanelGrid(
-          safeRect_1,
-          panelPreset,
-          panelLineWidth,
-          panelLineColor,
-          panelGutterSize
-        )
-      );
+    // if (panelPreset > -1)
+    //   safeRect_1.addPanels(
+    //     new PanelGrid(
+    //       safeRect_1,
+    //       panelPreset,
+    //       panelLineWidth,
+    //       panelLineColor,
+    //       panelGutterSize
+    //     )
+    //   );
     trimRect.addChild(safeRect_1);
 
     safeX = safeX + safeWidth + 2 * safeMarginRight;
@@ -321,16 +307,16 @@ function drawCanvas(makeDoublePage) {
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    if (panelPreset > -1)
-      safeRect_2.addPanels(
-        new PanelGrid(
-          safeRect_2,
-          panelPreset,
-          panelLineWidth,
-          panelLineColor,
-          panelGutterSize
-        )
-      );
+    // if (panelPreset > -1)
+    //   safeRect_2.addPanels(
+    //     new PanelGrid(
+    //       safeRect_2,
+    //       panelPreset,
+    //       panelLineWidth,
+    //       panelLineColor,
+    //       panelGutterSize
+    //     )
+    //   );
     trimRect.addChild(safeRect_2);
   } else {
     const safeX = trimX + safeMarginLeft;
@@ -354,16 +340,16 @@ function drawCanvas(makeDoublePage) {
       lineColor,
       [safeHeight / 120, safeHeight / 120]
     );
-    if (panelPreset > -1)
-      safeRect_1.addPanels(
-        new PanelGrid(
-          safeRect_1,
-          panelPreset,
-          panelLineWidth,
-          panelLineColor,
-          panelGutterSize
-        )
-      );
+    // if (panelPreset > -1)
+    //   safeRect_1.addPanels(
+    //     new PanelGrid(
+    //       safeRect_1,
+    //       panelPreset,
+    //       panelLineWidth,
+    //       panelLineColor,
+    //       panelGutterSize
+    //     )
+    //   );
     trimRect.addChild(safeRect_1);
   }
 
