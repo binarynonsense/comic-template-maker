@@ -4,7 +4,7 @@ let GridNodeType = {
   PANEL: "panel",
 };
 
-let rootNode;
+let g_rootNode;
 
 export function initPanels() {
   loadPreset(1);
@@ -12,7 +12,7 @@ export function initPanels() {
 
 export function loadPreset(value) {
   if (value == 1) {
-    rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
+    g_rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
     drawHtmlTree();
   } else if (value > 1 && value < 6) {
     buildSymetricGrid(value - 1, value - 1);
@@ -109,7 +109,7 @@ export function drawGrid(ctx, x, y, width, height) {
   const lineWidth =
     document.getElementById("panel-line-width-input").value * toInches;
   const lineColor = document.getElementById("panel-line-color-input").value;
-  rootNode.draw(
+  g_rootNode.draw(
     ctx,
     x,
     y,
@@ -123,20 +123,28 @@ export function drawGrid(ctx, x, y, width, height) {
 }
 
 function buildSymetricGrid(cols, rows) {
-  rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
+  g_rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
   for (let y = 0; y < rows; y++) {
     let hgroup1 = new GridNode(
-      rootNode,
+      g_rootNode,
       getUUID(),
       GridNodeType.HGROUP,
       100 / rows
     );
-    rootNode.addChildren(hgroup1);
+    g_rootNode.addChildren(hgroup1);
     for (let x = 0; x < cols; x++) {
       hgroup1.addChildren(
-        new GridNode(rootNode, getUUID(), GridNodeType.PANEL, 100 / cols)
+        new GridNode(g_rootNode, getUUID(), GridNodeType.PANEL, 100 / cols)
       );
     }
+  }
+
+  function getNodeFromId(node, id) {
+    if (node.id === id) return node;
+    for (let index = 0; index < node.children.length; index++) {
+      if (getNodeFromId(node.children[index], id)) return node;
+    }
+    return undefined;
   }
 
   // rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
@@ -175,10 +183,12 @@ function getUUID() {
 //////////////////////////////////////////
 //////////////////////////////////////////
 
+let g_selectedNodeId;
+
 function drawHtmlTree() {
   let rootElement = document.getElementById("panel-tree-root");
   rootElement.innerHTML = "";
-  buildHtmlTree(rootNode, rootElement);
+  buildHtmlTree(g_rootNode, rootElement);
   return;
 }
 

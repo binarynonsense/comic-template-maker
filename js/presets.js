@@ -10,10 +10,10 @@ import preset_9 from "../presets/six-by-nine-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
-let presets;
+let g_presets;
 
 export function initPresets(version) {
-  presets = [];
+  g_presets = [];
   document.getElementById("info-version-p").innerHTML = `${version}`;
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
@@ -82,7 +82,7 @@ export function loadPresetFromJson(preset) {
   opt.value = select.childElementCount;
   opt.textContent = preset.name;
   select.appendChild(opt);
-  presets.push(preset);
+  g_presets.push(preset);
   return opt.value;
 }
 
@@ -160,7 +160,7 @@ function isVersionOlder(testVersion, referenceVersion) {
 }
 
 export function setPreset(index, updateSelect = true) {
-  const preset = presets[index];
+  const preset = g_presets[index];
   //////////////// dimensions ///////////////////////////
   if (preset.units !== undefined) {
     document.getElementById("units-select").value = preset.units;
@@ -319,7 +319,7 @@ export function setPreset(index, updateSelect = true) {
 }
 
 export function getPresetFromCurrentValues(name, author) {
-  const preset = { ...presets[1] };
+  const preset = { ...g_presets[1] };
   //////////////// dimensions ///////////////////////////
   if (document.getElementById("save-preset-dimensions-checkbox").checked) {
     preset.units = document.getElementById("units-select").value;

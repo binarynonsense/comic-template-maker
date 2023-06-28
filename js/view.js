@@ -1,30 +1,30 @@
-let panzoom;
+let g_panzoom;
 
 export function initView() {
   const elem = document.getElementById("result-div");
-  panzoom = Panzoom(elem, {
+  g_panzoom = Panzoom(elem, {
     maxScale: 5,
   });
-  elem.parentElement.addEventListener("wheel", panzoom.zoomWithWheel);
+  elem.parentElement.addEventListener("wheel", g_panzoom.zoomWithWheel);
 
   document
     .getElementById("zoom-button-1")
-    .addEventListener("click", panzoom.zoomIn);
+    .addEventListener("click", g_panzoom.zoomIn);
   document
     .getElementById("zoom-button-2")
-    .addEventListener("click", panzoom.zoomOut);
+    .addEventListener("click", g_panzoom.zoomOut);
   document
     .getElementById("zoom-button-3")
-    .addEventListener("click", panzoom.reset);
+    .addEventListener("click", g_panzoom.reset);
 
   document
     .getElementById("result-div")
     .addEventListener("dblclick", function (e) {
-      panzoom.reset();
+      g_panzoom.reset();
       e.preventDefault();
     });
 }
 
 export function resetView() {
-  panzoom.reset();
+  g_panzoom.reset();
 }

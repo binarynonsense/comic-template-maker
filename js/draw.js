@@ -4,15 +4,15 @@ import { HeaderRect as HeaderRect } from "./header-rect.js";
 
 import { showLoading } from "./loading.js";
 
-let canvas;
+let g_canvas;
 
 export function initCanvas() {
-  canvas = document.createElement("canvas");
-  canvas.id = "hidden-canvas";
+  g_canvas = document.createElement("canvas");
+  g_canvas.id = "hidden-canvas";
 }
 
 export function getCanvas() {
-  return canvas;
+  return g_canvas;
 }
 
 export function drawTemplate() {
@@ -29,7 +29,7 @@ export function drawTemplate() {
         document.getElementById("layout-page-paper-select").value === "header"
       ) {
         // paper size = header area size
-        document.getElementById("result-img").src = canvas.toDataURL();
+        document.getElementById("result-img").src = g_canvas.toDataURL();
         showLoading(false);
       } else {
         // a4 210 mm x 297 mm
@@ -54,8 +54,8 @@ export function drawTemplate() {
         }
         let image = new Image();
         image.onload = function () {
-          canvas.width = paperWidth * renderedPageData.ppi;
-          canvas.height = paperHeight * renderedPageData.ppi;
+          g_canvas.width = paperWidth * renderedPageData.ppi;
+          g_canvas.height = paperHeight * renderedPageData.ppi;
           const doScale =
             document.getElementById("layout-page-scaling-select").value ===
             "scale"
@@ -64,24 +64,24 @@ export function drawTemplate() {
           let pageWidth = renderedPageData.width;
           let pageHeight = renderedPageData.height;
           if (doScale) {
-            const widthRatio = canvas.width / pageWidth;
-            const heightRatio = canvas.height / pageHeight;
+            const widthRatio = g_canvas.width / pageWidth;
+            const heightRatio = g_canvas.height / pageHeight;
             const ratio = widthRatio < heightRatio ? widthRatio : heightRatio;
             pageWidth = ratio * pageWidth;
             pageHeight = ratio * pageHeight;
           }
-          const gapX = canvas.width - pageWidth;
-          const gapY = canvas.height - pageHeight;
+          const gapX = g_canvas.width - pageWidth;
+          const gapY = g_canvas.height - pageHeight;
           // draw the image
-          const ctx = canvas.getContext("2d");
+          const ctx = g_canvas.getContext("2d");
           ctx.fillStyle = "white";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
           ctx.drawImage(this, gapX / 2, gapY / 2, pageWidth, pageHeight);
 
-          document.getElementById("result-img").src = canvas.toDataURL();
+          document.getElementById("result-img").src = g_canvas.toDataURL();
           showLoading(false);
         };
-        image.src = canvas.toDataURL();
+        image.src = g_canvas.toDataURL();
       }
     } else {
       let paperWidth = 8.3;
@@ -100,24 +100,24 @@ export function drawTemplate() {
       ).value;
       let image = new Image();
       image.onload = function () {
-        canvas.width = paperWidth * renderedPageData.ppi;
-        canvas.height = paperHeight * renderedPageData.ppi;
+        g_canvas.width = paperWidth * renderedPageData.ppi;
+        g_canvas.height = paperHeight * renderedPageData.ppi;
         const pageWidth = renderedPageData.width;
         const pageHeight = renderedPageData.height;
-        const thumbWidthRatio = canvas.width / numThumbsX / pageWidth;
-        const thumbHeightRatio = canvas.height / numThumbsY / pageHeight;
+        const thumbWidthRatio = g_canvas.width / numThumbsX / pageWidth;
+        const thumbHeightRatio = g_canvas.height / numThumbsY / pageHeight;
         const thumbRatio =
           thumbWidthRatio < thumbHeightRatio
             ? thumbWidthRatio
             : thumbHeightRatio;
         const thumbWidth = thumbRatio * pageWidth;
         const thumbHeight = thumbRatio * pageHeight;
-        const gapX = canvas.width - thumbWidth * numThumbsX;
-        const gapY = canvas.height - thumbHeight * numThumbsY;
+        const gapX = g_canvas.width - thumbWidth * numThumbsX;
+        const gapY = g_canvas.height - thumbHeight * numThumbsY;
         // draw the pattern
-        const ctx = canvas.getContext("2d");
+        const ctx = g_canvas.getContext("2d");
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
         let subCanvas = document.createElement("canvas");
         subCanvas.width = thumbWidth;
         subCanvas.height = thumbHeight;
@@ -128,10 +128,10 @@ export function drawTemplate() {
         ctx.translate(gapX / 2, gapY / 2);
         ctx.fillRect(0, 0, thumbWidth * numThumbsX, thumbHeight * numThumbsY);
 
-        document.getElementById("result-img").src = canvas.toDataURL();
+        document.getElementById("result-img").src = g_canvas.toDataURL();
         showLoading(false);
       };
-      image.src = canvas.toDataURL();
+      image.src = g_canvas.toDataURL();
     }
   }, "100");
 }
@@ -327,12 +327,12 @@ function drawCanvas(makeDoublePage) {
     trimRect.addChild(safeRect_1);
   }
 
-  canvas.width = headerRect.getSize().width * ppi;
-  canvas.height = headerRect.getSize().height * ppi;
-  const ctx = canvas.getContext("2d");
+  g_canvas.width = headerRect.getSize().width * ppi;
+  g_canvas.height = headerRect.getSize().height * ppi;
+  const ctx = g_canvas.getContext("2d");
   ctx.fillStyle = drawBackground ? backGroundColor : "rgba(0, 0, 0, 0)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
   headerRect.draw(ctx, true);
 
-  return { ppi: ppi, width: canvas.width, height: canvas.height };
+  return { ppi: ppi, width: g_canvas.width, height: g_canvas.height };
 }

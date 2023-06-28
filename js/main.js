@@ -4,13 +4,13 @@ import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
 import { initPanels, loadPreset as loadPanelsPreset } from "./panels.js";
 
-const version = "1.0.0";
+const g_version = "1.0.0";
 
 init();
 
 function init() {
   initCanvas();
-  initPresets(version);
+  initPresets(g_version);
   initSaveLoad();
   initView();
   initPanels();
