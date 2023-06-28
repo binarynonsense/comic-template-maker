@@ -67,147 +67,24 @@ for (let i = 0; i < refreshable.length; i++) {
   });
 }
 
-const tab1 = document.getElementById("tab-1");
-const tab1Content = document.getElementById("tab-1-content");
-const tab2 = document.getElementById("tab-2");
-const tab2Content = document.getElementById("tab-2-content");
-const tab3 = document.getElementById("tab-3");
-const tab3Content = document.getElementById("tab-3-content");
-const tab4 = document.getElementById("tab-4");
-const tab4Content = document.getElementById("tab-4-content");
-const tab5 = document.getElementById("tab-5");
-const tab5Content = document.getElementById("tab-5-content");
-const tab6 = document.getElementById("tab-6");
-const tab6Content = document.getElementById("tab-6-content");
-const tab7 = document.getElementById("tab-7");
-const tab7Content = document.getElementById("tab-7-content");
-tab1.addEventListener("click", function () {
-  if (!tab1.classList.contains("tab-selected")) {
-    tab1.classList.add("tab-selected");
-    tab1Content.classList.remove("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-tab2.addEventListener("click", function () {
-  if (!tab2.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.add("tab-selected");
-    tab2Content.classList.remove("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-tab3.addEventListener("click", function () {
-  if (!tab3.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.add("tab-selected");
-    tab3Content.classList.remove("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-tab4.addEventListener("click", function () {
-  if (!tab4.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.add("tab-selected");
-    tab4Content.classList.remove("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-tab5.addEventListener("click", function () {
-  if (!tab5.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.add("tab-selected");
-    tab5Content.classList.remove("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-tab6.addEventListener("click", function () {
-  if (!tab6.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.add("tab-selected");
-    tab6Content.classList.remove("hidden");
-    tab7.classList.remove("tab-selected");
-    tab7Content.classList.add("hidden");
-  }
-});
-
-tab7.addEventListener("click", function () {
-  if (!tab7.classList.contains("tab-selected")) {
-    tab1.classList.remove("tab-selected");
-    tab1Content.classList.add("hidden");
-    tab2.classList.remove("tab-selected");
-    tab2Content.classList.add("hidden");
-    tab3.classList.remove("tab-selected");
-    tab3Content.classList.add("hidden");
-    tab4.classList.remove("tab-selected");
-    tab4Content.classList.add("hidden");
-    tab5.classList.remove("tab-selected");
-    tab5Content.classList.add("hidden");
-    tab6.classList.remove("tab-selected");
-    tab6Content.classList.add("hidden");
-    tab7.classList.add("tab-selected");
-    tab7Content.classList.remove("hidden");
-  }
-});
+for (let i = 1; i < 8; i++) {
+  const tab = document.getElementById(`tab-${i}`);
+  tab.addEventListener("click", function () {
+    if (!tab.classList.contains("tab-selected")) {
+      for (let j = 1; j < 8; j++) {
+        if (i === j) {
+          document.getElementById(`tab-${j}`).classList.add("tab-selected");
+          document
+            .getElementById(`tab-${j}-content`)
+            .classList.remove("hidden");
+        } else {
+          document.getElementById(`tab-${j}`).classList.remove("tab-selected");
+          document.getElementById(`tab-${j}-content`).classList.add("hidden");
+        }
+      }
+    }
+  });
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////

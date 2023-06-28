@@ -39,13 +39,54 @@
       </div>
     </div>
     <div id="right">
-      <div class="tab tab-selected" id="tab-1" title="dimensions">
+      <div class="tab tab-selected" id="tab-1" title="presets">
         <i class="fa-solid fa-file tab-icon"></i>
       </div>
       <div id="tab-1-content">
+        <h3 class="h3-extratop">Template Presets:</h3>
         <label
           >load a preset<select id="preset-select" class="refresh"></select
         ></label>
+        <h3 class="h3-extratop h3-extrabottom">Import Preset From File:</h3>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="load-preset-apply-checkbox"
+            checked
+            disabled
+          />
+          add to presets list
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="load-preset-apply-checkbox" checked />
+          apply when loaded
+        </label>
+        <input type="file" id="load-preset-file-input" accept=".json" />
+        <button id="load-preset-button">IMPORT</button>
+        <h3 class="h3-extratop">Export Current Settings To File:</h3>
+        <label
+          >preset name<input
+            type="text"
+            id="save-preset-name-input"
+            value="comic page"
+        /></label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="save-preset-dimensions-checkbox" checked />
+          include dimensions
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="save-preset-rendering-checkbox" />
+          include rendering options
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="save-preset-panels-checkbox" disabled />
+          include panel grid
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="save-preset-layout-checkbox" />
+          include layout
+        </label>
+        <button id="save-preset-button">EXPORT</button>
       </div>
 
       <div class="tab" id="tab-2" title="dimensions">
@@ -477,37 +518,6 @@
           </select></label
         >
         <button id="save-template-button">SAVE</button>
-        <h3 class="h3-extratop h3-extrabottom">Load Settings From File:</h3>
-        <label class="checkbox-label">
-          <input type="checkbox" id="load-preset-apply-checkbox" checked />
-          apply when loaded
-        </label>
-        <input type="file" id="load-preset-file-input" accept=".json" />
-        <button id="load-preset-button">LOAD</button>
-        <h3 class="h3-extratop">Save Current Settings To File:</h3>
-        <label
-          >preset name<input
-            type="text"
-            id="save-preset-name-input"
-            value="comic page"
-        /></label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-dimensions-checkbox" checked />
-          save dimensions
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-rendering-checkbox" />
-          save rendering options
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-panels-checkbox" disabled />
-          save panel grid
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-layout-checkbox" />
-          save layout
-        </label>
-        <button id="save-preset-button">SAVE</button>
       </div>
 
       <div class="tab" id="tab-7" title="tool info">
