@@ -42,33 +42,33 @@ export class HeaderRect extends Rect {
       ctx.font = `${this.headerTextWeight === "bold" ? "bold " : ""}${
         fontSize * this.ppi
       }px Arial`;
-      // BOOK /////////
-      let bookTextX = bleedSize.x;
-      let bookTextY = bleedSize.y - this.headerPadding;
-      ctx.fillText("BOOK: ", bookTextX * this.ppi, bookTextY * this.ppi);
-      let bookTextWidthPx = ctx.measureText("BOOK: ");
-      let bookLineX = bookTextX + bookTextWidthPx.width / this.ppi;
-      let bookLineLength = this.headerTextHeight * 8;
+      // TITLE /////////
+      let titleTextX = bleedSize.x;
+      let titleTextY = bleedSize.y - this.headerPadding;
+      ctx.fillText("TITLE: ", titleTextX * this.ppi, titleTextY * this.ppi);
+      let titleTextWidthPx = ctx.measureText("TITLE: ");
+      let titleLineX = titleTextX + titleTextWidthPx.width / this.ppi;
+      let titleLineLength = this.headerTextHeight * 8;
       this.drawLine(
         ctx,
-        bookLineX,
-        bookTextY,
+        titleLineX,
+        titleTextY,
         0,
-        -bookLineLength,
+        -titleLineLength,
         this.lineWidth,
         [0, 0],
         this.lineColor
       );
       // ISSUE /////////
-      let issueTextX = bookLineX + bookLineLength;
-      ctx.fillText("  ISSUE #: ", issueTextX * this.ppi, bookTextY * this.ppi);
+      let issueTextX = titleLineX + titleLineLength;
+      ctx.fillText("  ISSUE #: ", issueTextX * this.ppi, titleTextY * this.ppi);
       let issueTextWidthPx = ctx.measureText("  ISSUE #: ");
       let issueLineX = issueTextX + issueTextWidthPx.width / this.ppi;
-      let issueLineLeght = bookLineLength / 4;
+      let issueLineLeght = titleLineLength / 4;
       this.drawLine(
         ctx,
         issueLineX,
-        bookTextY,
+        titleTextY,
         0,
         -issueLineLeght,
         this.lineWidth,
@@ -77,14 +77,14 @@ export class HeaderRect extends Rect {
       );
       // PAGE /////////
       let pageTextX = issueLineX + issueLineLeght;
-      ctx.fillText("  PAGE #: ", pageTextX * this.ppi, bookTextY * this.ppi);
+      ctx.fillText("  PAGE #: ", pageTextX * this.ppi, titleTextY * this.ppi);
       let pageTextWidthPx = ctx.measureText("  PAGE #: ");
       let pageLineX = pageTextX + pageTextWidthPx.width / this.ppi;
-      let pageLinelength = bookLineLength / 4;
+      let pageLinelength = titleLineLength / 4;
       this.drawLine(
         ctx,
         pageLineX,
-        bookTextY,
+        titleTextY,
         0,
         -pageLinelength,
         this.lineWidth,
