@@ -64,19 +64,19 @@ export class HeaderRect extends Rect {
       ctx.fillText("  ISSUE #: ", issueTextX * this.ppi, titleTextY * this.ppi);
       let issueTextWidthPx = ctx.measureText("  ISSUE #: ");
       let issueLineX = issueTextX + issueTextWidthPx.width / this.ppi;
-      let issueLineLeght = titleLineLength / 4;
+      let issueLineLenght = titleLineLength / 4;
       this.drawLine(
         ctx,
         issueLineX,
         titleTextY,
         0,
-        -issueLineLeght,
+        -issueLineLenght,
         this.lineWidth,
         [0, 0],
         this.lineColor
       );
       // PAGE /////////
-      let pageTextX = issueLineX + issueLineLeght;
+      let pageTextX = issueLineX + issueLineLenght;
       ctx.fillText("  PAGE #: ", pageTextX * this.ppi, titleTextY * this.ppi);
       let pageTextWidthPx = ctx.measureText("  PAGE #: ");
       let pageLineX = pageTextX + pageTextWidthPx.width / this.ppi;
