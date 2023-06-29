@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 export class Rect {
   constructor(parent, x, y, width, height, ppi) {
     this.parent = parent;

@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { Rect } from "./rect.js";
 import { SafeRect } from "./safe-rect.js";
 import { HeaderRect as HeaderRect } from "./header-rect.js";

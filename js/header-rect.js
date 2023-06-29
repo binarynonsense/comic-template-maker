@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { Rect } from "./rect.js";
 
 export class HeaderRect extends Rect {

@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 let g_panzoom;
 
 export function initView() {

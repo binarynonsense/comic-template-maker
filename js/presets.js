@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import preset_0 from "../presets/default.js";
 import preset_1 from "../presets/american-comic-1.js";
 import preset_2 from "../presets/american-comic-1-double.js";

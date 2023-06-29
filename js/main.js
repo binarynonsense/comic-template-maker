@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 import { initCanvas, drawTemplate } from "./draw.js";
 import { initPresets, setPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
