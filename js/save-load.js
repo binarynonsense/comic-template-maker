@@ -81,7 +81,7 @@ export function initSaveLoad() {
       reader.onload = function (e) {
         let index = loadPresetFromJson(JSON.parse(e.target.result));
         if (document.getElementById("load-preset-apply-checkbox").checked) {
-          if (index - 1 !== 0) setPreset(0, false); // load all defaults
+          setPreset(-1); // load all defaults
           setPreset(index - 1);
           if (true || document.getElementById("autorefresh-checkbox").checked)
             drawTemplate();

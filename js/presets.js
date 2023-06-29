@@ -1,3 +1,4 @@
+import preset_0 from "../presets/default.js";
 import preset_1 from "../presets/american-comic-1.js";
 import preset_2 from "../presets/american-comic-1-double.js";
 import preset_3 from "../presets/thumbs-american-single-1.js";
@@ -11,9 +12,12 @@ import preset_9 from "../presets/six-by-nine-1.js";
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
 
 let g_presets;
+let g_defaultPreset;
 
 export function initPresets(version) {
   g_presets = [];
+  g_defaultPreset = preset_0;
+  loadPresetFromJson(g_defaultPreset, false);
   document.getElementById("info-version-p").innerHTML = `${version}`;
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
@@ -31,59 +35,113 @@ export function initPresets(version) {
   loadPresetFromJson(preset_7);
   loadPresetFromJson(preset_8);
   loadPresetFromJson(preset_9);
-  setPreset(0);
+  setPreset(-1);
 }
 
-export function loadPresetFromJson(preset) {
+export function loadPresetFromJson(preset, addToList = true) {
   const select = document.getElementById("preset-select");
   // sanitize /////
   preset.name = sanitizeString(preset.name, "comic book");
   // TODO: check version is valid
   preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
   //////////////// dimensions ///////////////////////////
-  preset.units = sanitizeString(preset.units, "inches", ["inches", "cm"]);
+  if (preset.units !== undefined)
+    preset.units = sanitizeString(preset.units, "inches", ["inches", "cm"]);
 
-  preset.trimWidth = sanitizeNumber(preset.trimWidth);
-  preset.trimHeight = sanitizeNumber(preset.trimHeight);
-  preset.safeMarginTop = sanitizeNumber(preset.safeMarginTop);
-  preset.safeMarginBottom = sanitizeNumber(preset.safeMarginBottom);
-  preset.safeMarginLeft = sanitizeNumber(preset.safeMarginLeft);
-  preset.safeMarginRight = sanitizeNumber(preset.safeMarginRight);
-  preset.bleedMargin = sanitizeNumber(preset.bleedMargin);
-  preset.headerMarginTopBottom = sanitizeNumber(preset.headerMarginTopBottom);
-  preset.headerMarginLeftRight = sanitizeNumber(preset.headerMarginLeftRight);
+  if (preset.trimWidth !== undefined)
+    preset.trimWidth = sanitizeNumber(preset.trimWidth);
+  if (preset.trimHeight !== undefined)
+    preset.trimHeight = sanitizeNumber(preset.trimHeight);
+  if (preset.safeMarginTop !== undefined)
+    preset.safeMarginTop = sanitizeNumber(preset.safeMarginTop);
+  if (preset.safeMarginBottom !== undefined)
+    preset.safeMarginBottom = sanitizeNumber(preset.safeMarginBottom);
+  if (preset.safeMarginLeft !== undefined)
+    preset.safeMarginLeft = sanitizeNumber(preset.safeMarginLeft);
+  if (preset.safeMarginRight !== undefined)
+    preset.safeMarginRight = sanitizeNumber(preset.safeMarginRight);
+  if (preset.bleedMargin !== undefined)
+    preset.bleedMargin = sanitizeNumber(preset.bleedMargin);
+  if (preset.headerMarginTopBottom !== undefined)
+    preset.headerMarginTopBottom = sanitizeNumber(preset.headerMarginTopBottom);
+  if (preset.headerMarginLeftRight !== undefined)
+    preset.headerMarginLeftRight = sanitizeNumber(preset.headerMarginLeftRight);
 
-  preset.lineWidthThin = sanitizeNumber(preset.lineWidthThin);
-  preset.lineWidthThick = sanitizeNumber(preset.lineWidthThick);
-  preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
-  preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
-  preset.headerPadding = sanitizeNumber(preset.headerPadding);
+  if (preset.panelsGutterSize !== undefined)
+    preset.panelsGutterSize = sanitizeNumber(preset.panelsGutterSize);
+  if (preset.panelsLineWidth !== undefined)
+    preset.panelsLineWidth = sanitizeNumber(preset.panelsLineWidth);
+
+  if (preset.lineWidthThin !== undefined)
+    preset.lineWidthThin = sanitizeNumber(preset.lineWidthThin);
+  if (preset.lineWidthThick !== undefined)
+    preset.lineWidthThick = sanitizeNumber(preset.lineWidthThick);
+  if (preset.borderMarkMaxLength !== undefined)
+    preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
+  if (preset.headerTextHeight !== undefined)
+    preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
+  if (preset.headerPadding !== undefined)
+    preset.headerPadding = sanitizeNumber(preset.headerPadding);
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined)
     preset.renderBackgroundColor = sanitizeColor(preset.renderBackgroundColor);
   if (preset.renderLineColor !== undefined)
     preset.renderLineColor = sanitizeColor(preset.renderLineColor);
-  if (preset.renderLineWidth !== undefined)
-    preset.renderLineWidth = sanitizeNumber(preset.renderLineWidth);
+  if (preset.renderLineWeight !== undefined)
+    preset.renderLineWeight = sanitizeString(preset.renderLineWeight);
+  if (preset.panelsLineColor !== undefined)
+    preset.panelsLineColor = sanitizeString(preset.panelsLineColor);
   if (preset.renderHeaderTextWeight !== undefined)
-    preset.renderHeaderTextWeight = sanitizeString(preset.renderLineWidth);
+    preset.renderHeaderTextWeight = sanitizeString(
+      preset.renderHeaderTextWeight
+    );
+
   if (preset.renderDrawBackground !== undefined)
     preset.renderDrawBackground = sanitizeBool(preset.renderDrawBackground);
   if (preset.renderDrawHeader !== undefined)
     preset.renderDrawHeader = sanitizeBool(preset.renderDrawHeader);
   if (preset.renderDrawBleed !== undefined)
     preset.renderDrawBleed = sanitizeBool(preset.renderDrawBleed);
+  if (preset.renderDrawTrim !== undefined)
+    preset.renderDrawTrim = sanitizeBool(preset.renderDrawTrim);
   if (preset.renderDrawSafe !== undefined)
     preset.renderDrawSafe = sanitizeBool(preset.renderDrawSafe);
   if (preset.renderDrawMarks !== undefined)
     preset.renderDrawMarks = sanitizeBool(preset.renderDrawMarks);
+  //////////////// panels ///////////////////////////
+
+  //////////////// layout ///////////////////////////
+  if (preset.layoutPageSpread !== undefined)
+    preset.layoutPageSpread = sanitizeString(preset.layoutPageSpread);
+  if (preset.layoutPpi !== undefined)
+    preset.layoutPpi = sanitizeNumber(preset.layoutPpi);
+  if (preset.layoutTemplateType !== undefined)
+    preset.layoutTemplateType = sanitizeString(preset.layoutTemplateType);
+
+  if (preset.layoutPagePaperSize !== undefined)
+    preset.layoutPagePaperSize = sanitizeString(preset.layoutPagePaperSize);
+  if (preset.layoutPageScaling !== undefined)
+    preset.layoutPageScaling = sanitizeString(preset.layoutPageScaling);
+
+  if (preset.layoutThumbnailsRows !== undefined)
+    preset.layoutThumbnailsRows = sanitizeNumber(preset.layoutThumbnailsRows);
+  if (preset.layoutThumbnailsColumns !== undefined)
+    preset.layoutThumbnailsColumns = sanitizeNumber(
+      preset.layoutThumbnailsColumns
+    );
+  if (preset.layoutThumbnailsPaperSize !== undefined)
+    preset.layoutThumbnailsPaperSize = sanitizeString(
+      preset.layoutThumbnailsPaperSize
+    );
   /////////////////
-  let opt = document.createElement("option");
-  opt.value = select.childElementCount;
-  opt.textContent = preset.name;
-  select.appendChild(opt);
-  g_presets.push(preset);
-  return opt.value;
+  if (addToList) {
+    let opt = document.createElement("option");
+    opt.value = select.childElementCount;
+    opt.textContent = preset.name;
+    select.appendChild(opt);
+    g_presets.push(preset);
+    return opt.value;
+  }
 }
 
 // Sanitize ///////////////////////////////////////////////////////
@@ -159,8 +217,13 @@ function isVersionOlder(testVersion, referenceVersion) {
   return false;
 }
 
-export function setPreset(index, updateSelect = true) {
-  const preset = g_presets[index];
+export function setPreset(index) {
+  let preset;
+  if (index < 0 || index >= g_presets.length) {
+    preset = g_defaultPreset;
+  } else {
+    preset = g_presets[index];
+  }
   //////////////// dimensions ///////////////////////////
   if (preset.units !== undefined) {
     document.getElementById("units-select").value = preset.units;
@@ -199,6 +262,15 @@ export function setPreset(index, updateSelect = true) {
       preset.headerMarginLeftRight;
   }
 
+  if (preset.panelsGutterSize !== undefined) {
+    document.getElementById("panel-gutter-size-input").value =
+      preset.panelsGutterSize;
+  }
+  if (preset.panelsLineWidth !== undefined) {
+    document.getElementById("panel-line-width-input").value =
+      preset.panelsLineWidth;
+  }
+
   if (preset.lineWidthThin !== undefined) {
     document.getElementById("line-width-thin-input").value =
       preset.lineWidthThin;
@@ -219,14 +291,6 @@ export function setPreset(index, updateSelect = true) {
     document.getElementById("header-padding-input").value =
       preset.headerPadding;
   }
-  if (preset.panelsGutterSize !== undefined) {
-    document.getElementById("panel-gutter-size-input").value =
-      preset.panelsGutterSize;
-  }
-  if (preset.panelsLineWidth !== undefined) {
-    document.getElementById("panel-line-width-input").value =
-      preset.panelsLineWidth;
-  }
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined) {
     document.getElementById("background-color-input").value =
@@ -235,9 +299,9 @@ export function setPreset(index, updateSelect = true) {
   if (preset.renderLineColor !== undefined) {
     document.getElementById("line-color-input").value = preset.renderLineColor;
   }
-  if (preset.renderLineWidth !== undefined) {
+  if (preset.renderLineWeight !== undefined) {
     document.getElementById("line-thickness-select").value =
-      preset.renderLineWidth;
+      preset.renderLineWeight;
   }
   if (preset.panelsLineColor !== undefined) {
     document.getElementById("panel-line-color-input").value =
@@ -318,8 +382,9 @@ export function setPreset(index, updateSelect = true) {
   //////////////////////////////////////////////////
 }
 
-export function getPresetFromCurrentValues(name, author) {
-  const preset = { ...g_presets[1] };
+export function getPresetFromCurrentValues(name) {
+  const preset = { ...g_defaultPreset }; // load defaults
+  preset.name = name;
   //////////////// dimensions ///////////////////////////
   if (document.getElementById("save-preset-dimensions-checkbox").checked) {
     preset.units = document.getElementById("units-select").value;
@@ -346,13 +411,19 @@ export function getPresetFromCurrentValues(name, author) {
       "header-margin-left-right-input"
     ).value;
 
+    preset.panelsGutterSize = document.getElementById(
+      "panel-gutter-size-input"
+    ).value;
+    preset.panelsLineWidth = document.getElementById(
+      "panel-line-width-input"
+    ).value;
+
     preset.lineWidthThin = document.getElementById(
       "line-width-thin-input"
     ).value;
     preset.lineWidthThick = document.getElementById(
       "line-width-thick-input"
     ).value;
-
     preset.borderMarkMaxLength = document.getElementById(
       "border-marks-length-input"
     ).value;
@@ -362,13 +433,6 @@ export function getPresetFromCurrentValues(name, author) {
     preset.headerPadding = document.getElementById(
       "header-padding-input"
     ).value;
-
-    preset.panelsGutterSize = document.getElementById(
-      "panel-gutter-size-input"
-    ).value;
-    preset.panelsLineWidth = document.getElementById(
-      "panel-line-width-input"
-    ).value;
   }
   //////////////// rendering ///////////////////////////
   if (document.getElementById("save-preset-rendering-checkbox").checked) {
@@ -376,7 +440,7 @@ export function getPresetFromCurrentValues(name, author) {
       "background-color-input"
     ).value;
     preset.renderLineColor = document.getElementById("line-color-input").value;
-    preset.renderLineWidth = document.getElementById(
+    preset.renderLineWeight = document.getElementById(
       "line-thickness-select"
     ).value;
     preset.panelsLineColor = document.getElementById(
@@ -385,6 +449,7 @@ export function getPresetFromCurrentValues(name, author) {
     preset.renderHeaderTextWeight = document.getElementById(
       "header-text-weight-select"
     ).value;
+
     preset.renderDrawBackground = document.getElementById(
       "paper-draw-bg-checkbox"
     ).checked;
@@ -414,12 +479,14 @@ export function getPresetFromCurrentValues(name, author) {
     preset.layoutTemplateType = document.getElementById(
       "layout-template-select"
     ).value;
+
     preset.layoutPagePaperSize = document.getElementById(
       "layout-page-paper-select"
     ).value;
     preset.layoutPageScaling = document.getElementById(
       "layout-page-scaling-select"
     ).value;
+
     preset.layoutThumbnailsRows = document.getElementById(
       "layout-thumbnails-rows-input"
     ).value;
@@ -431,6 +498,5 @@ export function getPresetFromCurrentValues(name, author) {
     ).value;
   }
   //////////////////////////////////////////////////////
-  preset.name = name;
   return preset;
 }

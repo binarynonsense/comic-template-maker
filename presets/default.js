@@ -1,6 +1,5 @@
 export default {
-  name: "thumbnails 3x5 american comic double page",
-  presetFormatVersion: "1.0.0",
+  name: "default",
 
   units: "inches",
   trimWidth: "6.625",
@@ -23,22 +22,23 @@ export default {
   headerPadding: "0.19",
 
   renderBackgroundColor: "#ffffff",
-  renderLineColor: "#000000",
-  renderLineWeight: "4",
+  renderLineColor: "#a4dded",
+  renderLineWeight: "1",
   panelsLineColor: "#000000",
   renderHeaderTextWeight: "normal",
   renderDrawBackground: true,
   renderDrawHeader: true,
   renderDrawBleed: true,
   renderDrawTrim: true,
+  renderDrawSafe: true,
   renderDrawMarks: true,
 
-  layoutPageSpread: "double",
+  layoutPageSpread: "single",
   layoutPpi: "300",
-  layoutTemplateType: "thumbnails",
+  layoutTemplateType: "page",
   layoutPagePaperSize: "header",
   layoutPageScaling: "keep",
-  layoutThumbnailsRows: "5",
+  layoutThumbnailsRows: "3",
   layoutThumbnailsColumns: "3",
   layoutThumbnailsPaperSize: "a4",
 };

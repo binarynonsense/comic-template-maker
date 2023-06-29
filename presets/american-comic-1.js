@@ -1,6 +1,7 @@
 export default {
   name: "american comic page",
   presetFormatVersion: "1.0.0",
+
   units: "inches",
   trimWidth: "6.625",
   trimHeight: "10.1875",
@@ -12,32 +13,12 @@ export default {
   headerMarginTopBottom: "0.5",
   headerMarginLeftRight: "0.5",
 
+  panelsGutterSize: "0.15",
+  panelsLineWidth: "0.04",
+
   lineWidthThin: "0.004",
   lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
   headerTextHeight: "0.17",
   headerPadding: "0.19",
-
-  layoutPageSpread: "single",
-  renderBackgroundColor: "#ffffff",
-  renderLineColor: "#a4dded",
-  renderLineWidth: "1",
-  renderHeaderTextWeight: "normal",
-  renderDrawBackground: true,
-  renderDrawHeader: true,
-  renderDrawBleed: true,
-  renderDrawTrim: true,
-  renderDrawMarks: true,
-  panelsPreset: "-1",
-  panelsUnits: "inches",
-  panelsGutterSize: "0.15",
-  panelsLineWidth: "0.04",
-  panelsLineColor: "#000000",
-  layoutPpi: "300",
-  layoutTemplateType: "page",
-  layoutPagePaperSize: "header",
-  layoutPageScaling: "keep",
-  layoutThumbnailsRows: "3",
-  layoutThumbnailsColumns: "3",
-  layoutThumbnailsPaperSize: "a4",
 };

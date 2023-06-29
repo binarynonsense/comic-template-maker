@@ -1,8 +1,8 @@
 export default {
   name: "thumbnails 4x4 american comic single page",
   presetFormatVersion: "1.0.0",
-  units: "inches",
 
+  units: "inches",
   trimWidth: "6.625",
   trimHeight: "10.1875",
   safeMarginTop: "0.25",
@@ -13,6 +13,9 @@ export default {
   headerMarginTopBottom: "0.5",
   headerMarginLeftRight: "0.5",
 
+  panelsGutterSize: "0.15",
+  panelsLineWidth: "0.04",
+
   lineWidthThin: "0.004",
   lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
@@ -21,13 +24,15 @@ export default {
 
   renderBackgroundColor: "#ffffff",
   renderLineColor: "#000000",
-  renderLineWidth: "4",
+  renderLineWeight: "4",
+  panelsLineColor: "#000000",
   renderHeaderTextWeight: "normal",
   renderDrawBackground: true,
   renderDrawHeader: true,
   renderDrawBleed: true,
   renderDrawTrim: true,
   renderDrawMarks: true,
+
   layoutPageSpread: "single",
   layoutPpi: "300",
   layoutTemplateType: "thumbnails",

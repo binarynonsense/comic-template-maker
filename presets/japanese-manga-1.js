@@ -1,8 +1,8 @@
 export default {
   name: "japanese manga page",
   presetFormatVersion: "1.0.0",
-  units: "cm",
 
+  units: "cm",
   trimWidth: "22",
   trimHeight: "31",
   safeMarginTop: "2",
@@ -12,6 +12,9 @@ export default {
   bleedMargin: "1",
   headerMarginTopBottom: "1.7",
   headerMarginLeftRight: "0.85",
+
+  panelsGutterSize: "0.15",
+  panelsLineWidth: "0.04",
 
   lineWidthThin: "0.01",
   lineWidthThick: "0.02",
