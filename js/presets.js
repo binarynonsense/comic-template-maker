@@ -217,7 +217,7 @@ function isVersionOlder(testVersion, referenceVersion) {
   return false;
 }
 
-export function setPreset(index) {
+export function setPreset(index, checkUI = false) {
   let preset;
   if (index < 0 || index >= g_presets.length) {
     preset = g_defaultPreset;
@@ -225,159 +225,181 @@ export function setPreset(index) {
     preset = g_presets[index];
   }
   //////////////// dimensions ///////////////////////////
-  if (preset.units !== undefined) {
-    document.getElementById("units-select").value = preset.units;
-  }
-  if (preset.trimWidth !== undefined) {
-    document.getElementById("trim-width-input").value = preset.trimWidth;
-  }
-  if (preset.trimHeight !== undefined) {
-    document.getElementById("trim-height-input").value = preset.trimHeight;
-  }
-  if (preset.safeMarginTop !== undefined) {
-    document.getElementById("safe-margin-top-input").value =
-      preset.safeMarginTop;
-  }
-  if (preset.safeMarginBottom !== undefined) {
-    document.getElementById("safe-margin-bottom-input").value =
-      preset.safeMarginBottom;
-  }
-  if (preset.safeMarginLeft !== undefined) {
-    document.getElementById("safe-margin-left-input").value =
-      preset.safeMarginLeft;
-  }
-  if (preset.safeMarginRight !== undefined) {
-    document.getElementById("safe-margin-right-input").value =
-      preset.safeMarginRight;
-  }
-  if (preset.bleedMargin !== undefined) {
-    document.getElementById("bleed-margin-input").value = preset.bleedMargin;
-  }
-  if (preset.headerMarginTopBottom !== undefined) {
-    document.getElementById("header-margin-top-bottom-input").value =
-      preset.headerMarginTopBottom;
-  }
-  if (preset.headerMarginLeftRight !== undefined) {
-    document.getElementById("header-margin-left-right-input").value =
-      preset.headerMarginLeftRight;
-  }
+  if (
+    !checkUI ||
+    document.getElementById("select-preset-dimensions-checkbox").checked
+  ) {
+    if (preset.units !== undefined) {
+      document.getElementById("units-select").value = preset.units;
+    }
+    if (preset.trimWidth !== undefined) {
+      document.getElementById("trim-width-input").value = preset.trimWidth;
+    }
+    if (preset.trimHeight !== undefined) {
+      document.getElementById("trim-height-input").value = preset.trimHeight;
+    }
+    if (preset.safeMarginTop !== undefined) {
+      document.getElementById("safe-margin-top-input").value =
+        preset.safeMarginTop;
+    }
+    if (preset.safeMarginBottom !== undefined) {
+      document.getElementById("safe-margin-bottom-input").value =
+        preset.safeMarginBottom;
+    }
+    if (preset.safeMarginLeft !== undefined) {
+      document.getElementById("safe-margin-left-input").value =
+        preset.safeMarginLeft;
+    }
+    if (preset.safeMarginRight !== undefined) {
+      document.getElementById("safe-margin-right-input").value =
+        preset.safeMarginRight;
+    }
+    if (preset.bleedMargin !== undefined) {
+      document.getElementById("bleed-margin-input").value = preset.bleedMargin;
+    }
+    if (preset.headerMarginTopBottom !== undefined) {
+      document.getElementById("header-margin-top-bottom-input").value =
+        preset.headerMarginTopBottom;
+    }
+    if (preset.headerMarginLeftRight !== undefined) {
+      document.getElementById("header-margin-left-right-input").value =
+        preset.headerMarginLeftRight;
+    }
 
-  if (preset.panelsGutterSize !== undefined) {
-    document.getElementById("panel-gutter-size-input").value =
-      preset.panelsGutterSize;
-  }
-  if (preset.panelsLineWidth !== undefined) {
-    document.getElementById("panel-line-width-input").value =
-      preset.panelsLineWidth;
-  }
+    if (preset.panelsGutterSize !== undefined) {
+      document.getElementById("panel-gutter-size-input").value =
+        preset.panelsGutterSize;
+    }
+    if (preset.panelsLineWidth !== undefined) {
+      document.getElementById("panel-line-width-input").value =
+        preset.panelsLineWidth;
+    }
 
-  if (preset.lineWidthThin !== undefined) {
-    document.getElementById("line-width-thin-input").value =
-      preset.lineWidthThin;
-  }
-  if (preset.lineWidthThick !== undefined) {
-    document.getElementById("line-width-thick-input").value =
-      preset.lineWidthThick;
-  }
-  if (preset.borderMarkMaxLength !== undefined) {
-    document.getElementById("border-marks-length-input").value =
-      preset.borderMarkMaxLength;
-  }
-  if (preset.headerTextHeight !== undefined) {
-    document.getElementById("header-text-height-input").value =
-      preset.headerTextHeight;
-  }
-  if (preset.headerPadding !== undefined) {
-    document.getElementById("header-padding-input").value =
-      preset.headerPadding;
-  }
-  //////////////// rendering ///////////////////////////
-  if (preset.renderBackgroundColor !== undefined) {
-    document.getElementById("background-color-input").value =
-      preset.renderBackgroundColor;
-  }
-  if (preset.renderLineColor !== undefined) {
-    document.getElementById("line-color-input").value = preset.renderLineColor;
-  }
-  if (preset.renderLineWeight !== undefined) {
-    document.getElementById("line-thickness-select").value =
-      preset.renderLineWeight;
-  }
-  if (preset.panelsLineColor !== undefined) {
-    document.getElementById("panel-line-color-input").value =
-      preset.panelsLineColor;
-  }
-  if (preset.renderHeaderTextWeight !== undefined) {
-    document.getElementById("header-text-weight-select").value =
-      preset.renderHeaderTextWeight;
-  }
-
-  if (preset.renderDrawBackground !== undefined) {
-    document.getElementById("paper-draw-bg-checkbox").checked =
-      preset.renderDrawBackground;
-  }
-  if (preset.renderDrawHeader !== undefined) {
-    document.getElementById("paper-draw-header-checkbox").checked =
-      preset.renderDrawHeader;
-  }
-  if (preset.renderDrawBleed !== undefined) {
-    document.getElementById("bleed-draw-checkbox").checked =
-      preset.renderDrawBleed;
-  }
-  if (preset.renderDrawTrim !== undefined) {
-    document.getElementById("trim-draw-checkbox").checked =
-      preset.renderDrawTrim;
-  }
-  if (preset.renderDrawSafe !== undefined) {
-    document.getElementById("safe-draw-checkbox").checked =
-      preset.renderDrawSafe;
-  }
-  if (preset.renderDrawMarks !== undefined) {
-    document.getElementById("border-marks-draw-checkbox").checked =
-      preset.renderDrawMarks;
-  }
-  //////////////// panels ///////////////////////////
-
-  //////////////// layout ///////////////////////////
-  if (preset.layoutPageSpread !== undefined) {
-    document.getElementById("layout-spread-select").value =
-      preset.layoutPageSpread;
-  }
-  if (preset.layoutPpi !== undefined) {
-    document.getElementById("ppi-input").value = preset.layoutPpi;
-  }
-  if (preset.layoutTemplateType !== undefined) {
-    document.getElementById("layout-template-select").value =
-      preset.layoutTemplateType;
-    if (document.getElementById("layout-template-select").value === "page") {
-      document.getElementById("layout-page-div").classList.remove("hidden");
-      document.getElementById("layout-thumbnails-div").classList.add("hidden");
-    } else {
-      document.getElementById("layout-page-div").classList.add("hidden");
-      document
-        .getElementById("layout-thumbnails-div")
-        .classList.remove("hidden");
+    if (preset.lineWidthThin !== undefined) {
+      document.getElementById("line-width-thin-input").value =
+        preset.lineWidthThin;
+    }
+    if (preset.lineWidthThick !== undefined) {
+      document.getElementById("line-width-thick-input").value =
+        preset.lineWidthThick;
+    }
+    if (preset.borderMarkMaxLength !== undefined) {
+      document.getElementById("border-marks-length-input").value =
+        preset.borderMarkMaxLength;
+    }
+    if (preset.headerTextHeight !== undefined) {
+      document.getElementById("header-text-height-input").value =
+        preset.headerTextHeight;
+    }
+    if (preset.headerPadding !== undefined) {
+      document.getElementById("header-padding-input").value =
+        preset.headerPadding;
     }
   }
-  if (preset.layoutPagePaperSize !== undefined) {
-    document.getElementById("layout-page-paper-select").value =
-      preset.layoutPagePaperSize;
+  //////////////// rendering ///////////////////////////
+  if (
+    !checkUI ||
+    document.getElementById("select-preset-rendering-checkbox").checked
+  ) {
+    if (preset.renderBackgroundColor !== undefined) {
+      document.getElementById("background-color-input").value =
+        preset.renderBackgroundColor;
+    }
+    if (preset.renderLineColor !== undefined) {
+      document.getElementById("line-color-input").value =
+        preset.renderLineColor;
+    }
+    if (preset.renderLineWeight !== undefined) {
+      document.getElementById("line-thickness-select").value =
+        preset.renderLineWeight;
+    }
+    if (preset.panelsLineColor !== undefined) {
+      document.getElementById("panel-line-color-input").value =
+        preset.panelsLineColor;
+    }
+    if (preset.renderHeaderTextWeight !== undefined) {
+      document.getElementById("header-text-weight-select").value =
+        preset.renderHeaderTextWeight;
+    }
+
+    if (preset.renderDrawBackground !== undefined) {
+      document.getElementById("paper-draw-bg-checkbox").checked =
+        preset.renderDrawBackground;
+    }
+    if (preset.renderDrawHeader !== undefined) {
+      document.getElementById("paper-draw-header-checkbox").checked =
+        preset.renderDrawHeader;
+    }
+    if (preset.renderDrawBleed !== undefined) {
+      document.getElementById("bleed-draw-checkbox").checked =
+        preset.renderDrawBleed;
+    }
+    if (preset.renderDrawTrim !== undefined) {
+      document.getElementById("trim-draw-checkbox").checked =
+        preset.renderDrawTrim;
+    }
+    if (preset.renderDrawSafe !== undefined) {
+      document.getElementById("safe-draw-checkbox").checked =
+        preset.renderDrawSafe;
+    }
+    if (preset.renderDrawMarks !== undefined) {
+      document.getElementById("border-marks-draw-checkbox").checked =
+        preset.renderDrawMarks;
+    }
   }
-  if (preset.layoutPageScaling !== undefined) {
-    document.getElementById("layout-page-scaling-select").value =
-      preset.layoutPageScaling;
+  //////////////// panels ///////////////////////////
+  if (
+    !checkUI ||
+    document.getElementById("select-preset-panels-checkbox").checked
+  ) {
   }
-  if (preset.layoutThumbnailsRows !== undefined) {
-    document.getElementById("layout-thumbnails-rows-input").value =
-      preset.layoutThumbnailsRows;
-  }
-  if (preset.layoutThumbnailsColumns !== undefined) {
-    document.getElementById("layout-thumbnails-columns-input").value =
-      preset.layoutThumbnailsColumns;
-  }
-  if (preset.layoutThumbnailsPaperSize !== undefined) {
-    document.getElementById("layout-thumbnails-paper-select").value =
-      preset.layoutThumbnailsPaperSize;
+  //////////////// layout ///////////////////////////
+  if (
+    !checkUI ||
+    document.getElementById("select-preset-layout-checkbox").checked
+  ) {
+    if (preset.layoutPageSpread !== undefined) {
+      document.getElementById("layout-spread-select").value =
+        preset.layoutPageSpread;
+    }
+    if (preset.layoutPpi !== undefined) {
+      document.getElementById("ppi-input").value = preset.layoutPpi;
+    }
+    if (preset.layoutTemplateType !== undefined) {
+      document.getElementById("layout-template-select").value =
+        preset.layoutTemplateType;
+      if (document.getElementById("layout-template-select").value === "page") {
+        document.getElementById("layout-page-div").classList.remove("hidden");
+        document
+          .getElementById("layout-thumbnails-div")
+          .classList.add("hidden");
+      } else {
+        document.getElementById("layout-page-div").classList.add("hidden");
+        document
+          .getElementById("layout-thumbnails-div")
+          .classList.remove("hidden");
+      }
+    }
+    if (preset.layoutPagePaperSize !== undefined) {
+      document.getElementById("layout-page-paper-select").value =
+        preset.layoutPagePaperSize;
+    }
+    if (preset.layoutPageScaling !== undefined) {
+      document.getElementById("layout-page-scaling-select").value =
+        preset.layoutPageScaling;
+    }
+    if (preset.layoutThumbnailsRows !== undefined) {
+      document.getElementById("layout-thumbnails-rows-input").value =
+        preset.layoutThumbnailsRows;
+    }
+    if (preset.layoutThumbnailsColumns !== undefined) {
+      document.getElementById("layout-thumbnails-columns-input").value =
+        preset.layoutThumbnailsColumns;
+    }
+    if (preset.layoutThumbnailsPaperSize !== undefined) {
+      document.getElementById("layout-thumbnails-paper-select").value =
+        preset.layoutThumbnailsPaperSize;
+    }
   }
   //////////////////////////////////////////////////
 }

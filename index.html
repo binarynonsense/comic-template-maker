@@ -47,6 +47,32 @@
         <label
           >load a preset<select id="preset-select" class="refresh"></select
         ></label>
+        <div>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="select-preset-dimensions-checkbox"
+              checked
+            />
+            load dimensions
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="select-preset-rendering-checkbox"
+              checked
+            />
+            load rendering options
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="select-preset-panels-checkbox" checked />
+            load panel grid
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="select-preset-layout-checkbox" checked />
+            load layout
+          </label>
+        </div>
         <h3 class="h3-extratop h3-extrabottom">Import Preset From File:</h3>
         <label class="checkbox-label">
           <input
@@ -72,19 +98,19 @@
         /></label>
         <label class="checkbox-label">
           <input type="checkbox" id="save-preset-dimensions-checkbox" checked />
-          include dimensions
+          export dimensions
         </label>
         <label class="checkbox-label">
           <input type="checkbox" id="save-preset-rendering-checkbox" />
-          include rendering options
+          export rendering options
         </label>
         <label class="checkbox-label">
           <input type="checkbox" id="save-preset-panels-checkbox" disabled />
-          include panel grid
+          export panel grid
         </label>
         <label class="checkbox-label">
           <input type="checkbox" id="save-preset-layout-checkbox" />
-          include layout
+          export layout
         </label>
         <button id="save-preset-button">EXPORT</button>
       </div>

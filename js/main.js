@@ -28,8 +28,8 @@ for (let i = 0; i < refreshable.length; i++) {
   refreshable[i].addEventListener("change", function (event) {
     if (event.target.id === "preset-select") {
       if (event.target.value != 0) {
-        setPreset(-1); // load all defaults
-        setPreset(event.target.value - 1);
+        setPreset(-1, true); // load all defaults
+        setPreset(event.target.value - 1, true);
         if (document.getElementById("autorefresh-checkbox").checked) {
           drawTemplate();
           resetView();
