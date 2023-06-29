@@ -80,13 +80,13 @@ export class HeaderRect extends Rect {
       ctx.fillText("  PAGE #: ", pageTextX * this.ppi, titleTextY * this.ppi);
       let pageTextWidthPx = ctx.measureText("  PAGE #: ");
       let pageLineX = pageTextX + pageTextWidthPx.width / this.ppi;
-      let pageLinelength = titleLineLength / 4;
+      let pageLineLength = titleLineLength / 4;
       this.drawLine(
         ctx,
         pageLineX,
         titleTextY,
         0,
-        -pageLinelength,
+        -pageLineLength,
         this.lineWidth,
         [0, 0],
         this.lineColor
