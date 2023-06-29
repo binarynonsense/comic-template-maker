@@ -174,8 +174,10 @@ function drawCanvas(makeDoublePage) {
     document.getElementById("border-marks-length-input").value * toInches;
   const headerTextHeight =
     document.getElementById("header-text-height-input").value * toInches;
-  const headerPadding =
-    document.getElementById("header-padding-input").value * toInches;
+  const headerPaddingBottom =
+    document.getElementById("header-padding-bottom-input").value * toInches;
+  const headerPaddingLeft =
+    document.getElementById("header-padding-left-input").value * toInches;
 
   const backGroundColor = document.getElementById(
     "background-color-input"
@@ -221,7 +223,8 @@ function drawCanvas(makeDoublePage) {
     lineWidthThin,
     lineWidthMultiplier,
     drawHeader,
-    headerPadding,
+    headerPaddingBottom,
+    headerPaddingLeft,
     headerTextHeight,
     headerTextWeight,
     drawCropMarks

@@ -86,8 +86,10 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
   if (preset.headerTextHeight !== undefined)
     preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
-  if (preset.headerPadding !== undefined)
-    preset.headerPadding = sanitizeNumber(preset.headerPadding);
+  if (preset.headerPaddingBottom !== undefined)
+    preset.headerPaddingBottom = sanitizeNumber(preset.headerPaddingBottom);
+  if (preset.headerPaddingLeft !== undefined)
+    preset.headerPaddingLeft = sanitizeNumber(preset.headerPaddingLeft);
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined)
     preset.renderBackgroundColor = sanitizeColor(preset.renderBackgroundColor);
@@ -299,9 +301,13 @@ export function setPreset(index, checkUI = false) {
       document.getElementById("header-text-height-input").value =
         preset.headerTextHeight;
     }
-    if (preset.headerPadding !== undefined) {
-      document.getElementById("header-padding-input").value =
-        preset.headerPadding;
+    if (preset.headerPaddingBottom !== undefined) {
+      document.getElementById("header-padding-bottom-input").value =
+        preset.headerPaddingBottom;
+    }
+    if (preset.headerPaddingLeft !== undefined) {
+      document.getElementById("header-padding-left-input").value =
+        preset.headerPaddingLeft;
     }
   }
   //////////////// rendering ///////////////////////////
@@ -464,8 +470,11 @@ export function getPresetFromCurrentValues(name) {
     preset.headerTextHeight = document.getElementById(
       "header-text-height-input"
     ).value;
-    preset.headerPadding = document.getElementById(
-      "header-padding-input"
+    preset.headerPaddingBottom = document.getElementById(
+      "header-padding-bottom-input"
+    ).value;
+    preset.headerPaddingLeft = document.getElementById(
+      "header-padding-left-input"
     ).value;
   }
   //////////////// rendering ///////////////////////////

@@ -17,7 +17,8 @@ export class HeaderRect extends Rect {
     lineWidth,
     lineWidthMultiplier,
     drawHeader,
-    headerPadding,
+    headerPaddingBottom,
+    headerPaddingLeft,
     headerTextHeight,
     headerTextWeight,
     drawCropMarks
@@ -26,7 +27,8 @@ export class HeaderRect extends Rect {
     this.lineWidth = lineWidth;
     this.lineWidthMultiplier = lineWidthMultiplier;
     this.drawHeader = drawHeader;
-    this.headerPadding = headerPadding;
+    this.headerPaddingBottom = headerPaddingBottom;
+    this.headerPaddingLeft = headerPaddingLeft;
     this.headerTextHeight = headerTextHeight;
     this.headerTextWeight = headerTextWeight;
     this.drawCropMarks = drawCropMarks;
@@ -46,10 +48,12 @@ export class HeaderRect extends Rect {
         fontSize * this.ppi
       }px Arial`;
       // TITLE /////////
-      let titleTextX = trimSize.x;
-      let titleTextY = bleedSize.y - this.headerPadding;
-      ctx.fillText("  TITLE: ", titleTextX * this.ppi, titleTextY * this.ppi);
-      let titleTextWidthPx = ctx.measureText("  TITLE: ");
+      let titleTextX =
+        (this.drawCropMarks ? trimSize.x : bleedSize.x) +
+        this.headerPaddingLeft;
+      let titleTextY = bleedSize.y - this.headerPaddingBottom;
+      ctx.fillText("TITLE: ", titleTextX * this.ppi, titleTextY * this.ppi);
+      let titleTextWidthPx = ctx.measureText("TITLE: ");
       let titleLineX = titleTextX + titleTextWidthPx.width / this.ppi;
       let titleLineLength = this.headerTextHeight * 8;
       this.drawLine(

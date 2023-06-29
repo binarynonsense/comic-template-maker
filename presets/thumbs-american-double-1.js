@@ -20,7 +20,8 @@ export default {
   lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
   headerTextHeight: "0.17",
-  headerPadding: "0.19",
+  headerPaddingBottom: "0.19",
+  headerPaddingLeft: "0.19",
 
   renderBackgroundColor: "#ffffff",
   renderLineColor: "#000000",
