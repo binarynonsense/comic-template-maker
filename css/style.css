@@ -237,6 +237,11 @@ label {
   display: block;
 }
 
+.checkbox-label-2 {
+  margin: 15px 0px 15px 20px;
+  display: block;
+}
+
 button {
   /* appearance: none;
   -webkit-appearance: none; */

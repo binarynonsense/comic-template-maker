@@ -13,7 +13,7 @@ export default {
   headerMarginLeftRight: "0.5",
 
   panelsGutterSize: "0.15",
-  panelsLineWidth: "0.04",
+  panelsLineWidth: "0.025",
 
   lineWidthThin: "0.004",
   lineWidthThick: "0.008",

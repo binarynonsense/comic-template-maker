@@ -14,7 +14,7 @@ export default {
   headerMarginLeftRight: "0.85",
 
   panelsGutterSize: "0.15",
-  panelsLineWidth: "0.04",
+  panelsLineWidth: "0.025",
 
   lineWidthThin: "0.01",
   lineWidthThick: "0.02",
