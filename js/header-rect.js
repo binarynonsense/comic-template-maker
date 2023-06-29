@@ -19,7 +19,8 @@ export class HeaderRect extends Rect {
     drawHeader,
     headerPadding,
     headerTextHeight,
-    headerTextWeight
+    headerTextWeight,
+    drawCropMarks
   ) {
     super(parent, x, y, width, height, ppi);
     this.lineWidth = lineWidth;
@@ -28,10 +29,12 @@ export class HeaderRect extends Rect {
     this.headerPadding = headerPadding;
     this.headerTextHeight = headerTextHeight;
     this.headerTextWeight = headerTextWeight;
+    this.drawCropMarks = drawCropMarks;
   }
 
   draw(ctx, recursive = false) {
     const bleedSize = this.children[0];
+    const trimSize = bleedSize.children[0];
     const fontSize = this.headerTextHeight;
     /////////////////
     // HEADER ///////
@@ -43,10 +46,10 @@ export class HeaderRect extends Rect {
         fontSize * this.ppi
       }px Arial`;
       // TITLE /////////
-      let titleTextX = bleedSize.x;
+      let titleTextX = trimSize.x;
       let titleTextY = bleedSize.y - this.headerPadding;
-      ctx.fillText("TITLE: ", titleTextX * this.ppi, titleTextY * this.ppi);
-      let titleTextWidthPx = ctx.measureText("TITLE: ");
+      ctx.fillText("  TITLE: ", titleTextX * this.ppi, titleTextY * this.ppi);
+      let titleTextWidthPx = ctx.measureText("  TITLE: ");
       let titleLineX = titleTextX + titleTextWidthPx.width / this.ppi;
       let titleLineLength = this.headerTextHeight * 8;
       this.drawLine(
@@ -87,6 +90,100 @@ export class HeaderRect extends Rect {
         titleTextY,
         0,
         -pageLineLength,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+    }
+    /////////////////
+    // CROP MARKS ///////
+    /////////////////
+    // TODO: use custom condition
+    if (this.drawCropMarks) {
+      // up left
+      this.drawLine(
+        ctx,
+        trimSize.x,
+        bleedSize.y,
+        bleedSize.y,
+        0,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      // up right
+      this.drawLine(
+        ctx,
+        trimSize.x + trimSize.width,
+        bleedSize.y,
+        bleedSize.y,
+        0,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      // down left
+      this.drawLine(
+        ctx,
+        trimSize.x,
+        bleedSize.y + bleedSize.height,
+        -(this.height - bleedSize.y + bleedSize.height),
+        0,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      // down right
+      this.drawLine(
+        ctx,
+        trimSize.x + trimSize.width,
+        bleedSize.y + bleedSize.height,
+        -(this.height - bleedSize.y + bleedSize.height),
+        0,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      //left up
+      this.drawLine(
+        ctx,
+        bleedSize.x,
+        trimSize.y,
+        0,
+        bleedSize.x,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      //left down
+      this.drawLine(
+        ctx,
+        bleedSize.x,
+        trimSize.y + trimSize.height,
+        0,
+        bleedSize.x,
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      //right up
+      this.drawLine(
+        ctx,
+        bleedSize.x + bleedSize.width,
+        trimSize.y,
+        0,
+        -(this.width - bleedSize.x + bleedSize.width),
+        this.lineWidth,
+        [0, 0],
+        this.lineColor
+      );
+      //right down
+      this.drawLine(
+        ctx,
+        bleedSize.x + bleedSize.width,
+        trimSize.y + trimSize.height,
+        0,
+        -(this.width - bleedSize.x + bleedSize.width),
         this.lineWidth,
         [0, 0],
         this.lineColor

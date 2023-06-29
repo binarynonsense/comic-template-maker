@@ -114,6 +114,8 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.renderDrawSafe = sanitizeBool(preset.renderDrawSafe);
   if (preset.renderDrawMarks !== undefined)
     preset.renderDrawMarks = sanitizeBool(preset.renderDrawMarks);
+  if (preset.renderDrawCropMarks !== undefined)
+    preset.renderDrawCropMarks = sanitizeBool(preset.renderDrawCropMarks);
   //////////////// panels ///////////////////////////
 
   //////////////// layout ///////////////////////////
@@ -352,6 +354,10 @@ export function setPreset(index, checkUI = false) {
       document.getElementById("border-marks-draw-checkbox").checked =
         preset.renderDrawMarks;
     }
+    if (preset.renderDrawCropMarks !== undefined) {
+      document.getElementById("crop-marks-draw-checkbox").checked =
+        preset.renderDrawCropMarks;
+    }
   }
   //////////////// panels ///////////////////////////
   if (
@@ -493,6 +499,9 @@ export function getPresetFromCurrentValues(name) {
       document.getElementById("safe-draw-checkbox").checked;
     preset.renderDrawMarks = document.getElementById(
       "border-marks-draw-checkbox"
+    ).checked;
+    preset.renderDrawCropMarks = document.getElementById(
+      "crop-marks-draw-checkbox"
     ).checked;
   }
   //////////////// panels ///////////////////////////

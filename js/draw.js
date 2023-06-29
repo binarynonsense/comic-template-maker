@@ -200,6 +200,9 @@ function drawCanvas(makeDoublePage) {
   const drawBorderMarks = document.getElementById(
     "border-marks-draw-checkbox"
   ).checked;
+  const drawCropMarks = document.getElementById(
+    "crop-marks-draw-checkbox"
+  ).checked;
   const drawPanels = document.getElementById("panels-draw-checkbox").checked;
 
   if (makeDoublePage) trimWidth *= 2;
@@ -220,7 +223,8 @@ function drawCanvas(makeDoublePage) {
     drawHeader,
     headerPadding,
     headerTextHeight,
-    headerTextWeight
+    headerTextWeight,
+    drawCropMarks
   );
   headerRect.setBorderStyle(0, lineColor, [0, 0]);
 

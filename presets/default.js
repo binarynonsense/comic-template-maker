@@ -32,6 +32,7 @@ export default {
   renderDrawTrim: true,
   renderDrawSafe: true,
   renderDrawMarks: true,
+  renderDrawCropMarks: true,
 
   layoutPageSpread: "single",
   layoutPpi: "300",
