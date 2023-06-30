@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+import { exportGridPreset } from "./panels.js";
+
 import preset_0 from "../presets/default.js";
 import preset_1 from "../presets/american-comic-1.js";
 import preset_2 from "../presets/american-comic-1-double.js";
@@ -541,7 +543,8 @@ export function getPresetFromCurrentValues(name) {
     ).checked;
   }
   //////////////// panels ///////////////////////////
-  if (document.getElementById("save-preset-panels-checkbox").checked) {
+  if (true || document.getElementById("save-preset-panels-checkbox").checked) {
+    preset.panelGrid = exportGridPreset();
   }
   //////////////// layout ///////////////////////////
   if (document.getElementById("save-preset-layout-checkbox").checked) {

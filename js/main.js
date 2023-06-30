@@ -9,6 +9,7 @@ import { initPresets, setPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
 import { initPanels, loadPreset as loadPanelsPreset } from "./panels.js";
+import { initModals } from "./modals.js";
 
 const g_version = "1.0.0";
 
@@ -20,14 +21,15 @@ function init() {
   initSaveLoad();
   initView();
   initPanels();
+  initModals();
   drawTemplate();
 }
 
-document
-  .getElementById("refresh-button")
-  .addEventListener("click", function () {
-    drawTemplate();
-  });
+// document
+//   .getElementById("refresh-button")
+//   .addEventListener("click", function () {
+//     drawTemplate();
+//   });
 
 let refreshable = document.querySelectorAll(".refresh");
 for (let i = 0; i < refreshable.length; i++) {

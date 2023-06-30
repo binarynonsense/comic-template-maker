@@ -198,6 +198,7 @@ select {
   border: 2px solid #727272;
   border-radius: 0px;
   background-color: #fff;
+  cursor: pointer;
 }
 @-moz-document url-prefix() {
   select {
@@ -235,11 +236,13 @@ label {
 .checkbox-label {
   margin: 15px 0px 15px 0px;
   display: block;
+  cursor: pointer;
 }
 
 .checkbox-label-2 {
   margin: 15px 0px 15px 20px;
   display: block;
+  cursor: pointer;
 }
 
 button {
@@ -256,6 +259,7 @@ button {
 
 button:hover {
   background-color: #5a6ddd;
+  cursor: pointer;
 }
 
 button:active {
@@ -306,4 +310,26 @@ a:active {
 }
 #zoom-button-3 {
   top: 100px;
+}
+
+.import-export-buttons {
+  height: 18px;
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding-right: 5px;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.import-export-button {
+  color: rgb(87, 87, 87);
+  /* border: 2px solid #727272; */
+  padding: 2px;
+}
+.import-export-button:hover {
+  color: rgb(46, 46, 46);
+  cursor: pointer;
 }

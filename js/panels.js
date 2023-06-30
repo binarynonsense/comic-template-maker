@@ -321,6 +321,24 @@ function getGridNodeFromId(node, id) {
   return undefined;
 }
 
+function getNodePresetData(node) {
+  let children = [];
+  node.children.forEach((child) => {
+    children.push(getNodePresetData(child));
+  });
+  return {
+    parentID: node.parent?.id,
+    id: node.id,
+    type: node.type,
+    sizePercentage: node.sizePercentage,
+    children: children,
+  };
+}
+
+export function exportGridPreset() {
+  return getNodePresetData(g_rootNode);
+}
+
 //////////////////////////////////////////
 //////////////////////////////////////////
 

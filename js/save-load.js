@@ -11,6 +11,7 @@ import {
   setPreset,
   getPresetFromCurrentValues,
 } from "./presets.js";
+import { openModal, closeOpenModal } from "./modals.js";
 
 export function initSaveLoad() {
   let canvas = getCanvas();
@@ -67,22 +68,43 @@ export function initSaveLoad() {
     });
 
   document
-    .getElementById("save-preset-button")
+    .getElementById("open-modal-export-preset-button")
+    .addEventListener("click", function () {
+      openModal("export-preset-modal");
+    });
+  document
+    .getElementById("export-preset-close-modal-button")
+    .addEventListener("click", function () {
+      closeOpenModal();
+    });
+  document
+    .getElementById("export-preset-button")
     .addEventListener("click", function () {
       let name = document.getElementById("save-preset-name-input").value;
       savePresetFileFromCurrentValues(name);
+      closeOpenModal();
     });
 
   document
-    .getElementById("load-preset-button")
+    .getElementById("open-modal-import-preset-button")
     .addEventListener("click", function () {
-      document.getElementById("load-preset-file-input").click();
+      openModal("import-preset-modal");
     });
-
   document
-    .getElementById("load-preset-file-input")
+    .getElementById("import-preset-close-modal-button")
+    .addEventListener("click", function () {
+      closeOpenModal();
+    });
+  document
+    .getElementById("import-preset-button")
+    .addEventListener("click", function () {
+      document.getElementById("import-preset-file-input").click();
+      closeOpenModal();
+    });
+  document
+    .getElementById("import-preset-file-input")
     .addEventListener("change", function () {
-      const file = document.getElementById("load-preset-file-input").files[0];
+      const file = document.getElementById("import-preset-file-input").files[0];
       let reader = new FileReader();
       reader.onload = function (e) {
         let index = loadPresetFromJson(JSON.parse(e.target.result));
@@ -109,7 +131,7 @@ function saveBase64AsFile(base64, fileName) {
 
 function savePresetFileFromCurrentValues(name) {
   let preset = getPresetFromCurrentValues(name);
-  saveToFile(JSON.stringify(preset), "preset.json", "text/plain");
+  saveToFile(JSON.stringify(preset, null, 2), "preset.json", "text/plain");
 }
 
 // TODO: merge with base64 version?
