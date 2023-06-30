@@ -14,24 +14,23 @@ export class HeaderRect extends Rect {
     width,
     height,
     ppi,
-    lineWidth,
-    lineWidthMultiplier,
+    drawCropMarks,
+    cropMarksLineWidth,
     drawHeader,
+    headerLineWidth,
     headerPaddingBottom,
     headerPaddingLeft,
     headerTextHeight,
-    headerTextWeight,
-    drawCropMarks
+    headerTextWeight
   ) {
     super(parent, x, y, width, height, ppi);
-    this.lineWidth = lineWidth;
-    this.lineWidthMultiplier = lineWidthMultiplier;
+    this.drawCropMarks = drawCropMarks;
     this.drawHeader = drawHeader;
+    this.headerLineWidth = headerLineWidth;
     this.headerPaddingBottom = headerPaddingBottom;
     this.headerPaddingLeft = headerPaddingLeft;
     this.headerTextHeight = headerTextHeight;
     this.headerTextWeight = headerTextWeight;
-    this.drawCropMarks = drawCropMarks;
   }
 
   draw(ctx, recursive = false) {
@@ -62,7 +61,7 @@ export class HeaderRect extends Rect {
         titleTextY,
         0,
         -titleLineLength,
-        this.lineWidth,
+        this.headerLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -78,7 +77,7 @@ export class HeaderRect extends Rect {
         titleTextY,
         0,
         -issueLineLenght,
-        this.lineWidth,
+        this.headerLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -94,15 +93,14 @@ export class HeaderRect extends Rect {
         titleTextY,
         0,
         -pageLineLength,
-        this.lineWidth,
+        this.headerLineWidth,
         [0, 0],
         this.lineColor
       );
     }
     /////////////////
-    // CROP MARKS ///////
+    // CROP MARKS ///
     /////////////////
-    // TODO: use custom condition
     if (this.drawCropMarks) {
       // up left
       this.drawLine(
@@ -111,7 +109,7 @@ export class HeaderRect extends Rect {
         bleedSize.y,
         bleedSize.y,
         0,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -122,7 +120,7 @@ export class HeaderRect extends Rect {
         bleedSize.y,
         bleedSize.y,
         0,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -133,7 +131,7 @@ export class HeaderRect extends Rect {
         bleedSize.y + bleedSize.height,
         -(this.height - bleedSize.y + bleedSize.height),
         0,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -144,7 +142,7 @@ export class HeaderRect extends Rect {
         bleedSize.y + bleedSize.height,
         -(this.height - bleedSize.y + bleedSize.height),
         0,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -155,7 +153,7 @@ export class HeaderRect extends Rect {
         trimSize.y,
         0,
         bleedSize.x,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -166,7 +164,7 @@ export class HeaderRect extends Rect {
         trimSize.y + trimSize.height,
         0,
         bleedSize.x,
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -177,7 +175,7 @@ export class HeaderRect extends Rect {
         trimSize.y,
         0,
         -(this.width - bleedSize.x + bleedSize.width),
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );
@@ -188,7 +186,7 @@ export class HeaderRect extends Rect {
         trimSize.y + trimSize.height,
         0,
         -(this.width - bleedSize.x + bleedSize.width),
-        this.lineWidth,
+        this.cropMarksLineWidth,
         [0, 0],
         this.lineColor
       );

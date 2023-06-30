@@ -170,6 +170,8 @@ function drawCanvas(makeDoublePage) {
   const headerMarginLeftRight =
     document.getElementById("header-margin-left-right-input").value * toInches;
 
+  const gutterSize = document.getElementById("panel-gutter-size-input").value;
+
   const borderMarkMaxLength =
     document.getElementById("border-marks-length-input").value * toInches;
   const headerTextHeight =
@@ -185,6 +187,9 @@ function drawCanvas(makeDoublePage) {
   const lineColor = document.getElementById("line-color-input").value;
   const lineWidthMultiplier = document.getElementById(
     "line-thickness-select"
+  ).value;
+  const panelGuidesColor = document.getElementById(
+    "panel-guides-color-input"
   ).value;
   const headerTextWeight = document.getElementById(
     "header-text-weight-select"
@@ -205,6 +210,9 @@ function drawCanvas(makeDoublePage) {
   const drawCropMarks = document.getElementById(
     "crop-marks-draw-checkbox"
   ).checked;
+  const drawPanelGuides = document.getElementById(
+    "panel-guides-draw-checkbox"
+  ).checked;
   const drawPanels = document.getElementById("panels-draw-checkbox").checked;
 
   if (makeDoublePage) trimWidth *= 2;
@@ -220,14 +228,14 @@ function drawCanvas(makeDoublePage) {
     headerWidth,
     headerHeight,
     ppi,
-    lineWidthThin,
-    lineWidthMultiplier,
+    drawCropMarks,
+    lineWidthThick * lineWidthMultiplier, // width is used in crop lines
     drawHeader,
+    lineWidthThin * lineWidthMultiplier, // used in header
     headerPaddingBottom,
     headerPaddingLeft,
     headerTextHeight,
-    headerTextWeight,
-    drawCropMarks
+    headerTextWeight
   );
   headerRect.setBorderStyle(0, lineColor, [0, 0]);
 
@@ -285,7 +293,11 @@ function drawCanvas(makeDoublePage) {
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
       undefined,
-      drawPanels
+      gutterSize,
+      drawPanels,
+      drawPanelGuides,
+      panelGuidesColor,
+      lineWidthThin * lineWidthMultiplier
     );
     safeRect_1.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
@@ -306,7 +318,11 @@ function drawCanvas(makeDoublePage) {
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
       middleMarkPos,
-      drawPanels
+      gutterSize,
+      drawPanels,
+      drawPanelGuides,
+      panelGuidesColor,
+      lineWidthThin * lineWidthMultiplier
     );
     safeRect_2.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,
@@ -330,7 +346,11 @@ function drawCanvas(makeDoublePage) {
       lineWidthThick * lineWidthMultiplier,
       borderMarkMaxLength,
       undefined,
-      drawPanels
+      gutterSize,
+      drawPanels,
+      drawPanelGuides,
+      panelGuidesColor,
+      lineWidthThin * lineWidthMultiplier
     );
     safeRect_1.setBorderStyle(
       drawSafe ? lineWidthThin * lineWidthMultiplier : 0,

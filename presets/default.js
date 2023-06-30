@@ -26,6 +26,7 @@ export default {
   renderLineColor: "#a4dded",
   renderLineWeight: "1",
   panelsLineColor: "#000000",
+  panelGuidesColor: "#BD00BD",
   renderHeaderTextWeight: "normal",
   renderDrawBackground: true,
   renderDrawHeader: true,
@@ -34,6 +35,8 @@ export default {
   renderDrawSafe: true,
   renderDrawMarks: true,
   renderDrawCropMarks: true,
+  renderDrawPanelGuides: false,
+  renderDrawPanels: true,
 
   layoutPageSpread: "single",
   layoutPpi: "300",

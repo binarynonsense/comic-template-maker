@@ -310,20 +310,6 @@ function buildSymetricGrid(cols, rows) {
       );
     }
   }
-
-  // rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
-  // rootNode.addChildren(
-  //   new GridNode(rootNode, getUUID(), GridNodeType.PANEL, 50)
-  // );
-
-  // let hgroup1 = new GridNode(rootNode, getUUID(), GridNodeType.HGROUP, 50);
-  // rootNode.addChildren(hgroup1);
-  // hgroup1.addChildren(
-  //   new GridNode(rootNode, getUUID(), GridNodeType.PANEL, 50)
-  // );
-  // hgroup1.addChildren(
-  //   new GridNode(rootNode, getUUID(), GridNodeType.PANEL, 50)
-  // );
 }
 
 function getGridNodeFromId(node, id) {

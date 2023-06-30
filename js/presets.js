@@ -99,6 +99,8 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.renderLineWeight = sanitizeString(preset.renderLineWeight);
   if (preset.panelsLineColor !== undefined)
     preset.panelsLineColor = sanitizeString(preset.panelsLineColor);
+  if (preset.panelGuidesColor !== undefined)
+    preset.panelGuidesColor = sanitizeString(preset.panelGuidesColor);
   if (preset.renderHeaderTextWeight !== undefined)
     preset.renderHeaderTextWeight = sanitizeString(
       preset.renderHeaderTextWeight
@@ -118,6 +120,10 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.renderDrawMarks = sanitizeBool(preset.renderDrawMarks);
   if (preset.renderDrawCropMarks !== undefined)
     preset.renderDrawCropMarks = sanitizeBool(preset.renderDrawCropMarks);
+  if (preset.renderDrawPanelGuides !== undefined)
+    preset.renderDrawPanelGuides = sanitizeBool(preset.renderDrawPanelGuides);
+  if (preset.renderDrawPanels !== undefined)
+    preset.renderDrawPanels = sanitizeBool(preset.renderDrawPanels);
   //////////////// panels ///////////////////////////
 
   //////////////// layout ///////////////////////////
@@ -331,6 +337,10 @@ export function setPreset(index, checkUI = false) {
       document.getElementById("panel-line-color-input").value =
         preset.panelsLineColor;
     }
+    if (preset.panelGuidesColor !== undefined) {
+      document.getElementById("panel-guides-color-input").value =
+        preset.panelGuidesColor;
+    }
     if (preset.renderHeaderTextWeight !== undefined) {
       document.getElementById("header-text-weight-select").value =
         preset.renderHeaderTextWeight;
@@ -363,6 +373,14 @@ export function setPreset(index, checkUI = false) {
     if (preset.renderDrawCropMarks !== undefined) {
       document.getElementById("crop-marks-draw-checkbox").checked =
         preset.renderDrawCropMarks;
+    }
+    if (preset.renderDrawPanelGuides !== undefined) {
+      document.getElementById("panel-guides-draw-checkbox").checked =
+        preset.renderDrawPanelGuides;
+    }
+    if (preset.renderDrawPanels !== undefined) {
+      document.getElementById("panels-draw-checkbox").checked =
+        preset.renderDrawPanels;
     }
   }
   //////////////// panels ///////////////////////////
@@ -489,6 +507,9 @@ export function getPresetFromCurrentValues(name) {
     preset.panelsLineColor = document.getElementById(
       "panel-line-color-input"
     ).value;
+    preset.panelGuidesColor = document.getElementById(
+      "panel-guides-color-input"
+    ).value;
     preset.renderHeaderTextWeight = document.getElementById(
       "header-text-weight-select"
     ).value;
@@ -511,6 +532,12 @@ export function getPresetFromCurrentValues(name) {
     ).checked;
     preset.renderDrawCropMarks = document.getElementById(
       "crop-marks-draw-checkbox"
+    ).checked;
+    preset.renderDrawPanelGuides = document.getElementById(
+      "panel-guides-draw-checkbox"
+    ).checked;
+    preset.renderDrawPanels = document.getElementById(
+      "panels-draw-checkbox"
     ).checked;
   }
   //////////////// panels ///////////////////////////
