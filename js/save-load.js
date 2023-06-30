@@ -11,6 +11,7 @@ import {
   loadPresetFromJson,
   setPreset,
   getPresetFromCurrentValues,
+  getGridPresetFromCurrentValues,
 } from "./presets.js";
 import { openModal, closeOpenModal } from "./modals.js";
 
@@ -118,6 +119,24 @@ export function initSaveLoad() {
       };
       reader.readAsText(file);
     });
+
+  document
+    .getElementById("open-modal-export-grid-preset-button")
+    .addEventListener("click", function () {
+      openModal("export-grid-preset-modal");
+    });
+  document
+    .getElementById("export-grid-preset-close-modal-button")
+    .addEventListener("click", function () {
+      closeOpenModal();
+    });
+  document
+    .getElementById("export-grid-preset-button")
+    .addEventListener("click", function () {
+      let name = document.getElementById("save-grid-preset-name-input").value;
+      saveGridPresetFileFromCurrentValues(name);
+      closeOpenModal();
+    });
 }
 
 function saveBase64AsFile(base64, fileName) {
@@ -132,7 +151,16 @@ function saveBase64AsFile(base64, fileName) {
 
 function savePresetFileFromCurrentValues(name) {
   let preset = getPresetFromCurrentValues(name);
-  saveToFile(JSON.stringify(preset, null, 2), "preset.json", "text/plain");
+  saveToFile(
+    JSON.stringify(preset, null, 2),
+    "template-preset.json",
+    "text/plain"
+  );
+}
+
+function saveGridPresetFileFromCurrentValues(name) {
+  let preset = getGridPresetFromCurrentValues(name);
+  saveToFile(JSON.stringify(preset, null, 2), "grid-preset.json", "text/plain");
 }
 
 // TODO: merge with base64 version?

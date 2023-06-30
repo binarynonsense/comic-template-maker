@@ -544,7 +544,7 @@ export function getPresetFromCurrentValues(name) {
     ).checked;
   }
   //////////////// panels ///////////////////////////
-  if (true || document.getElementById("save-preset-panels-checkbox").checked) {
+  if (document.getElementById("save-preset-panels-checkbox").checked) {
     preset.panelGrid = exportGridPreset();
   }
   //////////////// layout ///////////////////////////
@@ -575,5 +575,12 @@ export function getPresetFromCurrentValues(name) {
     ).value;
   }
   //////////////////////////////////////////////////////
+  return preset;
+}
+
+export function getGridPresetFromCurrentValues(name) {
+  const preset = { name: undefined, panelGrid: undefined };
+  preset.name = name;
+  preset.panelGrid = exportGridPreset();
   return preset;
 }

@@ -447,6 +447,22 @@
             <option value="5">4x4</option>
           </select></label
         >
+        <div class="import-export-buttons">
+          <div
+            id="open-modal-import-grid-preset-button"
+            class="import-export-button"
+            title="import preset from file"
+          >
+            <i class="fa-solid fa-file-arrow-up"></i>
+          </div>
+          <div
+            id="open-modal-export-grid-preset-button"
+            class="import-export-button"
+            title="export grid to preset file"
+          >
+            <i class="fa-solid fa-file-arrow-down"></i>
+          </div>
+        </div>
         <label>grid nodes (tree view)</label>
         <div id="panel-tree">
           <ul id="panel-tree-root"></ul>
@@ -612,7 +628,7 @@
         <label class="checkbox-label">
           <input
             type="checkbox"
-            id="load-preset-apply-checkbox"
+            id="load-preset-add-checkbox"
             checked
             disabled
           />
@@ -662,6 +678,28 @@
           export layout
         </label>
         <button id="export-preset-button">EXPORT</button>
+      </div>
+    </div>
+
+    <div id="export-grid-preset-modal" class="modal">
+      <div class="modal-frame">
+        <div class="modal-topbar">
+          <div
+            id="export-grid-preset-close-modal-button"
+            class="modal-close-button"
+            title="cancel"
+          >
+            <i class="fa-solid fa-close"></i>
+          </div>
+        </div>
+        <h3 class="h3-extratop">Export Current Grid To File:</h3>
+        <label
+          >preset name<input
+            type="text"
+            id="save-grid-preset-name-input"
+            value="panel grid"
+        /></label>
+        <button id="export-grid-preset-button">EXPORT</button>
       </div>
     </div>
 
