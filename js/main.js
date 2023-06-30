@@ -26,11 +26,11 @@ function init() {
   drawTemplate();
 }
 
-// document
-//   .getElementById("refresh-button")
-//   .addEventListener("click", function () {
-//     drawTemplate();
-//   });
+document
+  .getElementById("refresh-button")
+  .addEventListener("click", function () {
+    drawTemplate();
+  });
 
 let refreshable = document.querySelectorAll(".refresh");
 for (let i = 0; i < refreshable.length; i++) {
