@@ -1,7 +1,8 @@
 export default {
-  name: "default",
+  name: "no panels",
+  presetFormatVersion: "1.0.0",
   panelGrid: {
-    id: "f0bb019f-7bbd-403c-9672-4472a05f384f",
+    id: "a59bd834-5743-4552-9843-239b0f88f325",
     type: "vgroup",
     sizePercentage: 100,
     children: [],

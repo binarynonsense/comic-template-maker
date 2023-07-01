@@ -6,10 +6,10 @@
  */
 
 import { initCanvas, drawTemplate } from "./draw.js";
-import { initPresets, setPreset } from "./presets.js";
+import { initPresets, setPreset, setGridPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
-import { initPanels, loadPreset as loadPanelsPreset } from "./panels.js";
+import { initPanels } from "./panels.js";
 import { initModals } from "./modals.js";
 
 const g_version = "1.0.0";
@@ -17,13 +17,18 @@ const g_version = "1.0.0";
 init();
 
 function init() {
+  document.getElementById("info-version-p").innerHTML = `${g_version}`;
   initCanvas();
-  initPresets(g_version);
+  initPresets();
   initSaveLoad();
   initView();
   initPanels();
   initModals();
   drawTemplate();
+}
+
+export function getVersion() {
+  return g_version;
 }
 
 document
@@ -45,9 +50,9 @@ for (let i = 0; i < refreshable.length; i++) {
         }
         event.target.value = 0;
       }
-    } else if (event.target.id === "panel-preset-select") {
+    } else if (event.target.id === "grid-preset-select") {
       if (event.target.value != 0) {
-        loadPanelsPreset(event.target.value);
+        setGridPreset(event.target.value - 1);
         if (document.getElementById("autorefresh-checkbox").checked) {
           drawTemplate();
           resetView();

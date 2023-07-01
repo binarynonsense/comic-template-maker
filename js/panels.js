@@ -16,8 +16,6 @@ let GridNodeType = {
 let g_rootNode;
 
 export function initPanels() {
-  loadPreset(1);
-
   // type select
   document
     .getElementById("panel-tree-selected-element-type-select")
@@ -148,16 +146,6 @@ export function initPanels() {
         }
       }
     });
-}
-
-export function loadPreset(value) {
-  if (value == 1) {
-    g_rootNode = new GridNode(undefined, getUUID(), GridNodeType.VGROUP, 100);
-    drawHtmlTree();
-  } else if (value > 1 && value < 6) {
-    buildSymetricGrid(value - 1, value - 1);
-    drawHtmlTree();
-  }
 }
 
 //////////////////////////////////////////
@@ -320,24 +308,6 @@ function getGridNodeFromId(node, id) {
     if (result) return result;
   }
   return undefined;
-}
-
-function getNodePresetData(node) {
-  let children = [];
-  node.children.forEach((child) => {
-    children.push(getNodePresetData(child));
-  });
-  return {
-    parentID: node.parent?.id,
-    id: node.id,
-    type: node.type,
-    sizePercentage: node.sizePercentage,
-    children: children,
-  };
-}
-
-export function exportGridPreset() {
-  return getNodePresetData(g_rootNode);
 }
 
 //////////////////////////////////////////
@@ -525,3 +495,37 @@ function setSelectedTreeElementFromId(id) {
 
 //////////////////////////////////////////
 //////////////////////////////////////////
+
+function getNodePresetData(node) {
+  let children = [];
+  node.children.forEach((child) => {
+    children.push(getNodePresetData(child));
+  });
+  return {
+    type: node.type,
+    sizePercentage: node.sizePercentage,
+    children: children,
+  };
+}
+
+function createNodeFromPresetData(data, parentNode) {
+  let node = new GridNode(
+    parentNode,
+    getUUID(),
+    data.type,
+    data.sizePercentage
+  );
+  data.children.forEach((child) => {
+    node.addChild(createNodeFromPresetData(child, node));
+  });
+  return node;
+}
+
+export function exportGridPresetData() {
+  return getNodePresetData(g_rootNode, undefined);
+}
+
+export function loadGridPresetData(data) {
+  g_rootNode = createNodeFromPresetData(data);
+  drawHtmlTree();
+}

@@ -6,13 +6,19 @@
  */
 
 export function initModals() {
-  window.addEventListener("load", function () {
-    document.addEventListener("click", (event) => {
-      if (event.target.classList.contains("modal")) {
-        closeOpenModal();
-      }
-    });
-  });
+  document.querySelectorAll(".modal-close-button").forEach((element) =>
+    element.addEventListener("click", (event) => {
+      closeOpenModal();
+    })
+  );
+  // close if clicking outside the modal
+  // window.addEventListener("load", function () {
+  //   document.addEventListener("click", (event) => {
+  //     if (event.target.classList.contains("modal")) {
+  //       closeOpenModal();
+  //     }
+  //   });
+  // });
 }
 
 export function openModal(id) {

@@ -24,11 +24,11 @@
   justify-content: right;
 }
 
-.modal-close-button {
+.modal-close-x-button {
   margin-right: 10px;
   color: rgb(87, 87, 87);
 }
-.modal-close-button:hover {
+.modal-close-x-button:hover {
   margin-right: 10px;
   color: rgb(46, 46, 46);
   cursor: pointer;

@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { exportGridPreset } from "./panels.js";
+import { exportGridPresetData, loadGridPresetData } from "./panels.js";
+import { Sanitize } from "./sanitize.js";
+import { getVersion } from "./main.js";
 
 import preset_0 from "../presets/default.js";
 import preset_1 from "../presets/american-comic-1.js";
@@ -19,15 +21,22 @@ import preset_8 from "../presets/japanese-manga-1.js";
 import preset_9 from "../presets/six-by-nine-1.js";
 // not supported by firefox:
 // import preset_1 from "../presets/american-1.json" assert { type: "json" };
+import gridPreset_0 from "../presets/grid/0x0.js";
+import gridPreset_1 from "../presets/grid/1x1.js";
+import gridPreset_2 from "../presets/grid/2x2.js";
+import gridPreset_3 from "../presets/grid/3x3.js";
+import gridPreset_4 from "../presets/grid/4x4.js";
 
 let g_presets;
 let g_defaultPreset;
 
-export function initPresets(version) {
+let g_gridPresets;
+
+export function initPresets() {
+  // template presets
   g_presets = [];
   g_defaultPreset = preset_0;
   loadPresetFromJson(g_defaultPreset, false);
-  document.getElementById("info-version-p").innerHTML = `${version}`;
   const select = document.getElementById("preset-select");
   let opt = document.createElement("option");
   opt.disabled = true;
@@ -45,111 +54,134 @@ export function initPresets(version) {
   loadPresetFromJson(preset_8);
   loadPresetFromJson(preset_9);
   setPreset(-1);
+  // grid presets
+  {
+    g_gridPresets = [];
+    const select = document.getElementById("grid-preset-select");
+    let opt = document.createElement("option");
+    opt.disabled = true;
+    opt.selected = true;
+    opt.value = 0;
+    opt.innerHTML = "select a preset";
+    select.appendChild(opt);
+    loadGridPresetFromJson(gridPreset_0);
+    loadGridPresetFromJson(gridPreset_1);
+    loadGridPresetFromJson(gridPreset_2);
+    loadGridPresetFromJson(gridPreset_3);
+    loadGridPresetFromJson(gridPreset_4);
+    setGridPreset(0);
+  }
 }
-
+//////////////////////
+// template presets //
+//////////////////////
 export function loadPresetFromJson(preset, addToList = true) {
   const select = document.getElementById("preset-select");
   // sanitize /////
-  preset.name = sanitizeString(preset.name, "comic book");
+  preset.name = Sanitize.string(preset.name, "comic book");
   // TODO: check version is valid
-  preset.presetFormatVersion = sanitizeVersion(preset.presetFormatVersion);
+  preset.presetFormatVersion = Sanitize.version(preset.presetFormatVersion);
   //////////////// dimensions ///////////////////////////
   if (preset.units !== undefined)
-    preset.units = sanitizeString(preset.units, "inches", ["inches", "cm"]);
+    preset.units = Sanitize.string(preset.units, "inches", ["inches", "cm"]);
 
   if (preset.trimWidth !== undefined)
-    preset.trimWidth = sanitizeNumber(preset.trimWidth);
+    preset.trimWidth = Sanitize.number(preset.trimWidth);
   if (preset.trimHeight !== undefined)
-    preset.trimHeight = sanitizeNumber(preset.trimHeight);
+    preset.trimHeight = Sanitize.number(preset.trimHeight);
   if (preset.safeMarginTop !== undefined)
-    preset.safeMarginTop = sanitizeNumber(preset.safeMarginTop);
+    preset.safeMarginTop = Sanitize.number(preset.safeMarginTop);
   if (preset.safeMarginBottom !== undefined)
-    preset.safeMarginBottom = sanitizeNumber(preset.safeMarginBottom);
+    preset.safeMarginBottom = Sanitize.number(preset.safeMarginBottom);
   if (preset.safeMarginLeft !== undefined)
-    preset.safeMarginLeft = sanitizeNumber(preset.safeMarginLeft);
+    preset.safeMarginLeft = Sanitize.number(preset.safeMarginLeft);
   if (preset.safeMarginRight !== undefined)
-    preset.safeMarginRight = sanitizeNumber(preset.safeMarginRight);
+    preset.safeMarginRight = Sanitize.number(preset.safeMarginRight);
   if (preset.bleedMargin !== undefined)
-    preset.bleedMargin = sanitizeNumber(preset.bleedMargin);
+    preset.bleedMargin = Sanitize.number(preset.bleedMargin);
   if (preset.headerMarginTopBottom !== undefined)
-    preset.headerMarginTopBottom = sanitizeNumber(preset.headerMarginTopBottom);
+    preset.headerMarginTopBottom = Sanitize.number(
+      preset.headerMarginTopBottom
+    );
   if (preset.headerMarginLeftRight !== undefined)
-    preset.headerMarginLeftRight = sanitizeNumber(preset.headerMarginLeftRight);
+    preset.headerMarginLeftRight = Sanitize.number(
+      preset.headerMarginLeftRight
+    );
 
   if (preset.panelsGutterSize !== undefined)
-    preset.panelsGutterSize = sanitizeNumber(preset.panelsGutterSize);
+    preset.panelsGutterSize = Sanitize.number(preset.panelsGutterSize);
   if (preset.panelsLineWidth !== undefined)
-    preset.panelsLineWidth = sanitizeNumber(preset.panelsLineWidth);
+    preset.panelsLineWidth = Sanitize.number(preset.panelsLineWidth);
 
   if (preset.lineWidthThin !== undefined)
-    preset.lineWidthThin = sanitizeNumber(preset.lineWidthThin);
+    preset.lineWidthThin = Sanitize.number(preset.lineWidthThin);
   if (preset.lineWidthThick !== undefined)
-    preset.lineWidthThick = sanitizeNumber(preset.lineWidthThick);
+    preset.lineWidthThick = Sanitize.number(preset.lineWidthThick);
   if (preset.borderMarkMaxLength !== undefined)
-    preset.borderMarkMaxLength = sanitizeNumber(preset.borderMarkMaxLength);
+    preset.borderMarkMaxLength = Sanitize.number(preset.borderMarkMaxLength);
   if (preset.headerTextHeight !== undefined)
-    preset.headerTextHeight = sanitizeNumber(preset.headerTextHeight);
+    preset.headerTextHeight = Sanitize.number(preset.headerTextHeight);
   if (preset.headerPaddingBottom !== undefined)
-    preset.headerPaddingBottom = sanitizeNumber(preset.headerPaddingBottom);
+    preset.headerPaddingBottom = Sanitize.number(preset.headerPaddingBottom);
   if (preset.headerPaddingLeft !== undefined)
-    preset.headerPaddingLeft = sanitizeNumber(preset.headerPaddingLeft);
+    preset.headerPaddingLeft = Sanitize.number(preset.headerPaddingLeft);
   //////////////// rendering ///////////////////////////
   if (preset.renderBackgroundColor !== undefined)
-    preset.renderBackgroundColor = sanitizeColor(preset.renderBackgroundColor);
+    preset.renderBackgroundColor = Sanitize.color(preset.renderBackgroundColor);
   if (preset.renderLineColor !== undefined)
-    preset.renderLineColor = sanitizeColor(preset.renderLineColor);
+    preset.renderLineColor = Sanitize.color(preset.renderLineColor);
   if (preset.renderLineWeight !== undefined)
-    preset.renderLineWeight = sanitizeString(preset.renderLineWeight);
+    preset.renderLineWeight = Sanitize.string(preset.renderLineWeight);
   if (preset.panelsLineColor !== undefined)
-    preset.panelsLineColor = sanitizeString(preset.panelsLineColor);
+    preset.panelsLineColor = Sanitize.string(preset.panelsLineColor);
   if (preset.panelGuidesColor !== undefined)
-    preset.panelGuidesColor = sanitizeString(preset.panelGuidesColor);
+    preset.panelGuidesColor = Sanitize.string(preset.panelGuidesColor);
   if (preset.renderHeaderTextWeight !== undefined)
-    preset.renderHeaderTextWeight = sanitizeString(
+    preset.renderHeaderTextWeight = Sanitize.string(
       preset.renderHeaderTextWeight
     );
 
   if (preset.renderDrawBackground !== undefined)
-    preset.renderDrawBackground = sanitizeBool(preset.renderDrawBackground);
+    preset.renderDrawBackground = Sanitize.bool(preset.renderDrawBackground);
   if (preset.renderDrawHeader !== undefined)
-    preset.renderDrawHeader = sanitizeBool(preset.renderDrawHeader);
+    preset.renderDrawHeader = Sanitize.bool(preset.renderDrawHeader);
   if (preset.renderDrawBleed !== undefined)
-    preset.renderDrawBleed = sanitizeBool(preset.renderDrawBleed);
+    preset.renderDrawBleed = Sanitize.bool(preset.renderDrawBleed);
   if (preset.renderDrawTrim !== undefined)
-    preset.renderDrawTrim = sanitizeBool(preset.renderDrawTrim);
+    preset.renderDrawTrim = Sanitize.bool(preset.renderDrawTrim);
   if (preset.renderDrawSafe !== undefined)
-    preset.renderDrawSafe = sanitizeBool(preset.renderDrawSafe);
+    preset.renderDrawSafe = Sanitize.bool(preset.renderDrawSafe);
   if (preset.renderDrawMarks !== undefined)
-    preset.renderDrawMarks = sanitizeBool(preset.renderDrawMarks);
+    preset.renderDrawMarks = Sanitize.bool(preset.renderDrawMarks);
   if (preset.renderDrawCropMarks !== undefined)
-    preset.renderDrawCropMarks = sanitizeBool(preset.renderDrawCropMarks);
+    preset.renderDrawCropMarks = Sanitize.bool(preset.renderDrawCropMarks);
   if (preset.renderDrawPanelGuides !== undefined)
-    preset.renderDrawPanelGuides = sanitizeBool(preset.renderDrawPanelGuides);
+    preset.renderDrawPanelGuides = Sanitize.bool(preset.renderDrawPanelGuides);
   if (preset.renderDrawPanels !== undefined)
-    preset.renderDrawPanels = sanitizeBool(preset.renderDrawPanels);
+    preset.renderDrawPanels = Sanitize.bool(preset.renderDrawPanels);
   //////////////// panels ///////////////////////////
-
+  // TODO: sanitize grid object somehow?
   //////////////// layout ///////////////////////////
   if (preset.layoutPageSpread !== undefined)
-    preset.layoutPageSpread = sanitizeString(preset.layoutPageSpread);
+    preset.layoutPageSpread = Sanitize.string(preset.layoutPageSpread);
   if (preset.layoutPpi !== undefined)
-    preset.layoutPpi = sanitizeNumber(preset.layoutPpi);
+    preset.layoutPpi = Sanitize.number(preset.layoutPpi);
   if (preset.layoutTemplateType !== undefined)
-    preset.layoutTemplateType = sanitizeString(preset.layoutTemplateType);
+    preset.layoutTemplateType = Sanitize.string(preset.layoutTemplateType);
 
   if (preset.layoutPagePaperSize !== undefined)
-    preset.layoutPagePaperSize = sanitizeString(preset.layoutPagePaperSize);
+    preset.layoutPagePaperSize = Sanitize.string(preset.layoutPagePaperSize);
   if (preset.layoutPageScaling !== undefined)
-    preset.layoutPageScaling = sanitizeString(preset.layoutPageScaling);
+    preset.layoutPageScaling = Sanitize.string(preset.layoutPageScaling);
 
   if (preset.layoutThumbnailsRows !== undefined)
-    preset.layoutThumbnailsRows = sanitizeNumber(preset.layoutThumbnailsRows);
+    preset.layoutThumbnailsRows = Sanitize.number(preset.layoutThumbnailsRows);
   if (preset.layoutThumbnailsColumns !== undefined)
-    preset.layoutThumbnailsColumns = sanitizeNumber(
+    preset.layoutThumbnailsColumns = Sanitize.number(
       preset.layoutThumbnailsColumns
     );
   if (preset.layoutThumbnailsPaperSize !== undefined)
-    preset.layoutThumbnailsPaperSize = sanitizeString(
+    preset.layoutThumbnailsPaperSize = Sanitize.string(
       preset.layoutThumbnailsPaperSize
     );
   /////////////////
@@ -163,79 +195,6 @@ export function loadPresetFromJson(preset, addToList = true) {
   }
 }
 
-// Sanitize ///////////////////////////////////////////////////////
-
-function sanitizeString(input, defaultString, validStrings) {
-  let isValid = true;
-  if (typeof input !== "string") {
-    isValid = false;
-  } else if (validStrings) {
-    isValid = false;
-    for (let index = 0; index < validStrings.length; index++) {
-      if (input === validStrings[index]) {
-        isValid = true;
-        break;
-      }
-    }
-  }
-  if (isValid) {
-    return input;
-  } else {
-    return defaultString;
-  }
-}
-function sanitizeNumber(input) {
-  let value = Number(input);
-  if (typeof value !== "number") {
-    return undefined;
-  }
-  return value;
-}
-function sanitizeBool(input) {
-  if (typeof input !== "boolean") {
-    return undefined;
-  }
-  return input;
-}
-function sanitizeColor(input) {
-  let regex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
-  if (typeof input !== "string" || !regex.test(input)) {
-    return undefined;
-  }
-  return input;
-}
-function sanitizeVersion(input) {
-  if (typeof input !== "string") {
-    return undefined;
-  }
-  if (!separateVersionText(input)) {
-    return undefined;
-  }
-  return input;
-}
-
-function separateVersionText(version) {
-  const regex =
-    /^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)(-beta(?<beta>[0-9]+))*$/;
-  let match = version.match(regex);
-  if (match === null) return undefined;
-  return match.groups;
-}
-
-function isVersionOlder(testVersion, referenceVersion) {
-  const test = separateVersionText(testVersion);
-  const reference = separateVersionText(referenceVersion);
-  if (test === undefined || reference === undefined) return true;
-  if (test.major < reference.major) return true;
-  if (test.minor < reference.minor) return true;
-  if (test.patch < reference.patch) return true;
-  if (test.beta !== undefined) {
-    if (reference.beta === undefined) return true;
-    if (test.beta < reference.beta) return true;
-  }
-  return false;
-}
-
 export function setPreset(index, checkUI = false) {
   let preset;
   if (index < 0 || index >= g_presets.length) {
@@ -246,7 +205,7 @@ export function setPreset(index, checkUI = false) {
   //////////////// dimensions ///////////////////////////
   if (
     !checkUI ||
-    document.getElementById("select-preset-dimensions-checkbox").checked
+    true //document.getElementById("select-preset-dimensions-checkbox").checked
   ) {
     if (preset.units !== undefined) {
       document.getElementById("units-select").value = preset.units;
@@ -322,7 +281,7 @@ export function setPreset(index, checkUI = false) {
   //////////////// rendering ///////////////////////////
   if (
     !checkUI ||
-    document.getElementById("select-preset-rendering-checkbox").checked
+    true //document.getElementById("select-preset-rendering-checkbox").checked
   ) {
     if (preset.renderBackgroundColor !== undefined) {
       document.getElementById("background-color-input").value =
@@ -389,13 +348,16 @@ export function setPreset(index, checkUI = false) {
   //////////////// panels ///////////////////////////
   if (
     !checkUI ||
-    document.getElementById("select-preset-panels-checkbox").checked
+    true //document.getElementById("select-preset-panels-checkbox").checked
   ) {
+    if (preset.panelGrid !== undefined) {
+      loadGridPresetData(preset.panelGrid);
+    }
   }
   //////////////// layout ///////////////////////////
   if (
     !checkUI ||
-    document.getElementById("select-preset-layout-checkbox").checked
+    true //document.getElementById("select-preset-layout-checkbox").checked
   ) {
     if (preset.layoutPageSpread !== undefined) {
       document.getElementById("layout-spread-select").value =
@@ -446,8 +408,9 @@ export function setPreset(index, checkUI = false) {
 export function getPresetFromCurrentValues(name) {
   const preset = { ...g_defaultPreset }; // load defaults
   preset.name = name;
+  preset.presetFormatVersion = getVersion();
   //////////////// dimensions ///////////////////////////
-  if (document.getElementById("save-preset-dimensions-checkbox").checked) {
+  if (document.getElementById("export-preset-dimensions-checkbox").checked) {
     preset.units = document.getElementById("units-select").value;
 
     preset.trimWidth = document.getElementById("trim-width-input").value;
@@ -499,7 +462,7 @@ export function getPresetFromCurrentValues(name) {
     ).value;
   }
   //////////////// rendering ///////////////////////////
-  if (document.getElementById("save-preset-rendering-checkbox").checked) {
+  if (document.getElementById("export-preset-rendering-checkbox").checked) {
     preset.renderBackgroundColor = document.getElementById(
       "background-color-input"
     ).value;
@@ -544,11 +507,11 @@ export function getPresetFromCurrentValues(name) {
     ).checked;
   }
   //////////////// panels ///////////////////////////
-  if (document.getElementById("save-preset-panels-checkbox").checked) {
-    preset.panelGrid = exportGridPreset();
+  if (document.getElementById("export-preset-current-grid-checkbox").checked) {
+    preset.panelGrid = exportGridPresetData();
   }
   //////////////// layout ///////////////////////////
-  if (document.getElementById("save-preset-layout-checkbox").checked) {
+  if (document.getElementById("export-preset-layout-checkbox").checked) {
     preset.layoutPageSpread = document.getElementById(
       "layout-spread-select"
     ).value;
@@ -578,9 +541,44 @@ export function getPresetFromCurrentValues(name) {
   return preset;
 }
 
+//////////////////
+// grid presets //
+//////////////////
+
+export function loadGridPresetFromJson(preset, addToList = true) {
+  const select = document.getElementById("grid-preset-select");
+  // sanitize /////////////////////////////
+  preset.name = Sanitize.string(preset.name, "comic book");
+  // TODO: check version is valid
+  preset.presetFormatVersion = Sanitize.version(preset.presetFormatVersion);
+  // panels //
+  // TODO: check if preset.panelGrid content is valid?
+  preset.panelGrid = preset.panelGrid;
+  /////////////////////////////////////////
+  if (addToList) {
+    let opt = document.createElement("option");
+    opt.value = select.childElementCount;
+    opt.textContent = preset.name;
+    select.appendChild(opt);
+    g_gridPresets.push(preset);
+    return opt.value;
+  }
+}
+
+export function setGridPreset(index) {
+  //loadPanelsPreset(event.target.value);
+  let preset = g_gridPresets[index];
+  if (index < 0 || index >= g_presets.length) {
+    preset = g_gridPresets[0];
+  }
+  //////////////// panels ///////////////////////////
+  loadGridPresetData(preset.panelGrid);
+  //////////////////////////////////////////////////
+}
+
 export function getGridPresetFromCurrentValues(name) {
   const preset = { name: undefined, panelGrid: undefined };
   preset.name = name;
-  preset.panelGrid = exportGridPreset();
+  preset.panelGrid = exportGridPresetData();
   return preset;
 }

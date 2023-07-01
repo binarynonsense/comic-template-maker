@@ -11,6 +11,8 @@ import {
   loadPresetFromJson,
   setPreset,
   getPresetFromCurrentValues,
+  loadGridPresetFromJson,
+  setGridPreset,
   getGridPresetFromCurrentValues,
 } from "./presets.js";
 import { openModal, closeOpenModal } from "./modals.js";
@@ -68,21 +70,16 @@ export function initSaveLoad() {
         }
       }, "100");
     });
-
+  // template presets import/export
   document
     .getElementById("open-modal-export-preset-button")
     .addEventListener("click", function () {
       openModal("export-preset-modal");
     });
   document
-    .getElementById("export-preset-close-modal-button")
-    .addEventListener("click", function () {
-      closeOpenModal();
-    });
-  document
     .getElementById("export-preset-button")
     .addEventListener("click", function () {
-      let name = document.getElementById("save-preset-name-input").value;
+      let name = document.getElementById("export-preset-name-input").value;
       savePresetFileFromCurrentValues(name);
       closeOpenModal();
     });
@@ -91,11 +88,6 @@ export function initSaveLoad() {
     .getElementById("open-modal-import-preset-button")
     .addEventListener("click", function () {
       openModal("import-preset-modal");
-    });
-  document
-    .getElementById("import-preset-close-modal-button")
-    .addEventListener("click", function () {
-      closeOpenModal();
     });
   document
     .getElementById("import-preset-button")
@@ -110,32 +102,58 @@ export function initSaveLoad() {
       let reader = new FileReader();
       reader.onload = function (e) {
         let index = loadPresetFromJson(JSON.parse(e.target.result));
-        if (document.getElementById("load-preset-apply-checkbox").checked) {
+        if (document.getElementById("import-preset-apply-checkbox").checked) {
           setPreset(-1); // load all defaults
           setPreset(index - 1);
-          if (true || document.getElementById("autorefresh-checkbox").checked)
+          if (document.getElementById("autorefresh-checkbox").checked)
             drawTemplate();
         }
       };
       reader.readAsText(file);
     });
 
+  // grid presets import/export
   document
     .getElementById("open-modal-export-grid-preset-button")
     .addEventListener("click", function () {
       openModal("export-grid-preset-modal");
     });
   document
-    .getElementById("export-grid-preset-close-modal-button")
+    .getElementById("export-grid-preset-button")
     .addEventListener("click", function () {
+      let name = document.getElementById("export-grid-preset-name-input").value;
+      saveGridPresetFileFromCurrentValues(name);
+      closeOpenModal();
+    });
+
+  document
+    .getElementById("open-modal-import-grid-preset-button")
+    .addEventListener("click", function () {
+      openModal("import-grid-preset-modal");
+    });
+  document
+    .getElementById("import-grid-preset-button")
+    .addEventListener("click", function () {
+      document.getElementById("import-grid-preset-file-input").click();
       closeOpenModal();
     });
   document
-    .getElementById("export-grid-preset-button")
-    .addEventListener("click", function () {
-      let name = document.getElementById("save-grid-preset-name-input").value;
-      saveGridPresetFileFromCurrentValues(name);
-      closeOpenModal();
+    .getElementById("import-grid-preset-file-input")
+    .addEventListener("change", function () {
+      const file = document.getElementById("import-grid-preset-file-input")
+        .files[0];
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        let index = loadGridPresetFromJson(JSON.parse(e.target.result));
+        if (
+          document.getElementById("import-grid-preset-apply-checkbox").checked
+        ) {
+          setGridPreset(index - 1);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      };
+      reader.readAsText(file);
     });
 }
 

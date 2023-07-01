@@ -64,36 +64,6 @@
             <i class="fa-solid fa-file-arrow-down"></i>
           </div>
         </div>
-        <!-- <div>
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              id="select-preset-dimensions-checkbox"
-              checked
-            />
-            load dimensions
-          </label>
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              id="select-preset-rendering-checkbox"
-              checked
-            />
-            load rendering options
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="select-preset-panels-checkbox" checked />
-            load panel grid
-          </label>
-          <label class="checkbox-label-2">
-            <input type="checkbox" id="select-preset-panels-checkbox" />
-            add to grid presets
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="select-preset-layout-checkbox" checked />
-            load layout
-          </label>
-        </div> -->
       </div>
 
       <div class="tab" id="tab-2" title="dimensions">
@@ -436,17 +406,8 @@
       <div id="tab-4-content" class="hidden">
         <label
           >load a grid preset
-          <select id="panel-preset-select" class="refresh">
-            <option value="0" selected="selected" disabled="disabled">
-              select a preset
-            </option>
-            <option value="1">no panels</option>
-            <option value="2">1x1</option>
-            <option value="3">2x2</option>
-            <option value="4">3x3</option>
-            <option value="5">4x4</option>
-          </select></label
-        >
+          <select id="grid-preset-select" class="refresh"></select
+        ></label>
         <div class="import-export-buttons">
           <div
             id="open-modal-import-grid-preset-button"
@@ -612,15 +573,11 @@
       <!-- fa-grip-vertical thumbnails tab -->
     </div>
 
-    <!-- modals -->
+    <!-- modals template presets -->
     <div id="import-preset-modal" class="modal">
       <div class="modal-frame">
         <div class="modal-topbar">
-          <div
-            id="import-preset-close-modal-button"
-            class="modal-close-button"
-            title="cancel"
-          >
+          <div class="modal-close-x-button modal-close-button" title="cancel">
             <i class="fa-solid fa-close"></i>
           </div>
         </div>
@@ -628,78 +585,115 @@
         <label class="checkbox-label">
           <input
             type="checkbox"
-            id="load-preset-add-checkbox"
+            id="import-preset-add-checkbox"
             checked
             disabled
           />
           add to presets list
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="load-preset-apply-checkbox" checked />
+          <input type="checkbox" id="import-preset-apply-checkbox" checked />
           apply when loaded
         </label>
         <input type="file" id="import-preset-file-input" accept=".json" />
-        <button id="import-preset-button">IMPORT</button>
+        <button id="import-preset-button">CHOOSE FILE</button>
+        <button class="modal-close-button">CANCEL</button>
       </div>
     </div>
 
     <div id="export-preset-modal" class="modal">
       <div class="modal-frame">
         <div class="modal-topbar">
-          <div
-            id="export-preset-close-modal-button"
-            class="modal-close-button"
-            title="cancel"
-          >
+          <div class="modal-close-button modal-close-button" title="cancel">
             <i class="fa-solid fa-close"></i>
           </div>
         </div>
-        <h3 class="h3-extratop">Export Current Settings To File:</h3>
+        <h3 class="h3-extratop">Export Current Settings To Preset File:</h3>
         <label
           >preset name<input
             type="text"
-            id="save-preset-name-input"
+            id="export-preset-name-input"
             value="comic page"
         /></label>
         <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-dimensions-checkbox" checked />
+          <input
+            type="checkbox"
+            id="export-preset-dimensions-checkbox"
+            checked
+          />
           export dimensions
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-rendering-checkbox" />
+          <input type="checkbox" id="export-preset-rendering-checkbox" />
           export rendering options
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-panels-checkbox" disabled />
+          <input
+            type="checkbox"
+            id="export-preset-current-grid-checkbox"
+            disabled
+          />
           export panel grid
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="save-preset-layout-checkbox" />
+          <input type="checkbox" id="export-preset-layout-checkbox" />
           export layout
         </label>
         <button id="export-preset-button">EXPORT</button>
+        <button class="modal-close-button">CANCEL</button>
+      </div>
+    </div>
+
+    <!-- modals grid presets -->
+    <div id="import-grid-preset-modal" class="modal">
+      <div class="modal-frame">
+        <div class="modal-topbar">
+          <div class="modal-close-x-button modal-close-button" title="cancel">
+            <i class="fa-solid fa-close"></i>
+          </div>
+        </div>
+        <h3 class="h3-extratop h3-extrabottom">
+          Import Grid Preset From File:
+        </h3>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="import-grid-preset-add-checkbox"
+            checked
+            disabled
+          />
+          add to presets list
+        </label>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="import-grid-preset-apply-checkbox"
+            checked
+          />
+          apply when loaded
+        </label>
+        <input type="file" id="import-grid-preset-file-input" accept=".json" />
+        <button id="import-grid-preset-button">CHOOSE FILE</button>
+        <button class="modal-close-button">CANCEL</button>
       </div>
     </div>
 
     <div id="export-grid-preset-modal" class="modal">
       <div class="modal-frame">
         <div class="modal-topbar">
-          <div
-            id="export-grid-preset-close-modal-button"
-            class="modal-close-button"
-            title="cancel"
-          >
+          <div class="modal-close-x-button modal-close-button" title="cancel">
             <i class="fa-solid fa-close"></i>
           </div>
         </div>
-        <h3 class="h3-extratop">Export Current Grid To File:</h3>
+        <h3 class="h3-extratop">Export Current Grid To Preset File:</h3>
         <label
           >preset name<input
             type="text"
-            id="save-grid-preset-name-input"
+            id="export-grid-preset-name-input"
             value="panel grid"
         /></label>
         <button id="export-grid-preset-button">EXPORT</button>
+        <button class="modal-close-button">CANCEL</button>
       </div>
     </div>
 
