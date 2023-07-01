@@ -26,6 +26,7 @@ export class HeaderRect extends Rect {
   ) {
     super(parent, x, y, width, height, ppi);
     this.drawCropMarks = drawCropMarks;
+    this.cropMarksLineWidth = cropMarksLineWidth;
     this.drawHeader = drawHeader;
     this.headerLineWidth = headerLineWidth;
     this.headerPaddingBottom = headerPaddingBottom;
