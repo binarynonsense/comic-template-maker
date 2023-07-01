@@ -132,10 +132,12 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.renderLineColor = Sanitize.color(preset.renderLineColor);
   if (preset.renderLineWeight !== undefined)
     preset.renderLineWeight = Sanitize.string(preset.renderLineWeight);
-  if (preset.panelsLineColor !== undefined)
-    preset.panelsLineColor = Sanitize.string(preset.panelsLineColor);
-  if (preset.panelGuidesColor !== undefined)
-    preset.panelGuidesColor = Sanitize.string(preset.panelGuidesColor);
+  if (preset.renderPanelLineColor !== undefined)
+    preset.renderPanelLineColor = Sanitize.string(preset.renderPanelLineColor);
+  if (preset.renderPanelGuidesColor !== undefined)
+    preset.renderPanelGuidesColor = Sanitize.string(
+      preset.renderPanelGuidesColor
+    );
   if (preset.renderHeaderTextWeight !== undefined)
     preset.renderHeaderTextWeight = Sanitize.string(
       preset.renderHeaderTextWeight
@@ -295,13 +297,13 @@ export function setPreset(index, checkUI = false) {
       document.getElementById("line-thickness-select").value =
         preset.renderLineWeight;
     }
-    if (preset.panelsLineColor !== undefined) {
+    if (preset.renderPanelLineColor !== undefined) {
       document.getElementById("panel-line-color-input").value =
-        preset.panelsLineColor;
+        preset.renderPanelLineColor;
     }
-    if (preset.panelGuidesColor !== undefined) {
+    if (preset.renderPanelGuidesColor !== undefined) {
       document.getElementById("panel-guides-color-input").value =
-        preset.panelGuidesColor;
+        preset.renderPanelGuidesColor;
     }
     if (preset.renderHeaderTextWeight !== undefined) {
       document.getElementById("header-text-weight-select").value =
@@ -470,10 +472,10 @@ export function getPresetFromCurrentValues(name) {
     preset.renderLineWeight = document.getElementById(
       "line-thickness-select"
     ).value;
-    preset.panelsLineColor = document.getElementById(
+    preset.renderPanelLineColor = document.getElementById(
       "panel-line-color-input"
     ).value;
-    preset.panelGuidesColor = document.getElementById(
+    preset.renderPanelGuidesColor = document.getElementById(
       "panel-guides-color-input"
     ).value;
     preset.renderHeaderTextWeight = document.getElementById(

@@ -189,7 +189,7 @@ function drawCanvas(makeDoublePage) {
   const lineWidthMultiplier = document.getElementById(
     "line-thickness-select"
   ).value;
-  const panelGuidesColor = document.getElementById(
+  const renderPanelGuidesColor = document.getElementById(
     "panel-guides-color-input"
   ).value;
   const headerTextWeight = document.getElementById(
@@ -297,7 +297,7 @@ function drawCanvas(makeDoublePage) {
       gutterSize,
       drawPanels,
       drawPanelGuides,
-      panelGuidesColor,
+      renderPanelGuidesColor,
       lineWidthThin * lineWidthMultiplier
     );
     safeRect_1.setBorderStyle(
@@ -322,7 +322,7 @@ function drawCanvas(makeDoublePage) {
       gutterSize,
       drawPanels,
       drawPanelGuides,
-      panelGuidesColor,
+      renderPanelGuidesColor,
       lineWidthThin * lineWidthMultiplier
     );
     safeRect_2.setBorderStyle(
@@ -350,7 +350,7 @@ function drawCanvas(makeDoublePage) {
       gutterSize,
       drawPanels,
       drawPanelGuides,
-      panelGuidesColor,
+      renderPanelGuidesColor,
       lineWidthThin * lineWidthMultiplier
     );
     safeRect_1.setBorderStyle(

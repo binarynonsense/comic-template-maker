@@ -23,7 +23,7 @@ export class SafeRect extends Rect {
     gutterSize,
     drawPanels,
     drawPanelGuides,
-    panelGuidesColor,
+    renderPanelGuidesColor,
     panelGuidesWidth
   ) {
     super(parent, x, y, width, height, ppi);
@@ -34,7 +34,7 @@ export class SafeRect extends Rect {
     this.gutterSize = gutterSize;
     this.drawPanels = drawPanels;
     this.drawPanelGuides = drawPanelGuides;
-    this.panelGuidesColor = panelGuidesColor;
+    this.renderPanelGuidesColor = renderPanelGuidesColor;
     this.panelGuidesWidth = panelGuidesWidth;
   }
 
@@ -117,7 +117,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -127,7 +127,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         // left right
         this.drawLine(
@@ -138,7 +138,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -148,7 +148,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
       }
       /////////////////
@@ -303,7 +303,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -313,7 +313,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         // 2
         this.drawLine(
@@ -324,7 +324,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -334,7 +334,7 @@ export class SafeRect extends Rect {
           0,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         // left right
         // 1
@@ -346,7 +346,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -356,7 +356,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         // 2
         this.drawLine(
@@ -367,7 +367,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
         this.drawLine(
           ctx,
@@ -377,7 +377,7 @@ export class SafeRect extends Rect {
           -bleedSize.width,
           this.panelGuidesWidth,
           lineDash,
-          this.panelGuidesColor
+          this.renderPanelGuidesColor
         );
       }
       /////////////////

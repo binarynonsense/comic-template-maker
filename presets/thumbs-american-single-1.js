@@ -26,7 +26,7 @@ export default {
   renderBackgroundColor: "#ffffff",
   renderLineColor: "#000000",
   renderLineWeight: "4",
-  panelsLineColor: "#000000",
+  renderPanelLineColor: "#000000",
   renderHeaderTextWeight: "normal",
   renderDrawBackground: true,
   renderDrawHeader: true,
