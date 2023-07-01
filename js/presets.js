@@ -410,7 +410,7 @@ export function setPreset(index, checkUI = false) {
 }
 
 export function getPresetFromCurrentValues(name) {
-  const preset = { ...g_defaultPreset }; // load defaults
+  const preset = {};
   preset.name = name;
   preset.presetFormatVersion = getVersion();
   //////////////// dimensions ///////////////////////////
