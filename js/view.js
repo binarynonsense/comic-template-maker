@@ -26,7 +26,7 @@ export function initView() {
 
   document
     .getElementById("result-div")
-    .addEventListener("dblclick", function (e) {
+    .parentElement.addEventListener("dblclick", function (e) {
       g_panzoom.reset();
       e.preventDefault();
     });
