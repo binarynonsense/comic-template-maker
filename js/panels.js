@@ -129,6 +129,42 @@ export function initPanels() {
         }
       }
     });
+  // move up button
+  document
+    .getElementById("panel-tree-selected-element-moveup-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          const index = node.parent.getChildIndexFromId(node.id);
+          const temp = node.parent.children[index - 1];
+          node.parent.children[index - 1] = node.parent.children[index];
+          node.parent.children[index] = temp;
+
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
+  // move up button
+  document
+    .getElementById("panel-tree-selected-element-movedown-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          const index = node.parent.getChildIndexFromId(node.id);
+          const temp = node.parent.children[index + 1];
+          node.parent.children[index + 1] = node.parent.children[index];
+          node.parent.children[index] = temp;
+
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawTemplate();
+        }
+      }
+    });
   // remove button
   document
     .getElementById("panel-tree-selected-element-remove-button")
@@ -416,7 +452,23 @@ function setSelectedTreeElementFromId(id) {
   g_selectedNodeId = id;
   const node = getGridNodeFromId(g_rootNode, g_selectedNodeId);
   if (node) {
-    // debug
+    let canMoveUp,
+      canMoveDown = false;
+    if (node.parent && node.parent.children.length > 1) {
+      for (let index = 0; index < node.parent.children.length; index++) {
+        const sibling = node.parent.children[index];
+        if (sibling === node) {
+          if (index > 0) {
+            canMoveUp = true;
+          }
+          if (index < node.parent.children.length - 1) {
+            canMoveDown = true;
+          }
+          break;
+        }
+      }
+    }
+    // degug
     if (false) {
       document.getElementById("panel-tree-selected-element-debug").textContent =
         node.id;
@@ -469,6 +521,25 @@ function setSelectedTreeElementFromId(id) {
         .getElementById("panel-tree-selected-element-addpanel-button")
         .classList.remove("panel-tree-button-disabled");
     }
+    // move up/down buttons
+    if (canMoveUp) {
+      document
+        .getElementById("panel-tree-selected-element-moveup-button")
+        .classList.remove("panel-tree-button-disabled");
+    } else {
+      document
+        .getElementById("panel-tree-selected-element-moveup-button")
+        .classList.add("panel-tree-button-disabled");
+    }
+    if (canMoveDown) {
+      document
+        .getElementById("panel-tree-selected-element-movedown-button")
+        .classList.remove("panel-tree-button-disabled");
+    } else {
+      document
+        .getElementById("panel-tree-selected-element-movedown-button")
+        .classList.add("panel-tree-button-disabled");
+    }
     // remove button
     if (node.parent === undefined) {
       document
@@ -486,6 +557,12 @@ function setSelectedTreeElementFromId(id) {
       .classList.add("panel-tree-button-disabled");
     document
       .getElementById("panel-tree-selected-element-addpanel-button")
+      .classList.add("panel-tree-button-disabled");
+    document
+      .getElementById("panel-tree-selected-element-moveup-button")
+      .classList.add("panel-tree-button-disabled");
+    document
+      .getElementById("panel-tree-selected-element-movedown-button")
       .classList.add("panel-tree-button-disabled");
     document
       .getElementById("panel-tree-selected-element-remove-button")

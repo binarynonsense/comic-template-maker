@@ -26,6 +26,7 @@ import gridPreset_1 from "../presets/grid/1x1.js";
 import gridPreset_2 from "../presets/grid/2x2.js";
 import gridPreset_3 from "../presets/grid/3x3.js";
 import gridPreset_4 from "../presets/grid/4x4.js";
+import gridPreset_5 from "../presets/grid/example1.js";
 
 let g_presets;
 let g_defaultPreset;
@@ -69,6 +70,7 @@ export function initPresets() {
     loadGridPresetFromJson(gridPreset_2);
     loadGridPresetFromJson(gridPreset_3);
     loadGridPresetFromJson(gridPreset_4);
+    loadGridPresetFromJson(gridPreset_5);
     setGridPreset(0);
   }
 }
