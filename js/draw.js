@@ -146,7 +146,7 @@ export function drawTemplate() {
 function drawCanvas(makeDoublePage) {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
-    document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
+    document.getElementById("units-select").value === "inches" ? 1 : 1 / 2.54;
 
   const lineWidthThin =
     document.getElementById("line-width-thin-input").value * toInches;

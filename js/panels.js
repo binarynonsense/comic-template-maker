@@ -300,7 +300,7 @@ class GridNode {
 export function drawGrid(ctx, x, y, width, height) {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
-    document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
+    document.getElementById("units-select").value === "inches" ? 1 : 1 / 2.54;
   const gutterSize =
     document.getElementById("panel-gutter-size-input").value * toInches;
   const lineWidth =

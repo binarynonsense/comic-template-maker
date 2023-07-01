@@ -43,7 +43,14 @@ function initBase() {
   let refreshable = document.querySelectorAll(".refresh");
   for (let i = 0; i < refreshable.length; i++) {
     refreshable[i].addEventListener("change", function (event) {
-      if (event.target.id === "preset-select") {
+      if (event.target.id === "units-select") {
+        // document.getElementById("units-select").value === "inches" ? 1 : 0.393701;
+        let unitElements = document.querySelectorAll(".unit-value");
+        unitElements.forEach((element) => {
+          element.value *= event.target.value === "inches" ? 1 / 2.54 : 2.54;
+          element.value = parseFloat(parseFloat(element.value).toFixed(5));
+        });
+      } else if (event.target.id === "preset-select") {
         if (event.target.value != 0) {
           setPreset(-1, true); // load all defaults
           setPreset(event.target.value - 1, true);
