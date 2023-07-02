@@ -38,6 +38,12 @@ export default {
   renderDrawPanelGuides: false,
   renderDrawPanels: true,
 
+  panelGrid: {
+    type: "vgroup",
+    sizePercentage: 100,
+    children: [],
+  },
+
   layoutPageSpread: "single",
   layoutPpi: "300",
   layoutTemplateType: "page",
