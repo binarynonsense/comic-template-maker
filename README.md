@@ -1,6 +1,10 @@
 # Comic Book Template Maker (Web)
 
-A web app to create comic book page and thumbnails templates. Includes some example presets but it can be used to create, import and export templates with custom dimensions, colors... and even panel grids. 
+A web app to create comic book page and thumbnails templates.
+
+It comes with some example presets but can be used to make, import and export templates with custom dimensions, colors, layouts...
+
+Also includes a tool to build panel grids and the option to save the template as a png or jpg image or a pdf file.
 
 Online version available at: [binarynonsense.com/webapps/template-maker](http://www.binarynonsense.com/webapps/template-maker/)
 
