@@ -5,4 +5,4 @@ A web app to create comic book page and thumbnails templates. Includes some exam
 Online version available at: [binarynonsense.com/webapps/template-maker](http://www.binarynonsense.com/webapps/template-maker/)
 
 ## License:
-This project's code is released under the BSD 2-Clause [license](./LICENSE). To check the licenses of the libraries used in the project go to the [libs](./libs/) folder.
+This project's code is released under the BSD 2-Clause [license](./LICENSE). To check the licenses of the third party libraries used in it go to the [libs](./libs/) folder.
