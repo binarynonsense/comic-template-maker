@@ -171,7 +171,8 @@ function drawCanvas(makeDoublePage) {
   const headerMarginLeftRight =
     document.getElementById("header-margin-left-right-input").value * toInches;
 
-  const gutterSize = document.getElementById("panel-gutter-size-input").value;
+  const gutterSize =
+    document.getElementById("panel-gutter-size-input").value * toInches;
 
   const borderMarkMaxLength =
     document.getElementById("border-marks-length-input").value * toInches;
