@@ -67,7 +67,52 @@ export function initSaveLoad() {
               showLoading(false);
             }
           });
+        } else if (
+          document.getElementById("save-template-format-select").value === "psd"
+        ) {
+          let writePsd = agPsd.writePsd;
+          const psd = {
+            width: canvas.width,
+            height: canvas.height,
+            channels: 3,
+            bitsPerChannel: 8,
+            colorMode: 3,
+            children: [
+              {
+                name: "Layer #1",
+                // top: 0,
+                // left: 0,
+                // bottom: canvas.width,
+                // right: canvas.height,
+                blendMode: "normal",
+                opacity: 1,
+                transparencyProtected: false,
+                hidden: false,
+                clipping: false,
+                canvas: canvas,
+              },
+            ],
+            canvas: canvas, // composite image, needed only for backwards compatibility?
+            // NOTE: if I don't set it programs like Okular only show a black image
+          };
+
+          const buffer = writePsd(psd, {
+            generateThumbnail: true,
+            noBackground: true,
+          });
+          const blob = new Blob([buffer], { type: "application/octet-stream" });
+
+          let link = document.createElement("a");
+          document.body.appendChild(link);
+          link.setAttribute("type", "hidden");
+          link.href = URL.createObjectURL(blob);
+          link.download = "test.psd";
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(link.href);
         }
+
+        showLoading(false);
       }, "100");
     });
   // template presets import/export
