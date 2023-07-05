@@ -12,7 +12,7 @@ import { initView, resetView } from "./view.js";
 import { initPanels } from "./panels.js";
 import { initModals } from "./modals.js";
 
-const g_version = "1.0.0";
+const g_version = "1.1.0";
 
 init();
 
