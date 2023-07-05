@@ -63,7 +63,7 @@ export function renderLayers(onFinish) {
       fitCanvasContentToLayout(layerCanvas2, renderedPageData2, () => {
         renderedPageData2.layerCanvases.push({
           canvas: layerCanvas2,
-          name: "areas",
+          name: "printing areas",
         });
         // layer 3 - panel guides
         let layerCanvas3 = document.createElement("canvas");
