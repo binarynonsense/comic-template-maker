@@ -6,7 +6,7 @@
  */
 
 import { showLoading } from "./loading.js";
-import { drawTemplate, getCanvas } from "./draw.js";
+import { drawTemplate, getCompositeCanvas } from "./draw.js";
 import {
   loadPresetFromJson,
   setPreset,
@@ -18,7 +18,7 @@ import {
 import { openModal, closeOpenModal } from "./modals.js";
 
 export function initSaveLoad() {
-  let canvas = getCanvas();
+  let canvas = getCompositeCanvas();
   document
     .getElementById("save-template-button")
     .addEventListener("click", function () {

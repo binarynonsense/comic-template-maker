@@ -11,32 +11,30 @@ import { HeaderRect as HeaderRect } from "./header-rect.js";
 
 import { showLoading } from "./loading.js";
 
-let g_canvas;
+let g_compositeCanvas;
 
 export function initCanvas() {
-  g_canvas = document.createElement("canvas");
-  g_canvas.id = "hidden-canvas";
+  g_compositeCanvas = document.createElement("canvas");
+  g_compositeCanvas.id = "hidden-canvas";
 }
 
-export function getCanvas() {
-  return g_canvas;
+export function getCompositeCanvas() {
+  return g_compositeCanvas;
 }
 
 export function drawTemplate() {
   showLoading(true);
   // set timeout so loading spinner can show
   setTimeout(() => {
-    const makeDoublePage =
-      document.getElementById("layout-spread-select").value === "double"
-        ? true
-        : false;
-    let renderedPageData = drawCanvas(makeDoublePage);
+    let rootRect = buildRects();
+    let renderedPageData = drawToCanvas(g_compositeCanvas, rootRect);
     if (document.getElementById("layout-template-select").value === "page") {
       if (
         document.getElementById("layout-page-paper-select").value === "header"
       ) {
         // paper size = header area size
-        document.getElementById("result-img").src = g_canvas.toDataURL();
+        document.getElementById("result-img").src =
+          g_compositeCanvas.toDataURL();
         showLoading(false);
       } else {
         // a4 210 mm x 297 mm
@@ -61,8 +59,8 @@ export function drawTemplate() {
         }
         let image = new Image();
         image.onload = function () {
-          g_canvas.width = paperWidth * renderedPageData.ppi;
-          g_canvas.height = paperHeight * renderedPageData.ppi;
+          g_compositeCanvas.width = paperWidth * renderedPageData.ppi;
+          g_compositeCanvas.height = paperHeight * renderedPageData.ppi;
           const doScale =
             document.getElementById("layout-page-scaling-select").value ===
             "scale"
@@ -71,24 +69,25 @@ export function drawTemplate() {
           let pageWidth = renderedPageData.width;
           let pageHeight = renderedPageData.height;
           if (doScale) {
-            const widthRatio = g_canvas.width / pageWidth;
-            const heightRatio = g_canvas.height / pageHeight;
+            const widthRatio = g_compositeCanvas.width / pageWidth;
+            const heightRatio = g_compositeCanvas.height / pageHeight;
             const ratio = widthRatio < heightRatio ? widthRatio : heightRatio;
             pageWidth = ratio * pageWidth;
             pageHeight = ratio * pageHeight;
           }
-          const gapX = g_canvas.width - pageWidth;
-          const gapY = g_canvas.height - pageHeight;
+          const gapX = g_compositeCanvas.width - pageWidth;
+          const gapY = g_compositeCanvas.height - pageHeight;
           // draw the image
-          const ctx = g_canvas.getContext("2d");
+          const ctx = g_compositeCanvas.getContext("2d");
           ctx.fillStyle = "white";
-          ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
+          ctx.fillRect(0, 0, g_compositeCanvas.width, g_compositeCanvas.height);
           ctx.drawImage(this, gapX / 2, gapY / 2, pageWidth, pageHeight);
 
-          document.getElementById("result-img").src = g_canvas.toDataURL();
+          document.getElementById("result-img").src =
+            g_compositeCanvas.toDataURL();
           showLoading(false);
         };
-        image.src = g_canvas.toDataURL();
+        image.src = g_compositeCanvas.toDataURL();
       }
     } else {
       let paperWidth = 8.3;
@@ -107,24 +106,26 @@ export function drawTemplate() {
       ).value;
       let image = new Image();
       image.onload = function () {
-        g_canvas.width = paperWidth * renderedPageData.ppi;
-        g_canvas.height = paperHeight * renderedPageData.ppi;
+        g_compositeCanvas.width = paperWidth * renderedPageData.ppi;
+        g_compositeCanvas.height = paperHeight * renderedPageData.ppi;
         const pageWidth = renderedPageData.width;
         const pageHeight = renderedPageData.height;
-        const thumbWidthRatio = g_canvas.width / numThumbsX / pageWidth;
-        const thumbHeightRatio = g_canvas.height / numThumbsY / pageHeight;
+        const thumbWidthRatio =
+          g_compositeCanvas.width / numThumbsX / pageWidth;
+        const thumbHeightRatio =
+          g_compositeCanvas.height / numThumbsY / pageHeight;
         const thumbRatio =
           thumbWidthRatio < thumbHeightRatio
             ? thumbWidthRatio
             : thumbHeightRatio;
         const thumbWidth = thumbRatio * pageWidth;
         const thumbHeight = thumbRatio * pageHeight;
-        const gapX = g_canvas.width - thumbWidth * numThumbsX;
-        const gapY = g_canvas.height - thumbHeight * numThumbsY;
+        const gapX = g_compositeCanvas.width - thumbWidth * numThumbsX;
+        const gapY = g_compositeCanvas.height - thumbHeight * numThumbsY;
         // draw the pattern
-        const ctx = g_canvas.getContext("2d");
+        const ctx = g_compositeCanvas.getContext("2d");
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
+        ctx.fillRect(0, 0, g_compositeCanvas.width, g_compositeCanvas.height);
         let subCanvas = document.createElement("canvas");
         subCanvas.width = thumbWidth;
         subCanvas.height = thumbHeight;
@@ -135,18 +136,24 @@ export function drawTemplate() {
         ctx.translate(gapX / 2, gapY / 2);
         ctx.fillRect(0, 0, thumbWidth * numThumbsX, thumbHeight * numThumbsY);
 
-        document.getElementById("result-img").src = g_canvas.toDataURL();
+        document.getElementById("result-img").src =
+          g_compositeCanvas.toDataURL();
         showLoading(false);
       };
-      image.src = g_canvas.toDataURL();
+      image.src = g_compositeCanvas.toDataURL();
     }
   }, "100");
 }
 
-function drawCanvas(makeDoublePage) {
+function buildRects() {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
     document.getElementById("units-select").value === "inches" ? 1 : 1 / 2.54;
+
+  const makeDoublePage =
+    document.getElementById("layout-spread-select").value === "double"
+      ? true
+      : false;
 
   const lineWidthThin =
     document.getElementById("line-width-thin-input").value * toInches;
@@ -183,9 +190,6 @@ function drawCanvas(makeDoublePage) {
   const headerPaddingLeft =
     document.getElementById("header-padding-left-input").value * toInches;
 
-  const backGroundColor = document.getElementById(
-    "background-color-input"
-  ).value;
   const lineColor = document.getElementById("line-color-input").value;
   const lineWidthMultiplier = document.getElementById(
     "line-thickness-select"
@@ -197,9 +201,6 @@ function drawCanvas(makeDoublePage) {
     "header-text-weight-select"
   ).value;
 
-  const drawBackground = document.getElementById(
-    "paper-draw-bg-checkbox"
-  ).checked;
   const drawHeader = document.getElementById(
     "paper-draw-header-checkbox"
   ).checked;
@@ -362,12 +363,28 @@ function drawCanvas(makeDoublePage) {
     trimRect.addChild(safeRect_1);
   }
 
-  g_canvas.width = headerRect.getSize().width * ppi;
-  g_canvas.height = headerRect.getSize().height * ppi;
-  const ctx = g_canvas.getContext("2d");
-  ctx.fillStyle = drawBackground ? backGroundColor : "rgba(0, 0, 0, 0)";
-  ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
-  headerRect.draw(ctx, true);
+  return headerRect;
+}
 
-  return { ppi: ppi, width: g_canvas.width, height: g_canvas.height };
+function drawToCanvas(canvas, rootRect) {
+  const ppi = document.getElementById("ppi-input").value;
+  const drawBackground = document.getElementById(
+    "paper-draw-bg-checkbox"
+  ).checked;
+  const backGroundColor = document.getElementById(
+    "background-color-input"
+  ).value;
+
+  canvas.width = rootRect.getSize().width * ppi;
+  canvas.height = rootRect.getSize().height * ppi;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = drawBackground ? backGroundColor : "rgba(0, 0, 0, 0)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  rootRect.draw(ctx, true);
+
+  return {
+    ppi: ppi,
+    width: canvas.width,
+    height: canvas.height,
+  };
 }
