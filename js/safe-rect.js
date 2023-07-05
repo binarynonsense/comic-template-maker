@@ -38,7 +38,7 @@ export class SafeRect extends Rect {
     this.panelGuidesWidth = panelGuidesWidth;
   }
 
-  draw(ctx, recursive = false) {
+  draw(ctx, layers, recursive) {
     /////////////////
     // MARKS ////////
     /////////////////
@@ -61,7 +61,10 @@ export class SafeRect extends Rect {
         x: bleedSize.x + bleedSize.width,
         y: this.y + this.height / 2,
       };
-      if (this.drawBorderMarks) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer)) &&
+        this.drawBorderMarks
+      ) {
         // up
         this.drawLine(
           ctx,
@@ -107,7 +110,10 @@ export class SafeRect extends Rect {
           this.lineColor
         );
       }
-      if (this.drawPanelGuides) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer + 1)) &&
+        this.drawPanelGuides
+      ) {
         // up down
         this.drawLine(
           ctx,
@@ -176,7 +182,10 @@ export class SafeRect extends Rect {
         y: this.y + (2 * this.height) / 3,
       };
 
-      if (this.drawBorderMarks) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer)) &&
+        this.drawBorderMarks
+      ) {
         markLineLength = this.borderMarkMaxLength / 2;
         // up
         this.drawLine(
@@ -263,7 +272,10 @@ export class SafeRect extends Rect {
           this.lineColor
         );
       }
-      if (this.drawPanelGuides) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer + 1)) &&
+        this.drawPanelGuides
+      ) {
         const third1UpAlt = {
           x:
             this.x +
@@ -383,7 +395,10 @@ export class SafeRect extends Rect {
       /////////////////
       // FOURTHS///////
       /////////////////
-      if (this.drawBorderMarks) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer)) &&
+        this.drawBorderMarks
+      ) {
         // up
         this.drawLine(
           ctx,
@@ -472,7 +487,11 @@ export class SafeRect extends Rect {
       //////////////////////////
       // DOUBLE SPREAD MIDDLE //
       //////////////////////////
-      if (this.middleMarkPos && this.middleMarkPos > 0) {
+      if (
+        (layers.includes(0) || layers.includes(this.layer)) &&
+        this.middleMarkPos &&
+        this.middleMarkPos > 0
+      ) {
         markLineLength = this.borderMarkMaxLength;
         markLineWidth = this.borderMarkWidth;
         lineDash = [0, 0];
@@ -503,11 +522,14 @@ export class SafeRect extends Rect {
     /////////////////
     // BORDER ///////
     /////////////////
-    super.draw(ctx, recursive);
+    super.draw(ctx, layers, recursive);
     /////////////////
     // PANELS ///////
     /////////////////
-    if (this.drawPanels) {
+    if (
+      (layers.includes(0) || layers.includes(this.layer + 2)) &&
+      this.drawPanels
+    ) {
       drawPanelGrid(ctx, this.x, this.y, this.width, this.height);
     }
   }

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { initCanvas, drawTemplate } from "./draw.js";
+import { initRenderer, drawCompositeImage } from "./draw.js";
 import { initPresets, setPreset, setGridPreset } from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
@@ -18,13 +18,13 @@ init();
 
 function init() {
   initBase();
-  initCanvas();
+  initRenderer();
   initPresets();
   initSaveLoad();
   initView();
   initPanels();
   initModals();
-  drawTemplate();
+  drawCompositeImage();
 }
 
 export function getVersion() {
@@ -37,7 +37,7 @@ function initBase() {
   document
     .getElementById("refresh-button")
     .addEventListener("click", function () {
-      drawTemplate();
+      drawCompositeImage();
     });
 
   let refreshable = document.querySelectorAll(".refresh");
@@ -55,7 +55,7 @@ function initBase() {
           setPreset(-1, true); // load all defaults
           setPreset(event.target.value - 1, true);
           if (document.getElementById("autorefresh-checkbox").checked) {
-            drawTemplate();
+            drawCompositeImage();
             resetView();
           }
           event.target.value = 0;
@@ -64,7 +64,7 @@ function initBase() {
         if (event.target.value != 0) {
           setGridPreset(event.target.value - 1);
           if (document.getElementById("autorefresh-checkbox").checked) {
-            drawTemplate();
+            drawCompositeImage();
             resetView();
           }
           event.target.value = 0;
@@ -88,7 +88,7 @@ function initBase() {
           }
         }
         if (document.getElementById("autorefresh-checkbox").checked)
-          drawTemplate();
+          drawCompositeImage();
       }
     });
   }

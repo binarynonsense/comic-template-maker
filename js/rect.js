@@ -17,6 +17,7 @@ export class Rect {
     this.headerLineWidth = 0;
     this.lineColor = "#000";
     this.lineDash = [0, 0];
+    this.layer = 2;
   }
 
   setPpi(ppi) {
@@ -32,6 +33,10 @@ export class Rect {
 
   getParent() {
     return this.parent;
+  }
+
+  setLayer(layer) {
+    this.layer = layer;
   }
 
   addChild(child) {
@@ -54,8 +59,11 @@ export class Rect {
     ctx.stroke();
   }
 
-  draw(ctx, recursive = false) {
-    if (this.headerLineWidth > 0) {
+  draw(ctx, layers, recursive) {
+    if (
+      (layers.includes(0) || layers.includes(this.layer)) &&
+      this.headerLineWidth > 0
+    ) {
       // ref: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeRect
       ctx.lineWidth = this.headerLineWidth * this.ppi;
       ctx.strokeStyle = this.lineColor;
@@ -72,7 +80,7 @@ export class Rect {
     }
     if (recursive) {
       this.children.forEach((child) => {
-        child.draw(ctx, true);
+        child.draw(ctx, layers, true);
       });
     }
   }

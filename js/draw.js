@@ -13,7 +13,7 @@ import { showLoading } from "./loading.js";
 
 let g_compositeCanvas;
 
-export function initCanvas() {
+export function initRenderer() {
   g_compositeCanvas = document.createElement("canvas");
   g_compositeCanvas.id = "hidden-canvas";
 }
@@ -26,7 +26,7 @@ function updatePreviewImage() {
   document.getElementById("result-img").src = g_compositeCanvas.toDataURL();
 }
 
-export function drawTemplate() {
+export function drawCompositeImage() {
   showLoading(true);
   // set timeout so loading spinner can show
   setTimeout(() => {
@@ -38,6 +38,58 @@ export function drawTemplate() {
       showLoading(false);
     });
   }, "100");
+}
+
+export function renderLayers(onFinish) {
+  let canvas = g_compositeCanvas;
+  let rootRect = buildRects();
+  let renderedPageData0 = drawToCanvas(canvas, rootRect);
+  renderedPageData0.layerCanvases = [];
+  fitCanvasContentToLayout(canvas, renderedPageData0, () => {
+    updatePreviewImage();
+    // layer 1 - background
+    let layerCanvas1 = document.createElement("canvas");
+    let renderedPageData1 = drawToCanvas(layerCanvas1, rootRect, [1]);
+    renderedPageData1.layerCanvases = renderedPageData0.layerCanvases;
+    fitCanvasContentToLayout(layerCanvas1, renderedPageData1, () => {
+      renderedPageData1.layerCanvases.push({
+        canvas: layerCanvas1,
+        name: "paper",
+      });
+      // layer 2 - safe, trim, bleed, crop, header..
+      let layerCanvas2 = document.createElement("canvas");
+      let renderedPageData2 = drawToCanvas(layerCanvas2, rootRect, [2]);
+      renderedPageData2.layerCanvases = renderedPageData1.layerCanvases;
+      fitCanvasContentToLayout(layerCanvas2, renderedPageData2, () => {
+        renderedPageData2.layerCanvases.push({
+          canvas: layerCanvas2,
+          name: "areas",
+        });
+        // layer 3 - panel guides
+        let layerCanvas3 = document.createElement("canvas");
+        let renderedPageData3 = drawToCanvas(layerCanvas3, rootRect, [3]);
+        renderedPageData3.layerCanvases = renderedPageData2.layerCanvases;
+        fitCanvasContentToLayout(layerCanvas3, renderedPageData3, () => {
+          renderedPageData3.layerCanvases.push({
+            canvas: layerCanvas3,
+            name: "panel guides",
+          });
+          // layer 4 - panel grid
+          let layerCanvas4 = document.createElement("canvas");
+          let renderedPageData4 = drawToCanvas(layerCanvas4, rootRect, [4]);
+          renderedPageData4.layerCanvases = renderedPageData3.layerCanvases;
+          fitCanvasContentToLayout(layerCanvas4, renderedPageData4, () => {
+            renderedPageData4.layerCanvases.push({
+              canvas: layerCanvas4,
+              name: "panel grid",
+            });
+            // send all canvases
+            onFinish(renderedPageData4);
+          });
+        });
+      });
+    });
+  });
 }
 
 function buildRects() {
@@ -261,26 +313,30 @@ function buildRects() {
   return headerRect;
 }
 
-function drawToCanvas(canvas, rootRect) {
+function drawToCanvas(canvas, rootRect, layers = [0]) {
   const ppi = document.getElementById("ppi-input").value;
   const drawBackground = document.getElementById(
     "paper-draw-bg-checkbox"
   ).checked;
-  const backGroundColor = document.getElementById(
-    "background-color-input"
-  ).value;
+  let backGroundColor = document.getElementById("background-color-input").value;
 
   canvas.width = rootRect.getSize().width * ppi;
   canvas.height = rootRect.getSize().height * ppi;
   const ctx = canvas.getContext("2d");
-  ctx.fillStyle = drawBackground ? backGroundColor : "rgba(0, 0, 0, 0)";
+  if ((layers.includes(0) || layers.includes(1)) && drawBackground) {
+    backGroundColor = backGroundColor;
+  } else {
+    backGroundColor = "rgba(0, 0, 0, 0)";
+  }
+  ctx.fillStyle = backGroundColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  rootRect.draw(ctx, true);
+  rootRect.draw(ctx, layers, true);
 
   return {
     ppi: ppi,
     width: canvas.width,
     height: canvas.height,
+    backGroundColor: backGroundColor,
   };
 }
 
@@ -332,7 +388,7 @@ function fitCanvasContentToLayout(canvas, renderedPageData, onFinished) {
         const gapY = canvas.height - pageHeight;
         // draw the image
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "white";
+        ctx.fillStyle = renderedPageData.backGroundColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this, gapX / 2, gapY / 2, pageWidth, pageHeight);
 
@@ -371,7 +427,7 @@ function fitCanvasContentToLayout(canvas, renderedPageData, onFinished) {
       const gapY = canvas.height - thumbHeight * numThumbsY;
       // draw the pattern
       const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "white";
+      ctx.fillStyle = renderedPageData.backGroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       let subCanvas = document.createElement("canvas");
       subCanvas.width = thumbWidth;

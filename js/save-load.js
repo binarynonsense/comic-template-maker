@@ -6,7 +6,11 @@
  */
 
 import { showLoading } from "./loading.js";
-import { drawTemplate, getCompositeCanvas } from "./draw.js";
+import {
+  drawCompositeImage,
+  getCompositeCanvas,
+  renderLayers,
+} from "./draw.js";
 import {
   loadPresetFromJson,
   setPreset,
@@ -70,46 +74,66 @@ export function initSaveLoad() {
         } else if (
           document.getElementById("save-template-format-select").value === "psd"
         ) {
-          let writePsd = agPsd.writePsd;
-          const psd = {
-            width: canvas.width,
-            height: canvas.height,
-            channels: 3,
-            bitsPerChannel: 8,
-            colorMode: 3,
-            children: [
-              {
-                name: "Layer #1",
-                // top: 0,
-                // left: 0,
-                // bottom: canvas.width,
-                // right: canvas.height,
+          renderLayers((pageData) => {
+            let layerCanvases = pageData.layerCanvases;
+            let children = [];
+            for (let index = 0; index < layerCanvases.length; index++) {
+              children.push({
+                name: layerCanvases[index].name,
                 blendMode: "normal",
                 opacity: 1,
                 transparencyProtected: false,
                 hidden: false,
                 clipping: false,
-                canvas: canvas,
+                canvas: layerCanvases[index].canvas,
+              });
+            }
+
+            let writePsd = agPsd.writePsd;
+            const psd = {
+              width: canvas.width,
+              height: canvas.height,
+              channels: 3,
+              bitsPerChannel: 8,
+              colorMode: 3,
+              children: [
+                {
+                  name: "template",
+                  children: children,
+                },
+              ],
+              // composite image, needed only for backwards compatibility?
+              // NOTE: if I don't set it programs like Okular only show a black image
+              canvas: canvas,
+              imageResources: {
+                resolutionInfo: {
+                  horizontalResolution: pageData.ppi,
+                  horizontalResolutionUnit: "PPI",
+                  widthUnit: "Points",
+                  verticalResolution: pageData.ppi,
+                  verticalResolutionUnit: "PPI",
+                  heightUnit: "Points", //'Inches' | 'Centimeters' | 'Points' | 'Picas' | 'Columns';
+                },
               },
-            ],
-            canvas: canvas, // composite image, needed only for backwards compatibility?
-            // NOTE: if I don't set it programs like Okular only show a black image
-          };
+            };
 
-          const buffer = writePsd(psd, {
-            generateThumbnail: true,
-            noBackground: true,
+            const buffer = writePsd(psd, {
+              generateThumbnail: true,
+              noBackground: true,
+            });
+            const blob = new Blob([buffer], {
+              type: "application/octet-stream",
+            });
+
+            let link = document.createElement("a");
+            document.body.appendChild(link);
+            link.setAttribute("type", "hidden");
+            link.href = URL.createObjectURL(blob);
+            link.download = "template.psd";
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(link.href);
           });
-          const blob = new Blob([buffer], { type: "application/octet-stream" });
-
-          let link = document.createElement("a");
-          document.body.appendChild(link);
-          link.setAttribute("type", "hidden");
-          link.href = URL.createObjectURL(blob);
-          link.download = "test.psd";
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(link.href);
         }
 
         showLoading(false);
@@ -151,7 +175,7 @@ export function initSaveLoad() {
           setPreset(-1); // load all defaults
           setPreset(index - 1);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       };
       reader.readAsText(file);
@@ -195,7 +219,7 @@ export function initSaveLoad() {
         ) {
           setGridPreset(index - 1);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       };
       reader.readAsText(file);

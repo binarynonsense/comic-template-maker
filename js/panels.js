@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-import { drawTemplate } from "./draw.js";
+import { drawCompositeImage } from "./draw.js";
 
 let GridNodeType = {
   VGROUP: "vgroup",
@@ -69,7 +69,7 @@ export function initPanels() {
           drawHtmlTree(id);
           document.getElementById(id).scrollIntoView();
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -93,7 +93,7 @@ export function initPanels() {
           drawHtmlTree(node.id);
           document.getElementById(node.id).scrollIntoView();
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -110,7 +110,7 @@ export function initPanels() {
           node.recalculateChildrenSizes();
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -125,7 +125,7 @@ export function initPanels() {
           node.recalculateChildrenSizes();
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -143,7 +143,7 @@ export function initPanels() {
 
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -161,7 +161,7 @@ export function initPanels() {
 
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });
@@ -178,7 +178,7 @@ export function initPanels() {
           drawHtmlTree(nodeParent.id);
           document.getElementById(nodeParent.id).scrollIntoView();
           if (document.getElementById("autorefresh-checkbox").checked)
-            drawTemplate();
+            drawCompositeImage();
         }
       }
     });

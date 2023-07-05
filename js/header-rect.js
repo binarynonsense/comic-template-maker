@@ -35,14 +35,17 @@ export class HeaderRect extends Rect {
     this.headerTextWeight = headerTextWeight;
   }
 
-  draw(ctx, recursive = false) {
+  draw(ctx, layers, recursive) {
     const bleedSize = this.children[0];
     const trimSize = bleedSize.children[0];
     const fontSize = this.headerTextHeight;
     /////////////////
     // HEADER ///////
     /////////////////
-    if (this.drawHeader) {
+    if (
+      (layers.includes(0) || layers.includes(this.layer)) &&
+      this.drawHeader
+    ) {
       ctx.strokeStyle = this.lineColor;
       ctx.fillStyle = this.lineColor;
       ctx.font = `${this.headerTextWeight === "bold" ? "bold " : ""}${
@@ -104,7 +107,10 @@ export class HeaderRect extends Rect {
     /////////////////
     // CROP MARKS ///
     /////////////////
-    if (this.drawCropMarks) {
+    if (
+      (layers.includes(0) || layers.includes(this.layer)) &&
+      this.drawCropMarks
+    ) {
       // up left
       this.drawLine(
         ctx,
@@ -197,6 +203,6 @@ export class HeaderRect extends Rect {
     /////////////////
     // BORDER ///////
     /////////////////
-    super.draw(ctx, recursive);
+    super.draw(ctx, layers, recursive);
   }
 }
