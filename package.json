@@ -12,11 +12,11 @@
   "build": {
     "appId": "com.binarynonsense.template-maker",
     "win": {
-      "icon": "./src/assets/images/icon_256x256.png"
+      "icon": "./src/electron/assets/images/icon_256x256.png"
     },
     "linux": {
       "category": "Utility",
-      "icon": "./src/assets/images/icon_256x256.png",
+      "icon": "./src/electron/assets/images/icon_256x256.png",
       "target": [
         {
           "target": "AppImage"

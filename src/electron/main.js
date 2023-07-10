@@ -18,6 +18,7 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js"),
     },
     autoHideMenuBar: true,
+    icon: path.join(__dirname, "assets/images/icon_256x256.png"),
   });
 
   g_mainWindow.loadFile("./src/index.html");
