@@ -1,14 +1,39 @@
 {
   "name": "comic-template-maker",
   "version": "1.2.0",
-  "description": "Comic book page template maker",
+  "description": "Comic Book Template Maker",
   "main": "./src/electron/main.js",
-  "scripts": {
-    "start": "electron ."
-  },
   "author": "Álvaro García (www.binarynonsense.com)",
   "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binarynonsense/comic-template-maker"
+  },
+  "build": {
+    "appId": "com.binarynonsense.template-maker",
+    "win": {
+      "icon": "./src/assets/images/icon_256x256.png"
+    },
+    "linux": {
+      "category": "Utility",
+      "icon": "./src/assets/images/icon_256x256.png",
+      "target": [
+        {
+          "target": "AppImage"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "start": "electron . --dev",
+    "dist": "npm run dist:windows && npm run dist:linux",
+    "dist:linux": "npm run build:linux",
+    "dist:windows": "npm run build:windows",
+    "build:linux": "electron-builder --linux",
+    "build:windows": "electron-builder --win --dir"
+  },
   "devDependencies": {
-    "electron": "^25.2.0"
+    "electron": "^25.2.0",
+    "electron-builder": "^24.4.0"
   }
 }
