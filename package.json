@@ -1,0 +1,14 @@
+{
+  "name": "comic-template-maker",
+  "version": "1.2.0",
+  "description": "Comic book page template maker",
+  "main": "./src/electron/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Álvaro García (www.binarynonsense.com)",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "electron": "^25.2.0"
+  }
+}
