@@ -8,4 +8,4 @@ Online version available at: [binarynonsense.com/webapps/template-maker](http://
 
 ## License:
 
-This project's code is released under the BSD 2-Clause [license](./LICENSE). To check the licenses of the third party libraries used in it go to the [libs](./src/libs/) folder.
+This project's code is released under the BSD 2-Clause [license](./LICENSE). To check the licenses of the third party libraries used in it go to the [licenses](./licenses/) folder.
