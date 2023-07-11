@@ -11,6 +11,7 @@ Tool to create comic book page and thumbnails templates with desktop (Windows & 
 
 ## Features:
 
+- Windows, Linux & online versions.
 - Make, import and export templates with custom dimensions, colors, layouts...
 - Example presets (american comic, manga...).
 - Panel grid creator.
