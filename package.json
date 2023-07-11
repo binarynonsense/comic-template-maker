@@ -30,10 +30,13 @@
     "dist:linux": "npm run build:linux",
     "dist:windows": "npm run build:windows",
     "build:linux": "electron-builder --linux",
-    "build:windows": "electron-builder --win --dir"
+    "build:windows": "electron-builder --win --dir",
+    "licenses": "license-checker > licenses/node_modules.txt && shx sed -i 's/path.*node_modules/path: node_modules/' ./licenses/node_modules.txt && shx sed -i 's/licenseFile.*node_modules/licenseFile: node_modules/' ./licenses/node_modules.txt"
   },
   "devDependencies": {
     "electron": "^25.2.0",
-    "electron-builder": "^24.4.0"
+    "electron-builder": "^24.4.0",
+    "license-checker": "^25.0.1",
+    "shx": "^0.3.4"
   }
 }
