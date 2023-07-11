@@ -114,3 +114,17 @@ function initBase() {
     });
   }
 }
+
+document.onkeydown = function (event) {
+  if (window.bridge) {
+    // electron
+    if (
+      event.ctrlKey &&
+      event.shiftKey &&
+      (event.key == "i" || event.key == "I")
+    ) {
+      event.preventDefault();
+      window.bridge.toggleDevTools();
+    }
+  }
+};

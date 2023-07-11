@@ -10,6 +10,10 @@ const path = require("path");
 
 let g_mainWindow;
 
+function isDev() {
+  return process.argv[2] == "--dev";
+}
+
 const createWindow = () => {
   g_mainWindow = new BrowserWindow({
     width: 1280,
@@ -40,6 +44,10 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+ipcMain.on("dev-tools-pressed", (event) => {
+  if (isDev()) g_mainWindow.toggleDevTools();
 });
 
 // refs:
