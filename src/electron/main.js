@@ -29,7 +29,6 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-  ipcMain.handle("ping", () => "pong");
   createWindow();
   // macos
   app.on("activate", () => {
