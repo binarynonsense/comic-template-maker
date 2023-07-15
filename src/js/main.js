@@ -18,7 +18,7 @@ import { initPanels } from "./panels.js";
 import { initHeaderText } from "./header.js";
 import { initModals } from "./modals.js";
 
-const g_version = "1.2.0";
+const g_version = "1.3.0";
 
 init();
 
