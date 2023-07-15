@@ -554,7 +554,9 @@ export function getPresetFromCurrentValues(name) {
     preset.panelGrid = exportGridPresetData();
   }
   //////////////// header ///////////////////////////
-  if (document.getElementById("export-preset-current-grid-checkbox").checked) {
+  if (
+    document.getElementById("export-preset-current-header-checkbox").checked
+  ) {
     preset.headerText = exportHeaderPresetData();
   }
   //////////////// layout ///////////////////////////
