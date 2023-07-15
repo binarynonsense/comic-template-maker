@@ -20,6 +20,7 @@ export default {
   lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
   headerTextHeight: "0.12",
+  headerLineSpacing: "1.4",
   headerPaddingBottom: "0.21",
   headerPaddingLeft: "0.21",
 };

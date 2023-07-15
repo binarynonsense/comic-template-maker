@@ -6,10 +6,16 @@
  */
 
 import { initRenderer, drawCompositeImage } from "./draw.js";
-import { initPresets, setPreset, setGridPreset } from "./presets.js";
+import {
+  initPresets,
+  setPreset,
+  setGridPreset,
+  setHeaderPreset,
+} from "./presets.js";
 import { initSaveLoad } from "./save-load.js";
 import { initView, resetView } from "./view.js";
 import { initPanels } from "./panels.js";
+import { initHeaderText } from "./header.js";
 import { initModals } from "./modals.js";
 
 const g_version = "1.2.0";
@@ -23,6 +29,7 @@ function init() {
   initSaveLoad();
   initView();
   initPanels();
+  initHeaderText();
   initModals();
   drawCompositeImage();
 }
@@ -69,6 +76,15 @@ function initBase() {
           }
           event.target.value = 0;
         }
+      } else if (event.target.id === "header-preset-select") {
+        if (event.target.value != 0) {
+          setHeaderPreset(event.target.value - 1);
+          if (document.getElementById("autorefresh-checkbox").checked) {
+            drawCompositeImage();
+            resetView();
+          }
+          event.target.value = 0;
+        }
       } else {
         if (event.target.id === "layout-template-select") {
           if (
@@ -93,11 +109,11 @@ function initBase() {
     });
   }
 
-  for (let i = 1; i < 8; i++) {
+  for (let i = 1; i < 9; i++) {
     const tab = document.getElementById(`tab-${i}`);
     tab.addEventListener("click", function () {
       if (!tab.classList.contains("tab-selected")) {
-        for (let j = 1; j < 8; j++) {
+        for (let j = 1; j < 9; j++) {
           if (i === j) {
             document.getElementById(`tab-${j}`).classList.add("tab-selected");
             document

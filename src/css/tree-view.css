@@ -1,4 +1,4 @@
-#panel-tree {
+.tree-view {
   margin: 5px 0px;
   width: 100%;
   height: 300px;
@@ -12,7 +12,7 @@
 
 /* ref: https://iamkate.com/code/tree-views/ */
 
-#panel-tree-root {
+.tree-view-root {
   font-size: 15px;
   --line-spacing: 1.5rem;
   --marker-radius: 10px;
@@ -20,31 +20,31 @@
   padding: 0;
 }
 
-#panel-tree-root li {
+.tree-view-root li {
   display: block;
   position: relative;
   padding-left: calc(1.92 * var(--line-spacing) - var(--marker-radius) - 2px);
   padding-top: 4px;
 }
 
-#panel-tree-root ul {
+.tree-view-root ul {
   margin-left: calc(var(--marker-radius) - var(--line-spacing));
   padding-left: 0;
 }
 
 /* vertical lines */
 
-#panel-tree-root ul li {
+.tree-view-root ul li {
   border-left: 2px solid #ddd;
 }
 
-#panel-tree-root ul li:last-child {
+.tree-view-root ul li:last-child {
   border-color: transparent;
 }
 
 /* horizontal lines */
 
-#panel-tree-root ul li::before {
+.tree-view-root ul li::before {
   content: "";
   display: block;
   position: absolute;
@@ -54,32 +54,33 @@
   height: calc(var(--line-spacing) + 1px);
   border: solid #ddd;
   border-width: 0 0 2px 2px;
+  pointer-events: none;
 }
 
 /* summaries */
 
-#panel-tree-root summary {
+.tree-view-root summary {
   display: block;
   cursor: pointer;
 }
 
-#panel-tree-root summary::marker,
-#panel-tree-root summary::-webkit-details-marker {
+.tree-view-root summary::marker,
+.tree-view-root summary::-webkit-details-marker {
   display: none;
 }
 
-#panel-tree-root summary:focus {
+.tree-view-root summary:focus {
   outline: none;
 }
 
-#panel-tree-root summary:focus-visible {
+.tree-view-root summary:focus-visible {
   outline: 1px dotted #000;
 }
 
 /* markers */
 
-#panel-tree-root li::after,
-#panel-tree-root summary::before {
+.tree-view-root li::after,
+.tree-view-root summary::before {
   content: "";
   display: block;
   position: absolute;
@@ -87,62 +88,65 @@
   left: calc(var(--line-spacing) - var(--marker-radius) - 1px);
   width: calc(1.5 * var(--marker-radius));
   height: calc(1.5 * var(--marker-radius));
-  /* border-radius: 50%; */
   background: #ddd;
   color: #fff;
 }
 
 /* + - buttons */
 
-#panel-tree-root summary::before {
+.tree-view-root summary::before {
   z-index: 2;
   background: rgb(129, 129, 129) url("plus-minus.svg") 0 0;
   background-size: 30px 15px;
 }
 
-/* #panel-tree-root summary:hover::before {
-  background-color: #af3030;
-} */
-
-#panel-tree-root summary:hover:not(:has(*:hover))::before {
+.tree-view-root summary:hover:not(:has(*:hover))::before {
   background-color: #3f51b5;
 }
 
-#panel-tree-root details[open] > summary::before {
+.tree-view-root details[open] > summary::before {
   background-position: calc(-1.5 * var(--marker-radius)) 0;
 }
 
-.panel-tree-summary-button,
-.panel-tree-panel-button {
+.tree-view-summary-button,
+.tree-view-panel-button {
   white-space: nowrap;
 }
 
-.panel-tree-summary-button:hover {
+.tree-view-summary-button:hover {
   font-weight: bold;
   color: #3f51b5;
 }
 
-.panel-tree-panel-button:hover {
+.tree-view-panel-button:hover {
   font-weight: bold;
   color: #3f51b5;
   cursor: pointer;
 }
 
-.panel-tree-button-selected {
+.tree-view-button-selected {
   font-weight: bolder;
   color: #3f51b5;
 }
 
-.panel-tree-button-disabled {
+.tree-view-button-disabled {
   cursor: default;
   pointer-events: none;
   background-color: #cacaca;
   user-select: none;
 }
 
+.tree-view-button-hidden {
+  display: none;
+}
+
+.tree-view-button-extra-top-margin {
+  margin-top: 10px;
+}
+
 /* ************************* */
 
-#panel-tree-selected-element-view {
+.tree-view-selected-element-view {
   margin: 5px 0px;
   width: 100%;
   border: 2px solid #727272;

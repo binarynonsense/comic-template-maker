@@ -6,8 +6,8 @@
  */
 
 import { Rect } from "./rect.js";
-import { SafeRect } from "./safe-rect.js";
-import { HeaderRect as HeaderRect } from "./header-rect.js";
+import { SafeRect } from "./rect-safe.js";
+import { HeaderRect as HeaderRect } from "./rect-header.js";
 
 import { showLoading } from "./loading.js";
 
@@ -130,22 +130,12 @@ function buildRects() {
 
   const borderMarkMaxLength =
     document.getElementById("border-marks-length-input").value * toInches;
-  const headerTextHeight =
-    document.getElementById("header-text-height-input").value * toInches;
-  const headerPaddingBottom =
-    document.getElementById("header-padding-bottom-input").value * toInches;
-  const headerPaddingLeft =
-    document.getElementById("header-padding-left-input").value * toInches;
-
   const lineColor = document.getElementById("line-color-input").value;
   const lineWidthMultiplier = document.getElementById(
     "line-thickness-select"
   ).value;
   const renderPanelGuidesColor = document.getElementById(
     "panel-guides-color-input"
-  ).value;
-  const headerTextWeight = document.getElementById(
-    "header-text-weight-select"
   ).value;
 
   const drawHeader = document.getElementById(
@@ -181,11 +171,7 @@ function buildRects() {
     drawCropMarks,
     lineWidthThick * lineWidthMultiplier, // width is used in crop lines
     drawHeader,
-    lineWidthThin * lineWidthMultiplier, // used in header
-    headerPaddingBottom,
-    headerPaddingLeft,
-    headerTextHeight,
-    headerTextWeight
+    lineWidthThin * lineWidthMultiplier // used in header
   );
   headerRect.setBorderStyle(0, lineColor, [0, 0]);
 

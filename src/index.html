@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/style.css" />
-    <link rel="stylesheet" href="./css/panel-tree.css" />
+    <link rel="stylesheet" href="./css/tree-view.css" />
     <link rel="stylesheet" href="./css/loading.css" />
     <link rel="stylesheet" href="./css/modals.css" />
     <link href="./libs/fontawesome/css/fontawesome.css" rel="stylesheet" />
@@ -198,6 +198,39 @@
           </div>
         </div>
 
+        <div class="section">
+          <h3>Lines:</h3>
+          <div class="columns-parent">
+            <label class="two-columns"
+              >thin width<input
+                type="number"
+                id="line-width-thin-input"
+                class="refresh unit-value"
+                step="0.005"
+                min="0"
+                value="0.004"
+            /></label>
+            <label class="two-columns"
+              >thick width<input
+                type="number"
+                id="line-width-thick-input"
+                class="refresh unit-value"
+                step="0.005"
+                min="0"
+                value="0.008"
+            /></label>
+          </div>
+          <label
+            >border marks max. length<input
+              type="number"
+              id="border-marks-length-input"
+              class="refresh unit-value"
+              step="0.005"
+              min="0"
+              value="0.085"
+          /></label>
+        </div>
+
         <div id="panels-div" class="section">
           <h3>Panels:</h3>
           <div class="columns-parent">
@@ -211,7 +244,7 @@
                 value="0.15"
             /></label>
             <label class="two-columns"
-              >panel line width<input
+              >line width<input
                 type="number"
                 id="panel-line-width-input"
                 class="refresh unit-value"
@@ -222,62 +255,52 @@
           </div>
         </div>
 
-        <div id="safe-div" class="section">
-          <h3>Template:</h3>
-          <label
-            >thin line width<input
-              type="number"
-              id="line-width-thin-input"
-              class="refresh unit-value"
-              step="0.005"
-              min="0"
-              value="0.004"
-          /></label>
-          <label
-            >thick line width<input
-              type="number"
-              id="line-width-thick-input"
-              class="refresh unit-value"
-              step="0.005"
-              min="0"
-              value="0.008"
-          /></label>
-          <label
-            >border marks max. length<input
-              type="number"
-              id="border-marks-length-input"
-              class="refresh unit-value"
-              step="0.005"
-              min="0"
-              value="0.085"
-          /></label>
-          <label
-            >header text height<input
-              type="number"
-              id="header-text-height-input"
-              class="refresh unit-value"
-              step="0.05"
-              min="0"
-              value="0.12"
-          /></label>
-          <label
-            >header padding bottom<input
-              type="number"
-              id="header-padding-bottom-input"
-              class="refresh unit-value"
-              step="0.25"
-              min="0"
-              value="0.21"
-          /></label>
-          <label
-            >header padding left<input
-              type="number"
-              id="header-padding-left-input"
-              class="refresh unit-value"
-              step="0.25"
-              min="0"
-              value="0.21"
-          /></label>
+        <div class="section">
+          <h3>Header Text:</h3>
+          <div class="columns-parent">
+            <label class="two-columns"
+              >text height<input
+                type="number"
+                id="header-text-height-input"
+                class="refresh unit-value"
+                step="0.05"
+                min="0"
+                value="0.12"
+            /></label>
+            <label class="two-columns"
+              >line spacing<select
+                id="header-text-spacing-select"
+                class="refresh"
+              >
+                <option value="1.1">x1.1</option>
+                <option value="1.2">x1.2</option>
+                <option value="1.3">x1.3</option>
+                <option value="1.4">x1.4</option>
+                <option value="1.5">x1.5</option>
+                <option value="2">x2</option>
+              </select></label
+            >
+          </div>
+          <div class="columns-parent">
+            <label class="two-columns"
+              >padding left<input
+                type="number"
+                id="header-padding-left-input"
+                class="refresh unit-value"
+                step="0.25"
+                min="0"
+                value="0.21"
+            /></label>
+            <label class="two-columns"
+              >padding bottom<input
+                type="number"
+                id="header-padding-bottom-input"
+                class="refresh unit-value"
+                step="0.25"
+                min="0"
+                value="0.21"
+            /></label>
+          </div>
         </div>
       </div>
 
@@ -440,17 +463,18 @@
             <i class="fa-solid fa-file-arrow-down"></i>
           </div>
         </div>
+
         <label>grid nodes (tree view)</label>
-        <div id="panel-tree">
-          <ul id="panel-tree-root"></ul>
+        <div id="panel-tree-view" class="tree-view">
+          <ul id="panel-tree-view-root" class="tree-view-root"></ul>
         </div>
 
         <label>selected node</label>
-        <div id="panel-tree-selected-element-view">
-          <label id="panel-tree-selected-element-debug"></label>
+        <div class="tree-view-selected-element-view">
+          <label id="panel-tree-view-selected-element-debug"></label>
           <div class="columns-parent">
             <label class="two-columns"
-              >type<select id="panel-tree-selected-element-type-select">
+              >type<select id="panel-tree-view-selected-element-type-select">
                 <option value="vgroup">vertical group</option>
                 <option value="hgroup">horizontal group</option>
                 <option value="panel">panel</option>
@@ -459,33 +483,108 @@
             <label class="two-columns"
               >size (%)<input
                 type="number"
-                id="panel-tree-selected-element-size-input"
+                id="panel-tree-view-selected-element-size-input"
                 step="1"
                 min="0"
                 max="100"
                 value="50"
             /></label>
           </div>
-          <button id="panel-tree-selected-element-addgroup-button">
+          <button id="panel-tree-view-selected-element-addgroup-button">
             ADD CHILD GROUP
           </button>
-          <button id="panel-tree-selected-element-addpanel-button">
+          <button id="panel-tree-view-selected-element-addpanel-button">
             ADD CHILD PANEL
           </button>
-          <button id="panel-tree-selected-element-moveup-button">
+          <button id="panel-tree-view-selected-element-moveup-button">
             MOVE UP
           </button>
-          <button id="panel-tree-selected-element-movedown-button">
+          <button id="panel-tree-view-selected-element-movedown-button">
             MOVE DOWN
           </button>
-          <button id="panel-tree-selected-element-remove-button">REMOVE</button>
+          <button id="panel-tree-view-selected-element-remove-button">
+            REMOVE
+          </button>
         </div>
       </div>
 
-      <div class="tab" id="tab-5" title="layout (page/thumbnails)">
-        <i class="fa-solid fa-grip tab-icon"></i>
+      <div class="tab" id="tab-5" title="header text">
+        <i class="fa-solid fa-align-justify tab-icon"></i>
       </div>
       <div id="tab-5-content" class="hidden">
+        <label
+          >load a header preset
+          <select id="header-preset-select" class="refresh"></select
+        ></label>
+        <div class="import-export-buttons">
+          <div
+            id="open-modal-import-header-preset-button"
+            class="import-export-button"
+            title="import preset from file"
+          >
+            <i class="fa-solid fa-file-arrow-up"></i>
+          </div>
+          <div
+            id="open-modal-export-header-preset-button"
+            class="import-export-button"
+            title="export header to preset file"
+          >
+            <i class="fa-solid fa-file-arrow-down"></i>
+          </div>
+        </div>
+
+        <label>header text (tree view)</label>
+        <div id="header-tree-view" class="tree-view">
+          <ul id="header-tree-view-root" class="tree-view-root"></ul>
+        </div>
+
+        <label>selected node</label>
+        <div class="tree-view-selected-element-view">
+          <label id="header-tree-view-selected-element-string-label"
+            >text<input
+              type="text"
+              id="header-tree-view-selected-element-string-input"
+          /></label>
+          <label id="header-tree-view-selected-element-length-label"
+            >length (x text height)<input
+              type="number"
+              id="header-tree-view-selected-element-length-input"
+              min="0"
+          /></label>
+          <button
+            id="header-tree-view-selected-element-addline-button"
+            class="tree-view-button-extra-top-margin"
+          >
+            ADD LINE CHILD
+          </button>
+          <button
+            id="header-tree-view-selected-element-addtext-button"
+            class="tree-view-button-extra-top-margin"
+          >
+            ADD TEXT CHILD
+          </button>
+          <button id="header-tree-view-selected-element-addunderline-button">
+            ADD UNDERLINE CHILD
+          </button>
+          <button id="header-tree-view-selected-element-addspace-button">
+            ADD SPACE CHILD
+          </button>
+          <button id="header-tree-view-selected-element-moveup-button">
+            MOVE UP
+          </button>
+          <button id="header-tree-view-selected-element-movedown-button">
+            MOVE DOWN
+          </button>
+          <button id="header-tree-view-selected-element-remove-button">
+            REMOVE
+          </button>
+        </div>
+      </div>
+
+      <div class="tab" id="tab-6" title="layout (page/thumbnails)">
+        <i class="fa-solid fa-grip tab-icon"></i>
+      </div>
+      <div id="tab-6-content" class="hidden">
         <h3 class="h3-extratop">Layout options:</h3>
         <label
           >page spread<select id="layout-spread-select" class="refresh">
@@ -559,10 +658,10 @@
         </div>
       </div>
 
-      <div class="tab" id="tab-6" title="save as image">
+      <div class="tab" id="tab-7" title="save as image">
         <i class="fa-solid fa-floppy-disk tab-icon"></i>
       </div>
-      <div id="tab-6-content" class="hidden">
+      <div id="tab-7-content" class="hidden">
         <h3 class="h3-extratop">Save Template As Image:</h3>
         <label
           >file format<select id="save-template-format-select">
@@ -575,10 +674,10 @@
         <button id="save-template-button">SAVE</button>
       </div>
 
-      <div class="tab" id="tab-7" title="tool info">
+      <div class="tab" id="tab-8" title="tool info">
         <i class="fa-solid fa-circle-info tab-icon"></i>
       </div>
-      <div id="tab-7-content" class="hidden">
+      <div id="tab-8-content" class="hidden">
         <h3>Comic Book Template Maker</h3>
         <p>Tool to create comic book page and thumbnails templates.</p>
         <h3>Version:</h3>
@@ -592,8 +691,6 @@
           >
         </p>
       </div>
-
-      <!-- fa-grip-vertical thumbnails tab -->
     </div>
 
     <!-- modals template presets -->
@@ -647,15 +744,31 @@
           export dimensions
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="export-preset-rendering-checkbox" />
+          <input
+            type="checkbox"
+            id="export-preset-rendering-checkbox"
+            checked
+          />
           export rendering options
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="export-preset-current-grid-checkbox" />
+          <input
+            type="checkbox"
+            id="export-preset-current-grid-checkbox"
+            checked
+          />
           export panel grid
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="export-preset-layout-checkbox" />
+          <input
+            type="checkbox"
+            id="export-preset-current-header-checkbox"
+            checked
+          />
+          export header text
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="export-preset-layout-checkbox" checked />
           export layout
         </label>
         <button id="export-preset-button">EXPORT</button>
@@ -709,9 +822,66 @@
           >preset name<input
             type="text"
             id="export-grid-preset-name-input"
-            value="panel grid"
+            value="panel grid preset"
         /></label>
         <button id="export-grid-preset-button">EXPORT</button>
+        <button class="modal-close-button">CANCEL</button>
+      </div>
+    </div>
+
+    <!-- modals header presets -->
+    <div id="import-header-preset-modal" class="modal">
+      <div class="modal-frame">
+        <div class="modal-topbar">
+          <div class="modal-close-x-button modal-close-button" title="cancel">
+            <i class="fa-solid fa-close"></i>
+          </div>
+        </div>
+        <h3 class="h3-extratop h3-extrabottom">
+          Import Header Preset From File:
+        </h3>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="import-header-preset-add-checkbox"
+            checked
+            disabled
+          />
+          add to presets list
+        </label>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            id="import-header-preset-apply-checkbox"
+            checked
+          />
+          apply when loaded
+        </label>
+        <input
+          type="file"
+          id="import-header-preset-file-input"
+          accept=".json"
+        />
+        <button id="import-header-preset-button">CHOOSE FILE</button>
+        <button class="modal-close-button">CANCEL</button>
+      </div>
+    </div>
+
+    <div id="export-header-preset-modal" class="modal">
+      <div class="modal-frame">
+        <div class="modal-topbar">
+          <div class="modal-close-x-button modal-close-button" title="cancel">
+            <i class="fa-solid fa-close"></i>
+          </div>
+        </div>
+        <h3 class="h3-extratop">Export Current Header To Preset File:</h3>
+        <label
+          >preset name<input
+            type="text"
+            id="export-header-preset-name-input"
+            value="header preset"
+        /></label>
+        <button id="export-header-preset-button">EXPORT</button>
         <button class="modal-close-button">CANCEL</button>
       </div>
     </div>

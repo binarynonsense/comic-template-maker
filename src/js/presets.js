@@ -6,6 +6,7 @@
  */
 
 import { exportGridPresetData, loadGridPresetData } from "./panels.js";
+import { exportHeaderPresetData, loadHeaderPresetData } from "./header.js";
 import { Sanitize } from "./sanitize.js";
 import { getVersion } from "./main.js";
 
@@ -28,10 +29,17 @@ import gridPreset_3 from "../presets/grid/3x3.js";
 import gridPreset_4 from "../presets/grid/4x4.js";
 import gridPreset_5 from "../presets/grid/example1.js";
 
+import headerPreset_0 from "../presets/header/empty.js";
+import headerPreset_1 from "../presets/header/page.js";
+import headerPreset_2 from "../presets/header/issue-page.js";
+import headerPreset_3 from "../presets/header/title-issue-page.js";
+import headerPreset_4 from "../presets/header/title-issue-page_penciller-inker.js";
+
 let g_presets;
 let g_defaultPreset;
 
 let g_gridPresets;
+let g_headerPresets;
 
 export function initPresets() {
   // template presets
@@ -73,6 +81,23 @@ export function initPresets() {
     loadGridPresetFromJson(gridPreset_5);
     setGridPreset(0);
   }
+  // header presets
+  {
+    g_headerPresets = [];
+    const select = document.getElementById("header-preset-select");
+    let opt = document.createElement("option");
+    opt.disabled = true;
+    opt.selected = true;
+    opt.value = 0;
+    opt.innerHTML = "select a preset";
+    select.appendChild(opt);
+    loadHeaderPresetFromJson(headerPreset_0);
+    loadHeaderPresetFromJson(headerPreset_1);
+    loadHeaderPresetFromJson(headerPreset_2);
+    loadHeaderPresetFromJson(headerPreset_3);
+    loadHeaderPresetFromJson(headerPreset_4);
+    setHeaderPreset(3);
+  }
 }
 //////////////////////
 // template presets //
@@ -80,7 +105,7 @@ export function initPresets() {
 export function loadPresetFromJson(preset, addToList = true) {
   const select = document.getElementById("preset-select");
   // sanitize /////
-  preset.name = Sanitize.string(preset.name, "comic book");
+  preset.name = Sanitize.string(preset.name, "comic book preset");
   // TODO: check version is valid
   preset.presetFormatVersion = Sanitize.version(preset.presetFormatVersion);
   //////////////// dimensions ///////////////////////////
@@ -123,6 +148,8 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.borderMarkMaxLength = Sanitize.number(preset.borderMarkMaxLength);
   if (preset.headerTextHeight !== undefined)
     preset.headerTextHeight = Sanitize.number(preset.headerTextHeight);
+  if (preset.headerLineSpacing !== undefined)
+    preset.headerLineSpacing = Sanitize.number(preset.headerLineSpacing);
   if (preset.headerPaddingBottom !== undefined)
     preset.headerPaddingBottom = Sanitize.number(preset.headerPaddingBottom);
   if (preset.headerPaddingLeft !== undefined)
@@ -165,6 +192,8 @@ export function loadPresetFromJson(preset, addToList = true) {
     preset.renderDrawPanels = Sanitize.bool(preset.renderDrawPanels);
   //////////////// panels ///////////////////////////
   // TODO: sanitize grid object somehow?
+  //////////////// header ///////////////////////////
+  // TODO: sanitize header object somehow?
   //////////////// layout ///////////////////////////
   if (preset.layoutPageSpread !== undefined)
     preset.layoutPageSpread = Sanitize.string(preset.layoutPageSpread);
@@ -273,6 +302,10 @@ export function setPreset(index, checkUI = false) {
       document.getElementById("header-text-height-input").value =
         preset.headerTextHeight;
     }
+    if (preset.headerLineSpacing !== undefined) {
+      document.getElementById("header-text-spacing-select").value =
+        preset.headerLineSpacing;
+    }
     if (preset.headerPaddingBottom !== undefined) {
       document.getElementById("header-padding-bottom-input").value =
         preset.headerPaddingBottom;
@@ -350,12 +383,15 @@ export function setPreset(index, checkUI = false) {
     }
   }
   //////////////// panels ///////////////////////////
-  if (
-    !checkUI ||
-    true //document.getElementById("select-preset-panels-checkbox").checked
-  ) {
+  if (!checkUI || true) {
     if (preset.panelGrid !== undefined) {
       loadGridPresetData(preset.panelGrid);
+    }
+  }
+  //////////////// header ///////////////////////////
+  if (!checkUI || true) {
+    if (preset.headerText !== undefined) {
+      loadHeaderPresetData(preset.headerText);
     }
   }
   //////////////// layout ///////////////////////////
@@ -458,6 +494,9 @@ export function getPresetFromCurrentValues(name) {
     preset.headerTextHeight = document.getElementById(
       "header-text-height-input"
     ).value;
+    preset.headerLineSpacing = document.getElementById(
+      "header-text-spacing-select"
+    ).value;
     preset.headerPaddingBottom = document.getElementById(
       "header-padding-bottom-input"
     ).value;
@@ -514,6 +553,10 @@ export function getPresetFromCurrentValues(name) {
   if (document.getElementById("export-preset-current-grid-checkbox").checked) {
     preset.panelGrid = exportGridPresetData();
   }
+  //////////////// header ///////////////////////////
+  if (document.getElementById("export-preset-current-grid-checkbox").checked) {
+    preset.headerText = exportHeaderPresetData();
+  }
   //////////////// layout ///////////////////////////
   if (document.getElementById("export-preset-layout-checkbox").checked) {
     preset.layoutPageSpread = document.getElementById(
@@ -552,7 +595,7 @@ export function getPresetFromCurrentValues(name) {
 export function loadGridPresetFromJson(preset, addToList = true) {
   const select = document.getElementById("grid-preset-select");
   // sanitize /////////////////////////////
-  preset.name = Sanitize.string(preset.name, "comic book");
+  preset.name = Sanitize.string(preset.name, "panel grid preset");
   // TODO: check version is valid
   preset.presetFormatVersion = Sanitize.version(preset.presetFormatVersion);
   // panels //
@@ -584,5 +627,46 @@ export function getGridPresetFromCurrentValues(name) {
   const preset = { name: undefined, panelGrid: undefined };
   preset.name = name;
   preset.panelGrid = exportGridPresetData();
+  return preset;
+}
+
+////////////////////
+// header presets //
+////////////////////
+
+export function loadHeaderPresetFromJson(preset, addToList = true) {
+  const select = document.getElementById("header-preset-select");
+  // sanitize /////////////////////////////
+  preset.name = Sanitize.string(preset.name, "header preset");
+  // TODO: check version is valid
+  preset.presetFormatVersion = Sanitize.version(preset.presetFormatVersion);
+  // header //
+  // TODO: check if preset.headerText content is valid?
+  preset.headerText = preset.headerText;
+  /////////////////////////////////////////
+  if (addToList) {
+    let opt = document.createElement("option");
+    opt.value = select.childElementCount;
+    opt.textContent = preset.name;
+    select.appendChild(opt);
+    g_headerPresets.push(preset);
+    return opt.value;
+  }
+}
+
+export function setHeaderPreset(index) {
+  let preset = g_headerPresets[index];
+  if (index < 0 || index >= g_presets.length) {
+    preset = g_headerPresets[0];
+  }
+  //////////////// header ///////////////////////////
+  loadHeaderPresetData(preset.headerText);
+  //////////////////////////////////////////////////
+}
+
+export function getHeaderPresetFromCurrentValues(name) {
+  const preset = { name: undefined, headerText: undefined };
+  preset.name = name;
+  preset.headerText = exportHeaderPresetData();
   return preset;
 }

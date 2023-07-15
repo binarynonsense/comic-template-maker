@@ -18,6 +18,9 @@ import {
   loadGridPresetFromJson,
   setGridPreset,
   getGridPresetFromCurrentValues,
+  loadHeaderPresetFromJson,
+  setHeaderPreset,
+  getHeaderPresetFromCurrentValues,
 } from "./presets.js";
 import { openModal, closeOpenModal } from "./modals.js";
 
@@ -194,7 +197,6 @@ export function initSaveLoad() {
       saveGridPresetFileFromCurrentValues(name);
       closeOpenModal();
     });
-
   document
     .getElementById("open-modal-import-grid-preset-button")
     .addEventListener("click", function () {
@@ -218,6 +220,50 @@ export function initSaveLoad() {
           document.getElementById("import-grid-preset-apply-checkbox").checked
         ) {
           setGridPreset(index - 1);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawCompositeImage();
+        }
+      };
+      reader.readAsText(file);
+    });
+  // header presets import/export
+  document
+    .getElementById("open-modal-export-header-preset-button")
+    .addEventListener("click", function () {
+      openModal("export-header-preset-modal");
+    });
+  document
+    .getElementById("export-header-preset-button")
+    .addEventListener("click", function () {
+      let name = document.getElementById(
+        "export-header-preset-name-input"
+      ).value;
+      saveHeaderPresetFileFromCurrentValues(name);
+      closeOpenModal();
+    });
+  document
+    .getElementById("open-modal-import-header-preset-button")
+    .addEventListener("click", function () {
+      openModal("import-header-preset-modal");
+    });
+  document
+    .getElementById("import-header-preset-button")
+    .addEventListener("click", function () {
+      document.getElementById("import-header-preset-file-input").click();
+      closeOpenModal();
+    });
+  document
+    .getElementById("import-header-preset-file-input")
+    .addEventListener("change", function () {
+      const file = document.getElementById("import-header-preset-file-input")
+        .files[0];
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        let index = loadHeaderPresetFromJson(JSON.parse(e.target.result));
+        if (
+          document.getElementById("import-header-preset-apply-checkbox").checked
+        ) {
+          setHeaderPreset(index - 1);
           if (document.getElementById("autorefresh-checkbox").checked)
             drawCompositeImage();
         }
@@ -248,6 +294,15 @@ function savePresetFileFromCurrentValues(name) {
 function saveGridPresetFileFromCurrentValues(name) {
   let preset = getGridPresetFromCurrentValues(name);
   saveToFile(JSON.stringify(preset, null, 2), "grid-preset.json", "text/plain");
+}
+
+function saveHeaderPresetFileFromCurrentValues(name) {
+  let preset = getHeaderPresetFromCurrentValues(name);
+  saveToFile(
+    JSON.stringify(preset, null, 2),
+    "header-preset.json",
+    "text/plain"
+  );
 }
 
 // TODO: merge with base64 version?

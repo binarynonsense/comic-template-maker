@@ -9,89 +9,29 @@ import { drawCompositeImage } from "./draw.js";
 import { getUUID, Node, getNodeFromId } from "./node.js";
 
 let NodeType = {
-  VGROUP: "vgroup",
-  HGROUP: "hgroup",
-  PANEL: "panel",
+  HEADER: "header",
+  LINE: "line",
+  TEXT: "text",
+  UNDERLINE: "underline",
+  SPACE: "space",
 };
 
 let g_rootNode;
 let g_selectedNodeId;
 
-export function initPanels() {
-  // type select
+export function initHeaderText() {
+  // text input
   document
-    .getElementById("panel-tree-view-selected-element-type-select")
+    .getElementById("header-tree-view-selected-element-string-input")
     .addEventListener("change", function (event) {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
         if (node) {
-          const type = document.getElementById(
-            "panel-tree-view-selected-element-type-select"
+          let text = document.getElementById(
+            "header-tree-view-selected-element-string-input"
           ).value;
-          if (node.type === type) return;
-          const id = node.id;
-          const children = node.children;
-          const parent = node.parent;
-          const size = node.sizePercentage;
-          let index;
-          if (parent) {
-            index = parent.getChildIndexFromId(id);
-            parent.removeChildWithId(id);
-          }
-          if (type === NodeType.PANEL) {
-            const newNode = new GridNode(parent, id, NodeType.PANEL, size);
-            newNode.children = children;
-            newNode.children.forEach((child) => {
-              child.parent = newNode;
-            });
-            if (parent) {
-              parent.addChildAtIndex(index, newNode);
-            } else {
-              g_rootNode = newNode;
-            }
-          } else {
-            const newNode = new GridNode(
-              parent,
-              id,
-              event.target.value === "vgroup"
-                ? NodeType.VGROUP
-                : NodeType.HGROUP,
-              size
-            );
-            newNode.children = children;
-            newNode.children.forEach((child) => {
-              child.parent = newNode;
-            });
-            if (parent) {
-              parent.addChildAtIndex(index, newNode);
-            } else {
-              g_rootNode = newNode;
-            }
-          }
-          drawHtmlTree(id);
-          document.getElementById(id).scrollIntoView();
-          if (document.getElementById("autorefresh-checkbox").checked)
-            drawCompositeImage();
-        }
-      }
-    });
-
-  // size input
-  document
-    .getElementById("panel-tree-view-selected-element-size-input")
-    .addEventListener("change", function (event) {
-      if (g_selectedNodeId) {
-        const node = getNodeFromId(g_rootNode, g_selectedNodeId);
-        if (node) {
-          let percentage = document.getElementById(
-            "panel-tree-view-selected-element-size-input"
-          ).value;
-          if (percentage < 0) percentage = 0;
-          else if (percentage > 100) percentage = 100;
-          if (!node.parent || node.parent.children.length <= 1)
-            percentage = 100;
-          node.sizePercentage = percentage;
-          node.parent.recalculateChildrenSizes(node);
+          // TODO: sanitize?
+          node.value = text;
           drawHtmlTree(node.id);
           document.getElementById(node.id).scrollIntoView();
           if (document.getElementById("autorefresh-checkbox").checked)
@@ -99,30 +39,83 @@ export function initPanels() {
         }
       }
     });
-  // add group button
+  // length input
   document
-    .getElementById("panel-tree-view-selected-element-addgroup-button")
+    .getElementById("header-tree-view-selected-element-length-input")
+    .addEventListener("change", function (event) {
+      if (g_selectedNodeId) {
+        const node = getNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          let length = document.getElementById(
+            "header-tree-view-selected-element-length-input"
+          ).value;
+          // TODO: sanitize?
+          node.length = length;
+          drawHtmlTree(node.id);
+          document.getElementById(node.id).scrollIntoView();
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawCompositeImage();
+        }
+      }
+    });
+  // add line button
+  document
+    .getElementById("header-tree-view-selected-element-addline-button")
     .addEventListener("click", function () {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
         if (node) {
-          node.addChild(new GridNode(node, getUUID(), NodeType.VGROUP, 100));
-          node.recalculateChildrenSizes();
+          node.addChild(
+            new HeaderNode(node, getUUID(), NodeType.LINE, 0, undefined)
+          );
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
             drawCompositeImage();
         }
       }
     });
-  // add panel button
+  // add text button
   document
-    .getElementById("panel-tree-view-selected-element-addpanel-button")
+    .getElementById("header-tree-view-selected-element-addtext-button")
     .addEventListener("click", function () {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
         if (node) {
-          node.addChild(new GridNode(node, getUUID(), NodeType.PANEL, 100));
-          node.recalculateChildrenSizes();
+          node.addChild(
+            new HeaderNode(node, getUUID(), NodeType.TEXT, 0, "TEXT")
+          );
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawCompositeImage();
+        }
+      }
+    });
+  // add space button
+  document
+    .getElementById("header-tree-view-selected-element-addspace-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          node.addChild(
+            new HeaderNode(node, getUUID(), NodeType.SPACE, 0.5, undefined)
+          );
+          drawHtmlTree(g_selectedNodeId);
+          if (document.getElementById("autorefresh-checkbox").checked)
+            drawCompositeImage();
+        }
+      }
+    });
+  // add underline button
+  document
+    .getElementById("header-tree-view-selected-element-addunderline-button")
+    .addEventListener("click", function () {
+      if (g_selectedNodeId) {
+        const node = getNodeFromId(g_rootNode, g_selectedNodeId);
+        if (node) {
+          node.addChild(
+            new HeaderNode(node, getUUID(), NodeType.UNDERLINE, 4, undefined)
+          );
           drawHtmlTree(g_selectedNodeId);
           if (document.getElementById("autorefresh-checkbox").checked)
             drawCompositeImage();
@@ -131,7 +124,7 @@ export function initPanels() {
     });
   // move up button
   document
-    .getElementById("panel-tree-view-selected-element-moveup-button")
+    .getElementById("header-tree-view-selected-element-moveup-button")
     .addEventListener("click", function () {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
@@ -148,7 +141,7 @@ export function initPanels() {
     });
   // move up button
   document
-    .getElementById("panel-tree-view-selected-element-movedown-button")
+    .getElementById("header-tree-view-selected-element-movedown-button")
     .addEventListener("click", function () {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
@@ -165,14 +158,13 @@ export function initPanels() {
     });
   // remove button
   document
-    .getElementById("panel-tree-view-selected-element-remove-button")
+    .getElementById("header-tree-view-selected-element-remove-button")
     .addEventListener("click", function () {
       if (g_selectedNodeId) {
         const node = getNodeFromId(g_rootNode, g_selectedNodeId);
         if (node) {
           const nodeParent = node.parent;
           nodeParent.removeChildWithId(node.id);
-          nodeParent.recalculateChildrenSizes();
           drawHtmlTree(nodeParent.id);
           document.getElementById(nodeParent.id).scrollIntoView();
           if (document.getElementById("autorefresh-checkbox").checked)
@@ -185,72 +177,87 @@ export function initPanels() {
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-class GridNode extends Node {
-  constructor(parent, id, type, sizePercentage) {
+class HeaderNode extends Node {
+  constructor(parent, id, type, length, value) {
     super(parent, id, type);
-    this.sizePercentage = sizePercentage;
+    this.length = length;
+    this.value = value;
   }
 
-  recalculateChildrenSizes(exceptNode) {
-    let totalNum = this.children.length;
-    let totalPercentage = 100;
-    if (exceptNode) {
-      totalNum -= 1;
-      totalPercentage -= exceptNode.sizePercentage;
-    }
-    let childPercentage = totalPercentage / totalNum;
-    for (let index = 0; index < this.children.length; index++) {
-      const child = this.children[index];
-      if (child === exceptNode) {
-        continue;
-      }
-      child.sizePercentage = childPercentage;
-    }
-  }
+  draw(
+    ctx,
+    x,
+    y,
+    lineColor,
+    lineWidth,
+    textHeight,
+    textWeight,
+    lineSpacing,
+    ppi
+  ) {
+    switch (this.type) {
+      case NodeType.TEXT:
+        this.drawText(
+          ctx,
+          x,
+          y,
+          this.value,
+          textHeight,
+          textWeight,
+          "Arial",
+          lineColor,
+          ppi
+        );
+        this.length = ctx.measureText(this.value).width / (textHeight * ppi);
+        break;
 
-  draw(ctx, x, y, width, height, gutterSize, lineWidth, lineColor, ppi) {
-    if (this.type === NodeType.PANEL) {
-      this.drawRect(ctx, x, y, width, height, lineWidth, lineColor, ppi);
+      case NodeType.UNDERLINE:
+        this.drawLine(
+          ctx,
+          x,
+          y,
+          0,
+          -this.length * textHeight,
+          lineWidth,
+          lineColor,
+          ppi
+        );
+        break;
+
+      default:
+        break;
     }
-    // children
+
     let nodeX = x;
     let nodeY = y;
     for (let index = 0; index < this.children.length; index++) {
       const node = this.children[index];
-      if (this.type === NodeType.VGROUP) {
-        let nodeWidth = width;
-        let nodeHeight =
-          (node.sizePercentage / 100) *
-          (height - (this.children.length - 1) * gutterSize);
+      if (this.type === NodeType.HEADER) {
         node.draw(
           ctx,
           nodeX,
           nodeY,
-          nodeWidth,
-          nodeHeight,
-          gutterSize,
-          lineWidth,
           lineColor,
+          lineWidth,
+          textHeight,
+          textWeight,
+          lineSpacing,
           ppi
         );
-        nodeY += nodeHeight + gutterSize;
-      } else if (this.type === NodeType.HGROUP) {
-        let nodeWidth =
-          (node.sizePercentage / 100) *
-          (width - (this.children.length - 1) * gutterSize);
-        let nodeHeight = height;
+        nodeY -= textHeight * lineSpacing;
+      } else if (this.type === NodeType.LINE) {
         node.draw(
           ctx,
           nodeX,
           nodeY,
-          nodeWidth,
-          nodeHeight,
-          gutterSize,
-          lineWidth,
           lineColor,
+          lineWidth,
+          textHeight,
+          textWeight,
+          lineSpacing,
           ppi
         );
-        nodeX += nodeWidth + gutterSize;
+        nodeX += node.length * textHeight;
       }
     }
   }
@@ -259,52 +266,41 @@ class GridNode extends Node {
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-export function drawGrid(ctx, x, y, width, height) {
+export function drawHeaderText(ctx, x, y, lineColor, lineWidth) {
   const ppi = document.getElementById("ppi-input").value;
   const toInches =
     document.getElementById("units-select").value === "inches" ? 1 : 1 / 2.54;
-  const gutterSize =
-    document.getElementById("panel-gutter-size-input").value * toInches;
-  const lineWidth =
-    document.getElementById("panel-line-width-input").value * toInches;
-  const lineColor = document.getElementById("panel-line-color-input").value;
+  const headerTextHeight =
+    document.getElementById("header-text-height-input").value * toInches;
+  const headerPaddingBottom =
+    document.getElementById("header-padding-bottom-input").value * toInches;
+  const headerPaddingLeft =
+    document.getElementById("header-padding-left-input").value * toInches;
+  const headerTextWeight = document.getElementById(
+    "header-text-weight-select"
+  ).value;
+  const headerLineSpacing = document.getElementById(
+    "header-text-spacing-select"
+  ).value;
   g_rootNode.draw(
     ctx,
-    x,
-    y,
-    width,
-    height,
-    gutterSize,
-    lineWidth,
+    x + headerPaddingLeft,
+    y - headerPaddingBottom,
     lineColor,
+    lineWidth,
+    headerTextHeight,
+    headerTextWeight,
+    headerLineSpacing,
     ppi
   );
 }
-
-// function buildSymetricGrid(cols, rows) {
-//   g_rootNode = new GridNode(undefined, getUUID(), NodeType.VGROUP, 100);
-//   for (let y = 0; y < rows; y++) {
-//     let hgroup = new GridNode(
-//       g_rootNode,
-//       getUUID(),
-//       NodeType.HGROUP,
-//       100 / rows
-//     );
-//     g_rootNode.addChild(hgroup);
-//     for (let x = 0; x < cols; x++) {
-//       hgroup.addChild(
-//         new GridNode(hgroup, getUUID(), NodeType.PANEL, 100 / cols)
-//       );
-//     }
-//   }
-// }
 
 //////////////////////////////////////////
 //////////////////////////////////////////
 
 function drawHtmlTree(selectedId) {
   g_selectedNodeId = g_rootNode.id;
-  let rootElement = document.getElementById("panel-tree-view-root");
+  let rootElement = document.getElementById("header-tree-view-root");
   rootElement.innerHTML = "";
   buildHtmlTree(g_rootNode, rootElement);
   if (selectedId) {
@@ -316,13 +312,19 @@ function drawHtmlTree(selectedId) {
 }
 
 function buildHtmlTree(node, htmlParent) {
-  if (node.type === NodeType.PANEL) {
+  if (node.type !== NodeType.HEADER && node.type !== NodeType.LINE) {
     let li = document.createElement("li");
     htmlParent.appendChild(li);
     let button = document.createElement("div");
     li.appendChild(button);
     button.classList = "tree-view-panel-button";
-    button.textContent = "panel";
+    if (node.type === NodeType.TEXT) {
+      button.textContent = "text";
+    } else if (node.type === NodeType.SPACE) {
+      button.textContent = "space";
+    } else {
+      button.textContent = "underline";
+    }
     button.id = node.id;
     if (node.id === g_selectedNodeId)
       button.classList.add("tree-view-button-selected");
@@ -346,10 +348,10 @@ function buildHtmlTree(node, htmlParent) {
     let button = document.createElement("div");
     summary.appendChild(button);
     button.classList = "tree-view-summary-button";
-    if (node.type === NodeType.VGROUP) {
-      button.textContent = "vertical group";
+    if (node.type === NodeType.HEADER) {
+      button.textContent = "header";
     } else {
-      button.textContent = "horizontal group";
+      button.textContent = "line";
     }
     button.id = node.id;
     if (node.id === g_selectedNodeId)
@@ -401,108 +403,107 @@ function setSelectedTreeElementFromId(id) {
         }
       }
     }
-    // debug
-    if (false) {
-      document.getElementById(
-        "panel-tree-view-selected-element-debug"
-      ).textContent = node.id;
+    // length & text
+    if (node.type === NodeType.HEADER || node.type === NodeType.LINE) {
       document
-        .getElementById("panel-tree-view-selected-element-debug")
-        .classList.remove("hidden");
+        .getElementById("header-tree-view-selected-element-length-label")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-string-label")
+        .classList.add("tree-view-button-hidden");
+    } else if (node.type === NodeType.TEXT) {
+      document
+        .getElementById("header-tree-view-selected-element-length-label")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-string-label")
+        .classList.remove("tree-view-button-hidden");
+      document.getElementById(
+        "header-tree-view-selected-element-string-input"
+      ).value = node.value;
     } else {
       document
-        .getElementById("panel-tree-view-selected-element-debug")
-        .classList.add("hidden");
-    }
-    // type
-    document
-      .querySelectorAll("#tree-view-selected-element-type-select option")
-      .forEach((opt) => {
-        if (node.children.length > 0 && opt.value == "panel") {
-          // nodes with children can't be converted to panels
-          opt.disabled = true;
-        } else {
-          opt.disabled = false;
-        }
-      });
-    document.getElementById(
-      "panel-tree-view-selected-element-type-select"
-    ).value = node.type;
-    // size
-    if (node.parent === undefined) {
+        .getElementById("header-tree-view-selected-element-length-label")
+        .classList.remove("tree-view-button-hidden");
       document.getElementById(
-        "panel-tree-view-selected-element-size-input"
-      ).disabled = true;
-    } else {
-      document.getElementById(
-        "panel-tree-view-selected-element-size-input"
-      ).disabled = false;
+        "header-tree-view-selected-element-length-input"
+      ).value = node.length;
+      document
+        .getElementById("header-tree-view-selected-element-string-label")
+        .classList.add("tree-view-button-hidden");
     }
-    document.getElementById(
-      "panel-tree-view-selected-element-size-input"
-    ).value = node.sizePercentage;
     // add buttons
-    if (node.type === NodeType.PANEL) {
+    if (node.type === NodeType.HEADER) {
       document
-        .getElementById("panel-tree-view-selected-element-addgroup-button")
-        .classList.add("tree-view-button-disabled");
+        .getElementById("header-tree-view-selected-element-addline-button")
+        .classList.remove("tree-view-button-hidden");
       document
-        .getElementById("panel-tree-view-selected-element-addpanel-button")
-        .classList.add("tree-view-button-disabled");
+        .getElementById("header-tree-view-selected-element-addtext-button")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addunderline-button")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addspace-button")
+        .classList.add("tree-view-button-hidden");
+    } else if (node.type === NodeType.LINE) {
+      document
+        .getElementById("header-tree-view-selected-element-addline-button")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addtext-button")
+        .classList.remove("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addunderline-button")
+        .classList.remove("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addspace-button")
+        .classList.remove("tree-view-button-hidden");
     } else {
       document
-        .getElementById("panel-tree-view-selected-element-addgroup-button")
-        .classList.remove("tree-view-button-disabled");
+        .getElementById("header-tree-view-selected-element-addline-button")
+        .classList.add("tree-view-button-hidden");
       document
-        .getElementById("panel-tree-view-selected-element-addpanel-button")
-        .classList.remove("tree-view-button-disabled");
+        .getElementById("header-tree-view-selected-element-addtext-button")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addunderline-button")
+        .classList.add("tree-view-button-hidden");
+      document
+        .getElementById("header-tree-view-selected-element-addspace-button")
+        .classList.add("tree-view-button-hidden");
     }
     // move up/down buttons
     if (canMoveUp) {
       document
-        .getElementById("panel-tree-view-selected-element-moveup-button")
+        .getElementById("header-tree-view-selected-element-moveup-button")
         .classList.remove("tree-view-button-disabled");
     } else {
       document
-        .getElementById("panel-tree-view-selected-element-moveup-button")
+        .getElementById("header-tree-view-selected-element-moveup-button")
         .classList.add("tree-view-button-disabled");
     }
     if (canMoveDown) {
       document
-        .getElementById("panel-tree-view-selected-element-movedown-button")
+        .getElementById("header-tree-view-selected-element-movedown-button")
         .classList.remove("tree-view-button-disabled");
     } else {
       document
-        .getElementById("panel-tree-view-selected-element-movedown-button")
+        .getElementById("header-tree-view-selected-element-movedown-button")
         .classList.add("tree-view-button-disabled");
     }
     // remove button
     if (node.parent === undefined) {
       document
-        .getElementById("panel-tree-view-selected-element-remove-button")
+        .getElementById("header-tree-view-selected-element-remove-button")
         .classList.add("tree-view-button-disabled");
     } else {
       document
-        .getElementById("panel-tree-view-selected-element-remove-button")
+        .getElementById("header-tree-view-selected-element-remove-button")
         .classList.remove("tree-view-button-disabled");
     }
   } else {
-    // TODO: disable type and size inputs
-    document
-      .getElementById("panel-tree-view-selected-element-addgroup-button")
-      .classList.add("tree-view-button-disabled");
-    document
-      .getElementById("panel-tree-view-selected-element-addpanel-button")
-      .classList.add("tree-view-button-disabled");
-    document
-      .getElementById("panel-tree-view-selected-element-moveup-button")
-      .classList.add("tree-view-button-disabled");
-    document
-      .getElementById("panel-tree-view-selected-element-movedown-button")
-      .classList.add("tree-view-button-disabled");
-    document
-      .getElementById("panel-tree-view-selected-element-remove-button")
-      .classList.add("tree-view-button-disabled");
+    // TODO: disable all
   }
 }
 
@@ -516,17 +517,24 @@ function getNodePresetData(node) {
   });
   return {
     type: node.type,
-    sizePercentage: node.sizePercentage,
+    length:
+      node.type === NodeType.HEADER ||
+      node.type === NodeType.LINE ||
+      node.type === NodeType.TEXT
+        ? undefined
+        : node.length,
+    value: node.type === NodeType.TEXT ? node.value : undefined,
     children: children,
   };
 }
 
 function createNodeFromPresetData(data, parentNode) {
-  let node = new GridNode(
+  let node = new HeaderNode(
     parentNode,
     getUUID(),
     data.type,
-    data.sizePercentage
+    data.length,
+    data.value
   );
   data.children.forEach((child) => {
     node.addChild(createNodeFromPresetData(child, node));
@@ -534,11 +542,11 @@ function createNodeFromPresetData(data, parentNode) {
   return node;
 }
 
-export function exportGridPresetData() {
+export function exportHeaderPresetData() {
   return getNodePresetData(g_rootNode, undefined);
 }
 
-export function loadGridPresetData(data) {
+export function loadHeaderPresetData(data) {
   g_rootNode = createNodeFromPresetData(data);
   drawHtmlTree();
 }

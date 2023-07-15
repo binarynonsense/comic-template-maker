@@ -20,6 +20,7 @@ export default {
   lineWidthThick: "0.008",
   borderMarkMaxLength: "0.085",
   headerTextHeight: "0.17",
+  headerLineSpacing: "1.4",
   headerPaddingBottom: "0.19",
   headerPaddingLeft: "0.19",
 
@@ -34,6 +35,11 @@ export default {
   renderDrawTrim: true,
   renderDrawMarks: true,
   renderDrawCropMarks: false,
+
+  headerText: {
+    type: "header",
+    children: [],
+  },
 
   layoutPageSpread: "single",
   layoutPpi: "300",
