@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright 2023 Álvaro García
+ * www.binarynonsense.com
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 // ref: https://developer.mozilla.org/en-US/docs/Web/API/Crypto
 // ref: https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid/
 export function getUUID() {
