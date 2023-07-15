@@ -1,6 +1,6 @@
 # Comic Book Template Maker
 
-Tool to create comic book page and thumbnails templates with desktop (Windows & Linux) and online versions.
+Tool to create comic book page and thumbnails templates.
 
 ![screenshots](https://github.com/binarynonsense/comic-template-maker/assets/8535921/4c0f5563-32b8-4204-a2d4-a63bd4131041)
 
